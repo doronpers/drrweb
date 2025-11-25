@@ -1,2 +1,217 @@
-# drrweb
-personal website
+# Interactive Installation - Personal Website
+
+A theatrical web design treating the website as an **interactive installation** rather than a traditional portfolio. Built with a focus on atmosphere, sensory feedback, and multi-modal presentation.
+
+## 🎭 The Concept
+
+This website is structured around **"The Prism"** – a metaphor for how a single identity refracts into multiple presentations based on viewer intent:
+
+- **Mode A: The Architect** - Utilitarian, Swiss Style (for recruiters/business)
+- **Mode B: The Author** - Editorial, breathable (for students/explorers)
+- **Mode C: The Lab** - Brutalist, raw (for makers/process-oriented)
+
+## 🎵 Audio as a First-Class Citizen
+
+Unlike typical websites, audio is central to the experience:
+- Biophilic ambient drone (filtered noise with breathing modulation)
+- Mode-specific UI sounds (dry clicks, warm tones, glitches)
+- Real-time synthesis using Tone.js (not just file playback)
+
+## 🏗️ Tech Stack
+
+- **Framework**: Next.js 14+ (App Router) with TypeScript
+- **Styling**: Tailwind CSS with custom utility classes
+- **Animation**: Framer Motion (layout animations & transitions)
+- **Audio**: Tone.js (synthesis & real-time processing)
+- **Backend**: Supabase (PostgreSQL for Echo Chamber)
+- **State**: React Context API (ViewMode management)
+
+## 📁 Project Structure
+
+```
+drrweb/
+├── app/
+│   ├── layout.tsx          # Root layout with fonts & providers
+│   ├── page.tsx             # Main Prism router
+│   └── globals.css          # Global styles & animations
+├── components/
+│   ├── canvas/              # Visual/interactive components
+│   │   ├── EchoChamber.tsx  # Floating guestbook
+│   │   └── EchoEntry.tsx    # Individual floating message
+│   ├── modes/               # The three view modes
+│   │   ├── Architect.tsx    # Mode A: Business view
+│   │   ├── Author.tsx       # Mode B: Editorial view
+│   │   └── Lab.tsx          # Mode C: Process view
+│   ├── Landing.tsx          # Entry point (Antechamber)
+│   └── AntiPortfolio.tsx    # Failures & uncertainties footer
+├── contexts/
+│   └── ViewModeContext.tsx  # The Prism state management
+├── lib/
+│   ├── audio.ts             # Tone.js audio engine
+│   └── supabase.ts          # Supabase client & queries
+├── public/
+│   ├── audio/               # Audio assets (if any)
+│   └── textures/            # Grain textures
+└── styles/                  # Additional styles (if needed)
+```
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js 18+ and npm
+
+### Installation
+
+1. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+2. **Configure environment variables (optional):**
+
+   If you want to enable the Echo Chamber backend:
+   ```bash
+   cp .env.local.example .env.local
+   ```
+
+   Then edit `.env.local` with your Supabase credentials.
+
+3. **Run development server:**
+   ```bash
+   npm run dev
+   ```
+
+4. **Open browser:**
+   Navigate to [http://localhost:3000](http://localhost:3000)
+
+## 🗄️ Supabase Setup (Optional)
+
+The Echo Chamber feature requires a Supabase backend. If you skip this, the site will work with mock data.
+
+### Database Schema
+
+```sql
+CREATE TABLE echoes (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  text TEXT NOT NULL CHECK (char_length(text) <= 100),
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
+  approved BOOLEAN DEFAULT false
+);
+
+-- Enable Row Level Security
+ALTER TABLE echoes ENABLE ROW LEVEL SECURITY;
+
+-- Policy for public reads
+CREATE POLICY "Public can read approved echoes"
+ON echoes FOR SELECT
+USING (approved = true);
+
+-- Policy for public inserts (requires moderation)
+CREATE POLICY "Anyone can insert echoes for moderation"
+ON echoes FOR INSERT
+WITH CHECK (true);
+```
+
+## 🎨 Key Features
+
+### 1. The Antechamber (Landing)
+- Minimal input field: "What do you seek?"
+- Keyword mapping routes to appropriate mode
+- Audio initialization with user consent
+
+### 2. The Prism (Mode Switcher)
+- Three distinct visual/audio aesthetics
+- Smooth transitions between modes
+- Context-aware content rendering
+
+### 3. The Echo Chamber
+- Floating guestbook messages
+- Physics-based motion (varying opacity for "distance")
+- Moderated submissions via Supabase
+
+### 4. The Anti-Portfolio
+- Terminal-style failures log
+- Categorized mistakes & lessons
+- Active "unknowns" list
+
+## 🎵 Audio System
+
+The audio system uses Tone.js for real-time synthesis:
+
+- **Ambient Drone**: Pink noise → Low-pass filter (LFO modulated) → Volume
+- **UI Sounds**:
+  - Architect: Sharp sine wave click (800Hz)
+  - Author: Warm membrane synth with reverb (200Hz)
+  - Lab: White noise burst (glitch)
+
+## 🎨 Design Philosophy
+
+### Show, Don't Tell
+Motion and sound convey meaning. Minimal text. High whitespace.
+
+### Variable Fonts
+Typography weight indicates hierarchy and mood. Font-variation-settings used extensively.
+
+### Radical Reduction
+No clutter. Textures over flat colors. Every element has purpose.
+
+### Theatrical Sensibility
+The site is staged, not built. Lighting (via opacity), pacing (via animation), and soundscape create atmosphere.
+
+## 📝 Customization
+
+### Update Content
+
+Edit the following files to customize content:
+
+- **Personal info**: `components/modes/Architect.tsx`, `Author.tsx`, `Lab.tsx`
+- **Failures**: `components/AntiPortfolio.tsx` → `FAILURES` array
+- **Echoes**: `components/canvas/EchoChamber.tsx` → `INITIAL_ECHOES`
+- **Keywords**: `contexts/ViewModeContext.tsx` → `KEYWORD_MAP`
+
+### Adjust Styling
+
+- **Colors**: `tailwind.config.ts` → `theme.extend.colors`
+- **Animations**: `app/globals.css` → custom keyframes
+- **Audio**: `lib/audio.ts` → synthesis parameters
+
+## 🚢 Deployment
+
+### Build for Production
+
+```bash
+npm run build
+npm start
+```
+
+### Deploy to Vercel
+
+```bash
+npm i -g vercel
+vercel
+```
+
+## 📚 Learning Resources
+
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Framer Motion](https://www.framer.com/motion/)
+- [Tone.js Documentation](https://tonejs.github.io/)
+- [Supabase Guides](https://supabase.com/docs)
+
+## 🎓 Academic Context
+
+This codebase is designed for educational use. All code is extensively commented to explain:
+- **Why** decisions were made (not just what)
+- **How** systems interact (architecture)
+- **Where** to extend functionality
+
+Perfect for teaching web development, sound design, or interactive installations.
+
+## 📄 License
+
+This is a personal project template. Feel free to fork and adapt for your own use.
+
+---
+
+**Built with care for atmosphere, subtext, and sensory feedback.**
