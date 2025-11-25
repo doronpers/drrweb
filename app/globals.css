@@ -1,0 +1,185 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ====================================
+   THEATRICAL WEB DESIGN - GLOBAL STYLES
+   ==================================== */
+
+:root {
+  --grain-opacity: 0.03;
+  --transition-prism: 800ms cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+/* CSS Variable Font Setup */
+@layer base {
+  html {
+    @apply antialiased;
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  }
+
+  body {
+    @apply overflow-x-hidden;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Disable default focus rings, we'll add custom ones */
+  *:focus {
+    outline: none;
+  }
+
+  *:focus-visible {
+    @apply ring-2 ring-offset-2 ring-black/20;
+  }
+}
+
+/* ====================================
+   GRAIN TEXTURE OVERLAY
+   ==================================== */
+.grain-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: var(--grain-opacity);
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(0, 0, 0, 0.03) 2px,
+      rgba(0, 0, 0, 0.03) 4px
+    );
+  animation: grain 8s steps(10) infinite;
+}
+
+@keyframes grain {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(-5%, -10%); }
+  20% { transform: translate(-15%, 5%); }
+  30% { transform: translate(7%, -25%); }
+  40% { transform: translate(-5%, 25%); }
+  50% { transform: translate(-15%, 10%); }
+  60% { transform: translate(15%, 0%); }
+  70% { transform: translate(0%, 15%); }
+  80% { transform: translate(3%, 35%); }
+  90% { transform: translate(-10%, 10%); }
+}
+
+/* ====================================
+   MODE-SPECIFIC TRANSITIONS
+   ==================================== */
+.mode-transition {
+  transition: all var(--transition-prism);
+}
+
+/* ====================================
+   CUSTOM SCROLLBAR
+   ==================================== */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-black/10 rounded-full;
+  transition: background 200ms;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-black/20;
+}
+
+/* ====================================
+   UTILITY CLASSES
+   ==================================== */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Variable font weight utilities */
+  .font-hairline {
+    font-variation-settings: 'wght' 100;
+  }
+
+  .font-extralight {
+    font-variation-settings: 'wght' 200;
+  }
+
+  .font-light {
+    font-variation-settings: 'wght' 300;
+  }
+
+  .font-normal {
+    font-variation-settings: 'wght' 400;
+  }
+
+  .font-medium {
+    font-variation-settings: 'wght' 500;
+  }
+
+  .font-semibold {
+    font-variation-settings: 'wght' 600;
+  }
+
+  .font-bold {
+    font-variation-settings: 'wght' 700;
+  }
+
+  .font-extrabold {
+    font-variation-settings: 'wght' 800;
+  }
+
+  .font-black {
+    font-variation-settings: 'wght' 900;
+  }
+}
+
+/* ====================================
+   ANIMATION KEYFRAMES
+   ==================================== */
+@keyframes breathe {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-breathe {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
