@@ -24,12 +24,12 @@
     "tailwindcss": "^3.4.0",
     "postcss": "^8.4.0",
     "autoprefixer": "^10.4.0",
-    "eslint": "^8.56.0",
+    "eslint": "^8.57.0",
     "eslint-config-next": "^14.2.0"
   },
   "repository": {
     "type": "git",
-    "url": "http://local_proxy@127.0.0.1:44250/git/doronpers/drrweb"
+    "url": "http://local_proxy@127.0.0.1:44250/git/doronreizes/drrweb"
   },
   "keywords": ["interactive", "theatrical", "sound-design", "portfolio"],
   "author": "",

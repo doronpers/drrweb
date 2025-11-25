@@ -9,10 +9,13 @@
  * The user's first utterance determines their path through the prism.
  */
 
-import { useState, useEffect, useCallback, FormEvent } from 'react';
+import { useState, useEffect, useCallback, FormEvent, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useViewMode, parseIntent } from '@/contexts/ViewModeContext';
-import { audioManager } from '@/lib/audio';
+import dynamic from 'next/dynamic';
+
+// Lazy load audio module to reduce initial bundle size
+const audioModule = dynamic(() => import('@/lib/audio'), { ssr: false });
 
 // ====================================
 // COMPONENT
@@ -25,15 +28,20 @@ export default function Landing() {
   const [audioInitialized, setAudioInitialized] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Cache audio manager once loaded
+  const audioManagerRef = useRef<typeof import('@/lib/audio').audioManager | null>(null);
 
   /**
    * Initialize audio on first user interaction.
    * Required due to browser autoplay policies.
    */
   const initializeAudio = useCallback(async () => {
-    if (audioInitialized) return;
+    if (audioInitialized && audioManagerRef.current) return;
 
     try {
+      const { audioManager } = await audioModule;
+      audioManagerRef.current = audioManager;
       await audioManager.init();
       setAudioInitialized(true);
 
@@ -61,7 +69,10 @@ export default function Landing() {
       await initializeAudio();
 
       // Play UI sound on submit
-      audioManager.playUISound('click-dry');
+      const audioManager = audioManagerRef.current;
+      if (audioManager) {
+        audioManager.playUISound('click-dry');
+      }
 
       // Parse intent from input
       const targetMode = parseIntent(input);
@@ -83,8 +94,11 @@ export default function Landing() {
       await initializeAudio();
     }
 
-    audioManager.toggleMute();
-    setIsMuted(audioManager.isMuted());
+    const audioManager = audioManagerRef.current;
+    if (audioManager) {
+      audioManager.toggleMute();
+      setIsMuted(audioManager.isMuted());
+    }
   }, [audioInitialized, initializeAudio]);
 
   /**
@@ -93,7 +107,10 @@ export default function Landing() {
   const handleFocus = useCallback(async () => {
     setIsFocused(true);
     await initializeAudio();
-    audioManager.playUISound('click-warm');
+    const audioManager = audioManagerRef.current;
+    if (audioManager) {
+      audioManager.playUISound('click-warm');
+    }
   }, [initializeAudio]);
 
   /**
@@ -101,7 +118,8 @@ export default function Landing() {
    */
   useEffect(() => {
     return () => {
-      if (audioInitialized) {
+      const audioManager = audioManagerRef.current;
+      if (audioManager && audioInitialized) {
         audioManager.stopAmbient();
       }
     };

@@ -67,6 +67,16 @@ drrweb/
    ```bash
    npm install
    ```
+   
+   **Note:** If you encounter npm registry issues (e.g., custom registry errors), you can use the setup script:
+   ```bash
+   ./setup.sh
+   ```
+   
+   Or manually set the registry:
+   ```bash
+   npm install --registry=https://registry.npmjs.org/
+   ```
 
 2. **Configure environment variables (optional):**
 

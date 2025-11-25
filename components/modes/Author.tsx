@@ -57,7 +57,7 @@ export default function Author() {
         >
           <div className="text-center">
             <h1 className="text-6xl font-light tracking-tight mb-6 text-balance">
-              Doron Pers
+              Doron Reizes
             </h1>
             <p className="text-xl font-light italic text-author-text/70 text-balance">
               On improving systems, stories, and the people that tell them
@@ -111,6 +111,10 @@ export default function Author() {
                 <strong>curation</strong>. Not the social media kind—the curatorial
                 kind. My students learn to ask: <em>What is the through-line? What
                 is the argument my work is making, even when I'm not speaking?</em>
+                Over multiple semesters, I've worked with students from diverse
+                backgrounds—designers, developers, artists, writers—helping them
+                discover the patterns that connect their work and the stories that
+                make their portfolios compelling.
               </p>
 
               <p>
@@ -149,7 +153,11 @@ export default function Author() {
               At Sonotheia, we're building systems that listen to voices the way a
               sound designer listens: not just for <em>what</em> is said, but for
               the microgestures, the tells, the signatures that can't be faked. It's
-              forensic. It's creative. It's both.
+              forensic. It's creative. It's both. We're working at the intersection
+              of machine learning and acoustic analysis, creating tools that can
+              detect synthetic voices, manipulated audio, and fraudulent attempts
+              with remarkable accuracy—all while preserving privacy and user
+              experience.
             </p>
           </motion.section>
 
@@ -207,11 +215,46 @@ export default function Author() {
             </div>
           </section>
 
+          {/* Background */}
+          <motion.section
+            className="space-y-6 text-lg leading-loose border-t border-author-text/20 pt-12 mt-16"
+            onMouseEnter={handleHover}
+          >
+            <h2 className="text-3xl font-light mb-6">Background</h2>
+            <p>
+              My path has been anything but linear. I've worked as a sound designer
+              on film sets and in studios, capturing the texture of places and
+              moments. I've written and edited, finding patterns in language and
+              narrative. I've built products and led teams, learning how systems
+              shape behavior and how culture shapes product. And now I teach,
+              helping others see the connections I've learned to recognize.
+            </p>
+            <p>
+              Each domain has taught me something the others couldn't. Sound taught
+              me to listen—really listen—to what's beneath the surface. Literature
+              taught me that structure is meaning, that form and content are
+              inseparable. Entrepreneurship taught me that the best systems are
+              simple, opinionated, and built for humans. Teaching taught me that
+              the best learning happens when you help someone see what they already
+              know, just from a new angle.
+            </p>
+          </motion.section>
+
           {/* Closing */}
           <section className="text-center text-author-text/60 italic text-lg border-t border-author-text/20 pt-12 mt-20">
             <p>
               If you're interested in conversation—about teaching, sound, startups,
               or the spaces between—reach out. I'm always curious.
+            </p>
+            <p className="mt-4 text-base">
+              <a
+                href="https://www.linkedin.com/in/doronreizes"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-author-accent hover:underline"
+              >
+                Connect on LinkedIn
+              </a>
             </p>
           </section>
         </motion.article>
