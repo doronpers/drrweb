@@ -22,6 +22,7 @@ interface EchoEntryProps {
 function EchoEntry({ id, text, timestamp, index }: EchoEntryProps) {
   // Random starting position and movement parameters
   // Memoized to prevent recalculation on re-renders
+  // Empty dependency array - these are random values that should be stable per component instance
   const floatParams = useMemo(() => ({
     startX: Math.random() * 80 + 10, // 10-90% of width
     startY: Math.random() * 80 + 10, // 10-90% of height
@@ -30,7 +31,7 @@ function EchoEntry({ id, text, timestamp, index }: EchoEntryProps) {
     duration: Math.random() * 30 + 40, // 40-70 seconds
     opacity: Math.random() * 0.3 + 0.2, // 0.2-0.5 opacity for "distance"
     rotation: Math.random() * 10 - 5, // -5 to 5 degrees
-  }), [id]); // Recalculate only if id changes
+  }), []); // Empty array - values are random but should be stable per instance
 
   return (
     <motion.div

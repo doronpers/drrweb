@@ -35,7 +35,10 @@
  *
  * 6. Add your Supabase credentials to .env.local:
  *    NEXT_PUBLIC_SUPABASE_URL=your_project_url
- *    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+ *    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_publishable_key
+ *    
+ *    Note: Supabase calls it "publishable key" in the dashboard, but the
+ *    environment variable name is still NEXT_PUBLIC_SUPABASE_ANON_KEY
  */
 
 import { createClient } from '@supabase/supabase-js';
@@ -96,8 +99,16 @@ export const supabase = envVars
         persistSession: false, // Don't persist sessions for anonymous access
         autoRefreshToken: false,
       },
+      db: {
+        schema: 'public', // Explicitly use public schema
+      },
     })
   : null;
+
+// Log connection info in development
+if (envVars && process.env.NODE_ENV === 'development') {
+  console.log('✅ Supabase connected:', envVars.url);
+}
 
 // ====================================
 // ECHO CHAMBER FUNCTIONS
@@ -114,6 +125,7 @@ export async function fetchEchoes(): Promise<Echo[]> {
   }
 
   try {
+    // Try with explicit schema (public is default but being explicit helps)
     const { data, error } = await supabase
       .from('echoes')
       .select('*')
@@ -121,10 +133,25 @@ export async function fetchEchoes(): Promise<Echo[]> {
       .order('created_at', { ascending: false })
       .limit(20);
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase error fetching echoes:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code,
+      });
+      throw error;
+    }
     return data || [];
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching echoes:', error);
+    // Log more details for debugging
+    if (error?.message) {
+      console.error('Error message:', error.message);
+    }
+    if (error?.details) {
+      console.error('Error details:', error.details);
+    }
     return [];
   }
 }
@@ -145,10 +172,24 @@ export async function submitEcho(text: string): Promise<boolean> {
       approved: false, // Requires manual approval
     });
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase error submitting echo:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code,
+      });
+      throw error;
+    }
     return true;
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error submitting echo:', error);
+    if (error?.message) {
+      console.error('Error message:', error.message);
+    }
+    if (error?.details) {
+      console.error('Error details:', error.details);
+    }
     return false;
   }
 }

@@ -12,10 +12,9 @@
 import { useState, useEffect, useCallback, FormEvent, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useViewMode, parseIntent } from '@/contexts/ViewModeContext';
-import dynamic from 'next/dynamic';
 
 // Lazy load audio module to reduce initial bundle size
-const audioModule = dynamic(() => import('@/lib/audio'), { ssr: false });
+// Using regular dynamic import instead of Next.js dynamic() since we're importing a module, not a component
 
 // ====================================
 // COMPONENT
@@ -26,7 +25,7 @@ export default function Landing() {
   const [input, setInput] = useState('');
   const [isFocused, setIsFocused] = useState(false);
   const [audioInitialized, setAudioInitialized] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true); // Default to muted
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Cache audio manager once loaded
@@ -40,14 +39,21 @@ export default function Landing() {
     if (audioInitialized && audioManagerRef.current) return;
 
     try {
-      const { audioManager } = await audioModule;
-      audioManagerRef.current = audioManager;
-      await audioManager.init();
+      // Dynamic import of audio module (only loads when needed)
+      const audioModule = await import('@/lib/audio');
+      audioManagerRef.current = audioModule.audioManager;
+      await audioModule.audioManager.init();
+      
+      // Set muted state immediately after initialization
+      if (isMuted) {
+        audioModule.audioManager.setMuted(true);
+      }
+      
       setAudioInitialized(true);
 
-      // Start ambient drone if not muted
+      // Start ambient drone only if not muted
       if (!isMuted) {
-        audioManager.startAmbient();
+        audioModule.audioManager.startAmbient();
       }
     } catch (error) {
       console.error('Audio initialization failed:', error);

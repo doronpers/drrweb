@@ -59,6 +59,12 @@ export const metadata: Metadata = {
     'doron reizes',
   ],
   authors: [{ name: 'Doron Reizes' }],
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
+    ],
+  },
   openGraph: {
     title: 'Doron Reizes - Interactive Installation',
     description: 'Improving systems, stories, and the people that tell them.',
