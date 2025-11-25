@@ -23,6 +23,7 @@ function EchoEntry({ id, text, timestamp, index }: EchoEntryProps) {
   // Random starting position and movement parameters
   // Memoized to prevent recalculation on re-renders
   // Empty dependency array - these are random values that should be stable per component instance
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const floatParams = useMemo(() => ({
     startX: Math.random() * 80 + 10, // 10-90% of width
     startY: Math.random() * 80 + 10, // 10-90% of height
