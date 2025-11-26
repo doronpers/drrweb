@@ -2,7 +2,7 @@
 
 *Generated on 2025-11-26*
 
-Found 11 file(s) with documentation issues:
+Found 10 file(s) with documentation issues:
 
 ## app/layout.tsx
 
@@ -48,16 +48,6 @@ Found 11 file(s) with documentation issues:
 - Functions: 1/5 documented
 - Has file-level JSDoc: ✓
 - Props documented: ✓
-
-## components/canvas/EchoEntry.tsx
-
-- ⚠️  Low function documentation coverage: 0%
-- ⚠️  Component props not documented
-
-**Stats:**
-- Functions: 0/1 documented
-- Has file-level JSDoc: ✓
-- Props documented: ✗
 
 ## components/modes/Architect.tsx
 
@@ -106,6 +96,6 @@ Found 11 file(s) with documentation issues:
 
 ## Summary
 
-- **Total files with issues:** 11
+- **Total files with issues:** 10
 - **Files without JSDoc:** 1
 - **Overall function documentation coverage:** 3%

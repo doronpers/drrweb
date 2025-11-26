@@ -58,27 +58,43 @@ function extractProps(content, componentName) {
   
   // Look for interface or type definitions
   const interfaceRegex = new RegExp(
-    `(?:interface|type)\\s+${componentName}Props\\s*(?:=\\s*)?{([^}]*)}`,
+    `(?:interface|type)\\s+${componentName}Props\\s*(?:=\\s*)?\\{([^}]*)\\}`,
     's'
   );
   
   const match = content.match(interfaceRegex);
   if (match) {
     const propsContent = match[1];
-    const propLines = propsContent.split('\n').filter(line => line.trim());
+    const lines = propsContent.split('\n');
     
-    propLines.forEach(line => {
-      // Match prop name, type, and optional comment
-      const propMatch = line.match(/(\w+)(\??)\s*:\s*([^;\/]+)(?:\/\/\s*(.+))?/);
+    let currentDoc = '';
+    
+    for (const line of lines) {
+      const trimmed = line.trim();
+      
+      // Check for JSDoc-style comment
+      if (trimmed.startsWith('/**')) {
+        currentDoc = trimmed.replace(/^\/\*\*\s*/, '').replace(/\s*\*\/$/, '');
+      } else if (trimmed.startsWith('*') && currentDoc) {
+        const docLine = trimmed.replace(/^\*\s*/, '').replace(/\s*\*\/$/, '');
+        if (docLine && !docLine.startsWith('/')) {
+          currentDoc += ' ' + docLine;
+        }
+      }
+      
+      // Match prop definition
+      const propMatch = trimmed.match(/^(\w+)(\??)\s*:\s*([^;\/]+)(?:\/\/\s*(.+))?/);
       if (propMatch) {
+        const description = propMatch[4] || currentDoc || '';
         props.push({
           name: propMatch[1],
           required: !propMatch[2],
           type: propMatch[3].trim(),
-          description: propMatch[4] ? propMatch[4].trim() : ''
+          description: description.trim()
         });
+        currentDoc = '';
       }
-    });
+    }
   }
   
   return props;

@@ -131,10 +131,10 @@ Uses physics-based motion to create organic floating effect.
 
 | Prop | Type | Required | Description |
 |------|------|----------|-------------|
-| `id` | `string` | ✓ |  |
-| `text` | `string` | ✓ |  |
-| `timestamp` | `Date` | ✓ |  |
-| `index` | `number` | ✓ |  |
+| `id` | `string` | ✓ | Unique identifier for the echo entry |
+| `text` | `string` | ✓ | The message text to display |
+| `timestamp` | `Date` | ✓ | When the echo was created |
+| `index` | `number` | ✓ | Position in the list for staggered animation |
 
 ## Hooks Used
 

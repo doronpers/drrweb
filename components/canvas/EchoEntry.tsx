@@ -12,13 +12,30 @@
 import { motion } from 'framer-motion';
 import { memo, useMemo } from 'react';
 
+/**
+ * Props for EchoEntry component
+ */
 interface EchoEntryProps {
+  /** Unique identifier for the echo entry */
   id: string;
+  /** The message text to display */
   text: string;
+  /** When the echo was created */
   timestamp: Date;
+  /** Position in the list for staggered animation */
   index: number;
 }
 
+/**
+ * EchoEntry component - renders a single floating message in the Echo Chamber
+ * 
+ * Displays a user-submitted message that floats organically across the screen
+ * with physics-based motion. Each entry has randomized starting position,
+ * drift direction, duration, opacity (to simulate depth), and rotation.
+ * 
+ * @param props - Component props
+ * @returns A memoized motion.div with animated floating message
+ */
 function EchoEntry({ id, text, timestamp, index }: EchoEntryProps) {
   // Random starting position and movement parameters
   // Memoized to prevent recalculation on re-renders
