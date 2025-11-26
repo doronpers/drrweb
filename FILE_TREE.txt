@@ -1,0 +1,131 @@
+# Project Tree: Prism Architecture
+
+## Component Structure (UI vs Logic)
+
+### Dumb Components (components/ui) - Presentation Only
+Currently integrated in main components folder, but could be extracted:
+- Pure presentational components
+- No state management
+- Props-driven rendering
+- Examples: Form inputs, buttons, typography primitives
+
+### Smart Components (components/logic) - Business Logic
+Currently integrated in main components folder:
+- State management
+- API calls
+- Side effects
+- Context consumers
+
+### Current Structure (Hybrid Approach)
+
+```
+drrweb/
+├── app/                           # Next.js 14 App Router
+│   ├── layout.tsx                 # Root layout with fonts & providers
+│   ├── page.tsx                   # Main Prism router (SMART)
+│   └── globals.css                # Global styles & animations
+│
+├── actions/                       # Server Actions (NEW)
+│   └── detect-intent.ts           # AI-powered intent detection (Gemini)
+│
+├── components/                    # React Components
+│   ├── canvas/                    # Visual/interactive components
+│   │   ├── EchoChamber.tsx        # Floating guestbook (SMART)
+│   │   └── EchoEntry.tsx          # Individual message (DUMB)
+│   │
+│   ├── modes/                     # The three view modes
+│   │   ├── Architect.tsx          # Mode A: Business view (SMART)
+│   │   ├── Author.tsx             # Mode B: Editorial view (SMART)
+│   │   └── Lab.tsx                # Mode C: Process view (SMART)
+│   │
+│   ├── Landing.tsx                # Entry point/Antechamber (SMART)
+│   ├── AntiPortfolio.tsx          # Failures footer (SMART)
+│   └── FailuresLog.tsx            # Table-style failures (SMART) (NEW)
+│
+├── contexts/                      # React Context Providers
+│   └── ViewModeContext.tsx        # The Prism state management (SMART)
+│
+├── lib/                           # Utilities & Services
+│   ├── audio.ts                   # Tone.js audio engine (SINGLETON)
+│   ├── useSoundscape.ts           # Audio mode hook (NEW)
+│   ├── styles.ts                  # Typography & animation configs
+│   └── supabase.ts                # Database client & queries
+│
+├── public/                        # Static Assets
+│   ├── data/                      # JSON Data (NEW)
+│   │   └── failures.json          # Anti-portfolio data (NEW)
+│   ├── audio/                     # Audio assets (if any)
+│   └── textures/                  # Visual textures (grain, etc.)
+│
+├── .env.local.example             # Environment variables template
+├── package.json                   # Dependencies & scripts
+├── tailwind.config.ts             # Tailwind with custom colors/fonts
+├── tsconfig.json                  # TypeScript configuration
+└── next.config.mjs                # Next.js configuration
+
+```
+
+## Key Architectural Patterns
+
+### 1. The Prism Pattern
+- Single URL, multiple renderings
+- State-driven view switching
+- No traditional navigation
+
+### 2. Audio-First Design
+- Singleton AudioManager
+- Mode-specific synthesis
+- Real-time parameter modulation
+
+### 3. AI-Enhanced Routing
+- Server Action: actions/detect-intent.ts
+- Gemini 1.5 Flash for intent analysis
+- Graceful fallback to keyword matching
+
+### 4. Data-Driven Components
+- JSON data sources (failures.json)
+- Supabase for dynamic content (Echo Chamber)
+- Clear separation of data and presentation
+
+## Component Classification
+
+### SMART (Logic Components)
+- app/page.tsx - Routes between modes
+- components/Landing.tsx - Intent detection & audio init
+- components/modes/*.tsx - Mode-specific content & state
+- components/canvas/EchoChamber.tsx - Supabase integration
+- components/AntiPortfolio.tsx - Collapsible state
+- components/FailuresLog.tsx - Data fetching
+- contexts/ViewModeContext.tsx - Global state
+
+### DUMB (Presentation Components)
+- components/canvas/EchoEntry.tsx - Pure message rendering
+- Could extract: Typography, Buttons, Form fields
+
+### UTILITIES & SERVICES
+- lib/audio.ts - Singleton service
+- lib/useSoundscape.ts - Stateful hook
+- lib/styles.ts - Pure functions
+- lib/supabase.ts - Singleton client
+
+### SERVER ACTIONS
+- actions/detect-intent.ts - AI-powered routing
+
+## Deliverables Status
+
+✅ Project Tree: This file
+✅ Context Provider: contexts/ViewModeContext.tsx
+✅ Landing Page: components/Landing.tsx (with AI integration)
+✅ Typographic Config: lib/styles.ts + tailwind.config.ts
+✅ Server Action: actions/detect-intent.ts (Gemini AI)
+✅ Failures Data: public/data/failures.json
+✅ FailuresLog Component: components/FailuresLog.tsx
+✅ Audio Engine: lib/audio.ts (Tone.js)
+✅ Soundscape Hook: lib/useSoundscape.ts
+
+## Notes
+
+- Components follow "hybrid" pattern: business logic and presentation in same file
+- Could be refactored to separate ui/ and logic/ folders if needed
+- Smart/dumb distinction clear through props and state usage
+- Server Actions provide clean separation of AI logic from client code
