@@ -266,10 +266,34 @@ Perfect for teaching web development, sound design, or interactive installations
 
 Comprehensive documentation is available:
 
+### Manual Documentation
 - **[PRISM_IMPLEMENTATION.md](./PRISM_IMPLEMENTATION.md)** - Complete implementation guide with setup instructions, testing checklists, and architecture notes
 - **[PRISM_FEATURES.md](./PRISM_FEATURES.md)** - Guide to new features including AI intent detection, FailuresLog, and soundscape hook
 - **[FILE_TREE.txt](./FILE_TREE.txt)** - Complete project structure with smart/dumb component classification
 - **[IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)** - Technical summary of all changes and deliverables
+
+### Auto-Generated Documentation
+- **[docs/generated/](./docs/generated/)** - Auto-generated documentation from code
+  - **[COMPONENTS.md](./docs/generated/COMPONENTS.md)** - Component reference with props and dependencies
+  - **[API.md](./docs/generated/API.md)** - API reference for functions, hooks, and utilities
+  - **[VALIDATION.md](./docs/generated/VALIDATION.md)** - Documentation completeness report
+
+#### Documentation Automation
+This project includes automated documentation generation that extracts documentation from code comments and type annotations:
+
+```bash
+# Generate all documentation
+npm run docs:generate
+
+# Validate documentation completeness
+npm run docs:validate
+
+# Generate specific documentation types
+npm run docs:components
+npm run docs:api
+```
+
+See **[scripts/doc-automation/README.md](./scripts/doc-automation/README.md)** for complete documentation automation guide.
 
 ## 📄 License
 
