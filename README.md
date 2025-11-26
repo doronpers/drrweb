@@ -2,6 +2,20 @@
 
 A theatrical web design treating the website as an **interactive installation** rather than a traditional portfolio. Built with a focus on atmosphere, sensory feedback, and multi-modal presentation.
 
+## 🆕 What's New
+
+This implementation includes the complete "Prism" architecture with:
+- ✅ **AI-Powered Intent Detection** - Uses Google Gemini 1.5 Flash to intelligently route users
+- ✅ **FailuresLog Component** - Brutally honest table of failures and lessons
+- ✅ **Soundscape Hook** - Mode-specific audio control system
+- ✅ **Server Actions** - AI routing with graceful fallbacks
+
+📚 **New Documentation:**
+- [PRISM_IMPLEMENTATION.md](./PRISM_IMPLEMENTATION.md) - Complete implementation guide
+- [PRISM_FEATURES.md](./PRISM_FEATURES.md) - New features guide
+- [FILE_TREE.txt](./FILE_TREE.txt) - Project structure
+- [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md) - Technical summary
+
 ## 🎭 The Concept
 
 This website is structured around **"The Prism"** – a metaphor for how a single identity refracts into multiple presentations based on viewer intent:
@@ -9,6 +23,8 @@ This website is structured around **"The Prism"** – a metaphor for how a singl
 - **Mode A: The Architect** - Utilitarian, Swiss Style (for recruiters/business)
 - **Mode B: The Author** - Editorial, breathable (for students/explorers)
 - **Mode C: The Lab** - Brutalist, raw (for makers/process-oriented)
+
+The site uses **AI to detect user intent** and automatically route to the appropriate mode. No traditional navigation - the same URL re-renders based on the viewer's needs.
 
 ## 🎵 Audio as a First-Class Citizen
 
@@ -23,8 +39,10 @@ Unlike typical websites, audio is central to the experience:
 - **Styling**: Tailwind CSS with custom utility classes
 - **Animation**: Framer Motion (layout animations & transitions)
 - **Audio**: Tone.js (synthesis & real-time processing)
+- **AI**: Vercel AI SDK with Google Gemini 1.5 Flash (intent detection)
 - **Backend**: Supabase (PostgreSQL for Echo Chamber)
 - **State**: React Context API (ViewMode management)
+- **Validation**: Zod (schema validation for AI outputs)
 
 ## 📁 Project Structure
 
@@ -34,6 +52,8 @@ drrweb/
 │   ├── layout.tsx          # Root layout with fonts & providers
 │   ├── page.tsx             # Main Prism router
 │   └── globals.css          # Global styles & animations
+├── actions/                 # Server Actions (NEW)
+│   └── detect-intent.ts     # AI-powered intent detection
 ├── components/
 │   ├── canvas/              # Visual/interactive components
 │   │   ├── EchoChamber.tsx  # Floating guestbook
@@ -43,11 +63,13 @@ drrweb/
 │   │   ├── Author.tsx       # Mode B: Editorial view
 │   │   └── Lab.tsx          # Mode C: Process view
 │   ├── Landing.tsx          # Entry point (Antechamber)
-│   └── AntiPortfolio.tsx    # Failures & uncertainties footer
+│   ├── AntiPortfolio.tsx    # Failures & uncertainties footer
+│   └── FailuresLog.tsx      # Table-style failures (NEW)
 ├── contexts/
 │   └── ViewModeContext.tsx  # The Prism state management
 ├── lib/
 │   ├── audio.ts             # Tone.js audio engine
+│   ├── useSoundscape.ts     # Audio mode hook (NEW)
 │   └── supabase.ts          # Supabase client & queries
 ├── public/
 │   ├── audio/               # Audio assets (if any)
@@ -78,14 +100,26 @@ drrweb/
    npm install --registry=https://registry.npmjs.org/
    ```
 
-2. **Configure environment variables (optional):**
+2. **Configure environment variables:**
 
-   If you want to enable the Echo Chamber backend:
    ```bash
    cp .env.local.example .env.local
    ```
 
-   Then edit `.env.local` with your Supabase credentials.
+   Edit `.env.local` with your credentials:
+   
+   ```env
+   # Optional: For Echo Chamber (Supabase backend)
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+   
+   # Optional: For AI-powered intent detection
+   GOOGLE_GENERATIVE_AI_API_KEY=your_google_ai_key
+   ```
+   
+   **Get Google AI API Key:** Visit https://ai.google.dev/
+   
+   **Note:** Without the AI API key, the system falls back to keyword matching (still functional).
 
 3. **Run development server:**
    ```bash
@@ -176,9 +210,16 @@ The site is staged, not built. Lighting (via opacity), pacing (via animation), a
 Edit the following files to customize content:
 
 - **Personal info**: `components/modes/Architect.tsx`, `Author.tsx`, `Lab.tsx`
-- **Failures**: `components/AntiPortfolio.tsx` → `FAILURES` array
+- **Failures**: Update `public/data/failures.json` or edit `components/AntiPortfolio.tsx` → `FAILURES` array
 - **Echoes**: `components/canvas/EchoChamber.tsx` → `INITIAL_ECHOES`
 - **Keywords**: `contexts/ViewModeContext.tsx` → `KEYWORD_MAP`
+
+### Adjust AI Routing
+
+To customize intent detection behavior, edit `actions/detect-intent.ts`:
+- Modify the prompt to change routing logic
+- Adjust audio parameter ranges
+- Add new mode detection patterns
 
 ### Adjust Styling
 
@@ -217,6 +258,15 @@ This codebase is designed for educational use. All code is extensively commented
 - **Where** to extend functionality
 
 Perfect for teaching web development, sound design, or interactive installations.
+
+## 📚 Documentation
+
+Comprehensive documentation is available:
+
+- **[PRISM_IMPLEMENTATION.md](./PRISM_IMPLEMENTATION.md)** - Complete implementation guide with setup instructions, testing checklists, and architecture notes
+- **[PRISM_FEATURES.md](./PRISM_FEATURES.md)** - Guide to new features including AI intent detection, FailuresLog, and soundscape hook
+- **[FILE_TREE.txt](./FILE_TREE.txt)** - Complete project structure with smart/dumb component classification
+- **[IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)** - Technical summary of all changes and deliverables
 
 ## 📄 License
 
