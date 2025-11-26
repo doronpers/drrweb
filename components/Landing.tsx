@@ -12,6 +12,7 @@
 import { useState, useEffect, useCallback, FormEvent, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useViewMode, parseIntent } from '@/contexts/ViewModeContext';
+import { detectIntent } from '@/actions/detect-intent';
 
 // Lazy load audio module to reduce initial bundle size
 // Using regular dynamic import instead of Next.js dynamic() since we're importing a module, not a component
@@ -62,7 +63,8 @@ export default function Landing() {
 
   /**
    * Handle form submission.
-   * Parse user intent and transition to appropriate mode.
+   * Uses Server Action (AI) for intent detection when available,
+   * falls back to client-side keyword matching.
    */
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
@@ -80,13 +82,32 @@ export default function Landing() {
         audioManager.playUISound('click-dry');
       }
 
-      // Parse intent from input
-      const targetMode = parseIntent(input);
-
-      // Slight delay for dramatic effect
-      setTimeout(() => {
-        setMode(targetMode);
-      }, 300);
+      try {
+        // Try to use Server Action for AI-powered intent detection
+        const intentResult = await detectIntent(input);
+        const targetMode = intentResult.targetMode;
+        
+        // Log audio params for future use (Phase 4)
+        console.log('🎵 Suggested audio params:', intentResult.audioParams);
+        
+        // Slight delay for dramatic effect
+        setTimeout(() => {
+          setMode(targetMode);
+        }, 300);
+      } catch (error) {
+        console.error('Intent detection failed, using fallback:', error);
+        
+        // Fallback to client-side parsing
+        const targetMode = parseIntent(input);
+        setTimeout(() => {
+          setMode(targetMode);
+        }, 300);
+      } finally {
+        // Reset submitting state after transition
+        setTimeout(() => {
+          setIsSubmitting(false);
+        }, 500);
+      }
     },
     [input, isSubmitting, initializeAudio, setMode]
   );
