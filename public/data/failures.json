@@ -1,0 +1,44 @@
+[
+  {
+    "year": "2024",
+    "project": "Real-time voice cloning MVP",
+    "outcome": "Built for perfection, not iteration. Missed market window.",
+    "lesson": "Ship fast, iterate faster. Perfect is the enemy of launched."
+  },
+  {
+    "year": "2023",
+    "project": "Automated grading system for writing",
+    "outcome": "AI can't read subtext. Students felt unheard.",
+    "lesson": "Technology should augment human connection, not replace it."
+  },
+  {
+    "year": "2023",
+    "project": "Field recording marketplace",
+    "outcome": "Wrong platform architecture. MongoDB for time-series was naive.",
+    "lesson": "Choose the right tool for the job, not the trendy one."
+  },
+  {
+    "year": "2022",
+    "project": "Co-founded audio plugin company",
+    "outcome": "Split equity before roles were clear. Partnership dissolved.",
+    "lesson": "Alignment on vision and values before contracts."
+  },
+  {
+    "year": "2021",
+    "project": "Spatial audio installation",
+    "outcome": "8-channel system crashed opening night. Underestimated complexity.",
+    "lesson": "Test in production conditions. Murphy's Law is real."
+  },
+  {
+    "year": "2018",
+    "project": "The Over-Engineered Mix",
+    "outcome": "Cut by director. Too many layers, lost the emotional core.",
+    "lesson": "Precision without context is waste. Serve the story."
+  },
+  {
+    "year": "2021",
+    "project": "Media Consultancy",
+    "outcome": "Market mismatch. Target audience didn't exist yet.",
+    "lesson": "Rigidity breaks; adaptability bends. Timing matters."
+  }
+]
