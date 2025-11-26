@@ -9,6 +9,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@ai-sdk/gateway": "^1.0.0",
     "@ai-sdk/google": "^2.0.43",
     "@supabase/supabase-js": "^2.39.0",
     "@vercel/speed-insights": "^1.2.0",
@@ -54,7 +55,7 @@
   "author": "",
   "license": "ISC",
   "overrides": {
-    "eslint": "^9.14.0",
+    "eslint": "^9.39.1",
     "glob": "^10.3.10",
     "rimraf": "^5.0.5",
     "@humanwhocodes/config-array": "npm:@eslint/config-array@^0.14.0",

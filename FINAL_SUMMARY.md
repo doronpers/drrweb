@@ -225,8 +225,10 @@ The system is fully functional and ready for deployment. The only limitation (fo
 ## Next Steps for User
 
 1. **Add API Key:**
-   - Get key from https://ai.google.dev/
-   - Add to `.env.local` as `GOOGLE_GENERATIVE_AI_API_KEY`
+   - Sign in to your Vercel account
+   - Navigate to AI Gateway section in dashboard
+   - Create a new API key
+   - Add to `.env.local` as `AI_GATEWAY_API_KEY`
 
 2. **Customize Content:**
    - Edit `public/data/failures.json` with authentic failures

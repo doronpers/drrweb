@@ -113,13 +113,16 @@ drrweb/
    NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
    
-   # Optional: For AI-powered intent detection
-   GOOGLE_GENERATIVE_AI_API_KEY=your_google_ai_key
+   # Optional: For AI-powered intent detection (Vercel AI Gateway)
+   AI_GATEWAY_API_KEY=your_vercel_ai_gateway_key
    ```
    
-   **Get Google AI API Key:** Visit https://ai.google.dev/
+   **Get Vercel AI Gateway API Key:** 
+   1. Sign in to your Vercel account
+   2. Navigate to the AI Gateway section in your dashboard
+   3. Create a new API key and copy it
    
-   **Note:** Without the AI API key, the system falls back to keyword matching (still functional).
+   **Note:** Without the AI Gateway API key, the system falls back to keyword matching (still functional).
 
 3. **Run development server:**
    ```bash

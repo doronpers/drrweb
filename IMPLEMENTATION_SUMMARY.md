@@ -54,7 +54,7 @@ This implementation fulfills all requirements from the problem statement for cre
 
 ### 1. Configuration
 - **`.env.local.example`**
-  - Added `GOOGLE_GENERATIVE_AI_API_KEY` for Gemini AI
+  - Added `AI_GATEWAY_API_KEY` for Vercel AI Gateway
   - Documentation on where to get API key
 
 ### 2. Components

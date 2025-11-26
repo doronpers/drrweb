@@ -3,8 +3,8 @@
  * GHOST ROUTER - INTENT DETECTION SERVER ACTION
  * ====================================
  *
- * This Server Action uses Google's Gemini 1.5 Flash model to analyze
- * user input and route to the appropriate view mode.
+ * This Server Action uses Vercel AI Gateway with Google's Gemini 1.5 Flash model
+ * to analyze user input and route to the appropriate view mode.
  *
  * Philosophy:
  * - Generate routing data, not chat responses
@@ -18,7 +18,7 @@
 
 'use server';
 
-import { google } from '@ai-sdk/google';
+import { createGateway } from '@ai-sdk/gateway';
 import { generateObject } from 'ai';
 import { z } from 'zod';
 import { ViewMode, parseIntent } from '@/contexts/ViewModeContext';
@@ -53,6 +53,18 @@ const IntentSchema = z.object({
 export type IntentResponse = z.infer<typeof IntentSchema>;
 
 // ====================================
+// GATEWAY CONFIGURATION
+// ====================================
+
+/**
+ * Creates the Vercel AI Gateway instance.
+ * Uses AI_GATEWAY_API_KEY environment variable.
+ */
+const gateway = createGateway({
+  apiKey: process.env.AI_GATEWAY_API_KEY,
+});
+
+// ====================================
 // MAPPER FUNCTION
 // ====================================
 
@@ -79,7 +91,7 @@ function toNarrowMode(mode: ViewMode): NarrowMode {
 
 /**
  * Analyzes user input and returns routing information.
- * Uses Gemini 1.5 Flash for intent classification.
+ * Uses Vercel AI Gateway with Gemini 1.5 Flash for intent classification.
  *
  * @param input - The user's search query
  * @returns Promise<IntentResponse> - Target mode and audio parameters
@@ -91,18 +103,18 @@ export async function detectIntent(input: string): Promise<IntentResponse> {
   }
 
   // Check for API key
-  const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+  const apiKey = process.env.AI_GATEWAY_API_KEY;
   
   if (!apiKey) {
-    console.warn('⚠️  GOOGLE_GENERATIVE_AI_API_KEY not set. Falling back to keyword matching.');
+    console.warn('⚠️  AI_GATEWAY_API_KEY not set. Falling back to keyword matching.');
     const mode = parseIntent(input); // returns ViewMode (may include "landing")
     return createFallbackResponse(toNarrowMode(mode)); // narrowed to valid union
   }
 
   try {
-    // Call Gemini API with structured output
+    // Call AI Gateway with Gemini model via structured output
     const { object } = await generateObject({
-      model: google('gemini-1.5-flash'),
+      model: gateway('google/gemini-1.5-flash'),
       schema: IntentSchema,
       prompt: buildPrompt(input),
       temperature: 0.3, // Lower temperature for more consistent routing

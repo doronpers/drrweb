@@ -71,18 +71,21 @@ Copy the example file:
 cp .env.local.example .env.local
 ```
 
-Add your Google AI API key (optional):
+Add your Vercel AI Gateway API key (optional):
 ```env
-GOOGLE_GENERATIVE_AI_API_KEY=your_api_key_here
+AI_GATEWAY_API_KEY=your_vercel_ai_gateway_key
 ```
 
-Get your key at: https://ai.google.dev/
+Get your key:
+1. Sign in to your Vercel account
+2. Navigate to the AI Gateway section in your dashboard
+3. Create a new API key
 
 ### 2. Dependencies
 
 Already installed via `npm install`:
 - `ai` - Vercel AI SDK
-- `@ai-sdk/google` - Google AI provider
+- `@ai-sdk/gateway` - Vercel AI Gateway provider
 - `zod` - Schema validation
 
 ### 3. Run Development Server
@@ -184,7 +187,7 @@ User Input
 
 **Symptom:** Always falls back to keyword matching
 
-**Solution:** Check that `GOOGLE_GENERATIVE_AI_API_KEY` is set in `.env.local`
+**Solution:** Check that `AI_GATEWAY_API_KEY` is set in `.env.local`
 
 ### FailuresLog Not Loading
 

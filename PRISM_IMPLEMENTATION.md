@@ -26,11 +26,12 @@ The global ViewModeContext successfully manages three states:
 
 **File:** `actions/detect-intent.ts`
 
-AI-powered intent detection using Gemini 1.5 Flash:
+AI-powered intent detection using Vercel AI Gateway with Gemini 1.5 Flash:
 - Structured output with Zod schema validation
 - Returns: `{ targetMode: 'architect' | 'author' | 'lab', audioParams: { reverb, filter } }`
 - Graceful fallback to keyword matching if API unavailable
 - No chat responses - pure routing data
+- Uses Vercel AI Gateway for unified API access and cost optimization
 
 **Logic:**
 - Hiring/data/credentials → Architect
@@ -39,7 +40,7 @@ AI-powered intent detection using Gemini 1.5 Flash:
 
 **Environment Variable:**
 ```bash
-GOOGLE_GENERATIVE_AI_API_KEY=your_api_key_here
+AI_GATEWAY_API_KEY=your_vercel_ai_gateway_key
 ```
 
 **Integration:** Landing component calls `detectIntent()` on form submission with fallback to `parseIntent()`.
@@ -139,14 +140,14 @@ Edit `.env.local` and add your API keys:
 NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
 
-# Required: For AI intent detection
-GOOGLE_GENERATIVE_AI_API_KEY=your_google_ai_key
+# Optional: For AI intent detection (Vercel AI Gateway)
+AI_GATEWAY_API_KEY=your_vercel_ai_gateway_key
 ```
 
-**Get Google AI API Key:**
-1. Visit https://ai.google.dev/
-2. Sign in with Google account
-3. Create API key for Gemini
+**Get Vercel AI Gateway API Key:**
+1. Sign in to your Vercel account
+2. Navigate to the AI Gateway section in your dashboard
+3. Create a new API key
 4. Add to `.env.local`
 
 ### 3. Development
@@ -226,7 +227,7 @@ The build may fail when Google Fonts are blocked (network restrictions). This is
 
 ### 2. AI API Key Required
 
-Without `GOOGLE_GENERATIVE_AI_API_KEY`, the Server Action falls back to keyword matching. This is by design - graceful degradation.
+Without `AI_GATEWAY_API_KEY`, the Server Action falls back to keyword matching. This is by design - graceful degradation.
 
 ### 3. Audio Context Autoplay
 
