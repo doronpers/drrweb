@@ -12,6 +12,7 @@
  */
 
 import type { Metadata } from 'next';
+import { Inter, EB_Garamond, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { ViewModeProvider } from '@/contexts/ViewModeContext';
 
@@ -19,15 +20,34 @@ import { ViewModeProvider } from '@/contexts/ViewModeContext';
 // FONT CONFIGURATION
 // ====================================
 
-// Note: Using system fonts as fallback for environments without Google Fonts access
-// In production, you can add Google Fonts via <link> tag in <head> or use next/font when network is available
+// Optimize font loading with next/font
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
+  preload: true,
+});
+
+const ebGaramond = EB_Garamond({
+  subsets: ['latin'],
+  variable: '--font-eb-garamond',
+  display: 'swap',
+  preload: false, // Load on demand for Author mode
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  variable: '--font-jetbrains-mono',
+  display: 'swap',
+  preload: false, // Load on demand for Lab mode
+});
 
 // ====================================
 // METADATA
 // ====================================
 
 export const metadata: Metadata = {
-  title: 'Doron Pers - Interactive Installation',
+  title: 'Doron Reizes - Interactive Installation',
   description:
     'Systems architect, sound designer, and educator. An interactive installation exploring the intersection of sound, story, and systems.',
   keywords: [
@@ -36,11 +56,17 @@ export const metadata: Metadata = {
     'sonotheia',
     'portfolio',
     'interactive installation',
-    'doron pers',
+    'doron reizes',
   ],
-  authors: [{ name: 'Doron Pers' }],
+  authors: [{ name: 'Doron Reizes' }],
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
+    ],
+  },
   openGraph: {
-    title: 'Doron Pers - Interactive Installation',
+    title: 'Doron Reizes - Interactive Installation',
     description: 'Improving systems, stories, and the people that tell them.',
     type: 'website',
   },
@@ -56,17 +82,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        {/* Optional: Add Google Fonts when network is available */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=EB+Garamond:wght@400..800&family=JetBrains+Mono:wght@100..800&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="antialiased">
+    <html lang="en" className={`${inter.variable} ${ebGaramond.variable} ${jetbrainsMono.variable}`}>
+      <body className="antialiased font-sans">
         {/* Grain texture overlay - always present */}
         <div className="grain-overlay" aria-hidden="true" />
 

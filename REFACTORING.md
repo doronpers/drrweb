@@ -10,7 +10,7 @@ This document explains the refactoring applied to demonstrate the best-practice 
 ```tsx
 // Scattered inline styles across components
 <h1 className="text-5xl font-black tracking-tight mb-2">
-  Doron Pers
+  Doron Reizes
 </h1>
 ```
 
@@ -19,7 +19,7 @@ This document explains the refactoring applied to demonstrate the best-practice 
 // Centralized config
 const styles = getTypography('architect');
 <h1 className={styles.h1}>
-  Doron Pers
+  Doron Reizes
 </h1>
 ```
 

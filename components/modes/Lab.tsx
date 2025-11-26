@@ -105,7 +105,7 @@ export default function Lab() {
             </span>
           </div>
           <div className="space-y-1 text-sm opacity-80">
-            <p>{'>'} USER: doron_pers</p>
+            <p>{'>'} USER: doron_reizes</p>
             <p>{'>'} MODE: laboratory</p>
             <p>{'>'} ACCESS: public_read</p>
           </div>
@@ -126,22 +126,29 @@ export default function Lab() {
                 <Project
                   name="sonotheia.ai"
                   status="IN_DEVELOPMENT"
-                  description="voice fraud detection system. building auth layer + waveform visualization. 73% complete."
-                  tech={['Next.js', 'TensorFlow', 'Web Audio API', 'Supabase']}
+                  description="voice fraud detection platform. ML-powered vocal biometric analysis. building auth layer, waveform visualization, real-time processing pipeline. 73% complete. handling drift detection, synthetic voice identification, audio manipulation detection."
+                  tech={['Next.js', 'TypeScript', 'TensorFlow', 'Web Audio API', 'Supabase', 'Python']}
                   onMouseEnter={handleHover}
                 />
                 <Project
                   name="portfolio_pedagogy"
                   status="ACTIVE"
-                  description="university course. teaching narrative construction through curation. semester 2 ongoing."
-                  tech={['Figma', 'Notion', 'Peer Review Systems']}
+                  description="university course on professional portfolio construction. teaching narrative synthesis, strategic curation, presentation design. semester 2 ongoing. 40+ students across design, development, and creative fields."
+                  tech={['Figma', 'Notion', 'Peer Review Systems', 'Curriculum Design']}
                   onMouseEnter={handleHover}
                 />
                 <Project
                   name="field_recordings_archive"
                   status="ONGOING"
-                  description="cataloging 10+ years of location sound. building searchable metadata system."
-                  tech={['Python', 'SQLite', 'Librosa', 'Reaper']}
+                  description="cataloging 10+ years of location sound recordings. building searchable metadata system with spectral analysis, location tagging, temporal indexing. exploring ML-based sound classification."
+                  tech={['Python', 'SQLite', 'Librosa', 'Reaper', 'PostgreSQL']}
+                  onMouseEnter={handleHover}
+                />
+                <Project
+                  name="interactive_installations"
+                  status="EXPERIMENTAL"
+                  description="exploring web-based interactive sound installations. real-time synthesis, spatial audio, user interaction patterns. this website is part of this exploration."
+                  tech={['Next.js', 'Tone.js', 'Web Audio API', 'Framer Motion']}
                   onMouseEnter={handleHover}
                 />
               </div>
@@ -181,16 +188,25 @@ export default function Lab() {
             <TerminalBlock title="NOTES.TXT" onMouseEnter={handleHover}>
               <div className="space-y-4 text-sm opacity-80">
                 <p>
-                  [2025-01-15] what if portfolio course was less about "showing
-                  your best work" and more about "showing your thinking"?
+                  [2025-01-25] what if portfolio course was less about "showing
+                  your best work" and more about "showing your thinking"? students
+                  respond better when they understand curation as argument, not
+                  display.
                 </p>
                 <p>
-                  [2025-01-12] voice prints are like fingerprints but they drift
-                  over time. age, health, context. building for drift, not stasis.
+                  [2025-01-22] voice prints are like fingerprints but they drift
+                  over time. age, health, context, emotional state. building for
+                  drift, not stasis. need adaptive models.
                 </p>
                 <p>
-                  [2025-01-08] students confuse curation with censorship. need
-                  better metaphor. prism? lens? filter?
+                  [2025-01-18] students confuse curation with censorship. need
+                  better metaphor. prism? lens? filter? settled on "prism" for this
+                  site—same source, different refractions.
+                </p>
+                <p>
+                  [2025-01-15] field recording session in abandoned warehouse.
+                  captured 3 hours of ambience, mechanical sounds, water drips.
+                  thinking about how space shapes sound, how sound shapes memory.
                 </p>
                 <p className="text-lab-accent">
                   [2025-01-03] THIS WEBSITE IS A PRISM NOT A MIRROR
@@ -219,7 +235,8 @@ export default function Lab() {
             {/* Links */}
             <TerminalBlock title="EXTERNAL_LINKS" onMouseEnter={handleHover}>
               <div className="space-y-2 text-sm">
-                <ExtLink href="https://github.com" label="github/doronpers" onMouseEnter={handleHover} />
+                <ExtLink href="https://github.com/doronreizes" label="github/doronreizes" onMouseEnter={handleHover} />
+                <ExtLink href="https://www.linkedin.com/in/doronreizes" label="linkedin.com/in/doronreizes" onMouseEnter={handleHover} />
                 <ExtLink href="https://sonotheia.ai" label="sonotheia.ai" onMouseEnter={handleHover} />
                 <ExtLink href="#" label="soundcloud/fieldwork" onMouseEnter={handleHover} />
                 <ExtLink href="#" label="are.na/research" onMouseEnter={handleHover} />
@@ -231,8 +248,10 @@ export default function Lab() {
               <div className="space-y-1 text-xs opacity-70">
                 <p>UPTIME: {'>'}10 years</p>
                 <p>DOMAINS: 3 (sound, text, code)</p>
-                <p>CURRENT_ROLE: acting_president</p>
-                <p>TEACHING: active</p>
+                <p>CURRENT_ROLE: acting_president_cto</p>
+                <p>COMPANY: sonotheia.ai</p>
+                <p>TEACHING: active (adjunct)</p>
+                <p>LOCATION: remote</p>
                 <p>STATUS: building</p>
               </div>
             </TerminalBlock>

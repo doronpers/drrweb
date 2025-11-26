@@ -9,9 +9,9 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter", "system-ui", "-apple-system", "sans-serif"],
-        serif: ["EB Garamond", "Georgia", "Times New Roman", "serif"],
-        mono: ["JetBrains Mono", "Consolas", "Monaco", "monospace"],
+        sans: ["var(--font-inter)", "system-ui", "-apple-system", "sans-serif"],
+        serif: ["var(--font-eb-garamond)", "Georgia", "Times New Roman", "serif"],
+        mono: ["var(--font-jetbrains-mono)", "Consolas", "Monaco", "monospace"],
       },
       colors: {
         architect: {
@@ -31,7 +31,7 @@ const config: Config = {
         },
       },
       backgroundImage: {
-        grain: "url('/textures/grain.png')",
+        grain: "url('/textures/grain.svg')",
       },
     },
   },

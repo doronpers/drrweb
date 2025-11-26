@@ -61,7 +61,7 @@ export default function Architect() {
           className="mb-20"
         >
           <motion.h1 layout="position" className={styles.h1}>
-            Doron Pers
+            Doron Reizes
           </motion.h1>
           <motion.p
             layout="position"
@@ -107,19 +107,32 @@ export default function Architect() {
             <Section title="CURRENT POSITION" onHover={handleHover}>
               <motion.div layout className="space-y-6">
                 <Position
-                  title="Acting President & CTO"
+                  title="Acting President & Chief Technology Officer"
                   company="Sonotheia.ai"
-                  description="Leading technical infrastructure for voice fraud detection platform. Responsible for system architecture, product development, and strategic direction."
-                  tags={['Voice AI', 'Security', 'Full-Stack Development']}
+                  description="Leading technical infrastructure and product development for voice fraud detection platform. Architecting ML-powered systems that analyze vocal biometrics to detect synthetic and manipulated audio. Responsible for full-stack development, system architecture, team leadership, and strategic direction. Building scalable solutions that balance security, performance, and user experience."
+                  tags={['Voice AI', 'Machine Learning', 'Security', 'Full-Stack Development', 'Product Strategy']}
                   highlight
                   onHover={handleHover}
                 />
 
                 <Position
-                  title="University Instructor"
-                  company="Portfolio Course"
-                  description="Teaching students to construct compelling narratives around their work. Emphasis on synthesis, curation, and presentation."
-                  tags={['Pedagogy', 'Narrative Design', 'Professional Development']}
+                  title="Adjunct Instructor"
+                  company="Portfolio Development Course"
+                  description="Teaching undergraduate and graduate students the art of professional portfolio construction. Curriculum focuses on narrative synthesis, strategic curation, and compelling presentation of creative and technical work. Students learn to identify through-lines, construct coherent arguments through project selection, and communicate their unique value proposition."
+                  tags={['Pedagogy', 'Narrative Design', 'Professional Development', 'Curriculum Design']}
+                  onHover={handleHover}
+                />
+              </motion.div>
+            </Section>
+
+            {/* Professional Experience */}
+            <Section title="PROFESSIONAL EXPERIENCE" onHover={handleHover}>
+              <motion.div layout className="space-y-6">
+                <Position
+                  title="Sound Designer & Technical Consultant"
+                  company="Freelance"
+                  description="Field recording, sound design, and audio post-production for film, installation, and interactive media. Specialized in location sound, spatial audio, and creating immersive sonic environments. Technical consulting on audio systems, workflow optimization, and creative sound design approaches."
+                  tags={['Field Recording', 'Post-Production', 'Spatial Audio', 'Technical Consulting']}
                   onHover={handleHover}
                 />
               </motion.div>
@@ -129,45 +142,69 @@ export default function Architect() {
             <Section title="CORE COMPETENCIES" onHover={handleHover}>
               <motion.div layout className="grid grid-cols-2 gap-6">
                 <CompetencyCard
-                  title="Sound Design"
+                  title="Sound Design & Audio"
                   items={[
-                    'Field Recording',
-                    'Synthesis & Processing',
-                    'Spatial Audio',
-                    'Music Production',
+                    'Field Recording & Location Sound',
+                    'Synthesis & Audio Processing',
+                    'Spatial Audio & Ambisonics',
+                    'Music Production & Composition',
+                    'Audio Post-Production',
                   ]}
                   onHover={handleHover}
                 />
                 <CompetencyCard
                   title="Technical Leadership"
                   items={[
-                    'System Architecture',
-                    'Product Strategy',
-                    'Team Management',
-                    'Technical Writing',
+                    'System Architecture & Design',
+                    'Product Strategy & Roadmapping',
+                    'Team Leadership & Management',
+                    'Technical Writing & Documentation',
+                    'Agile & Scrum Methodologies',
                   ]}
                   onHover={handleHover}
                 />
                 <CompetencyCard
-                  title="Literature & Writing"
+                  title="Software Development"
                   items={[
-                    'Creative Writing',
-                    'Critical Analysis',
-                    'Narrative Structure',
-                    'Editorial Work',
+                    'Full-Stack Web Development',
+                    'Machine Learning & AI',
+                    'Voice & Audio Processing',
+                    'API Design & Integration',
+                    'Database Architecture',
                   ]}
                   onHover={handleHover}
                 />
                 <CompetencyCard
-                  title="Education"
+                  title="Education & Communication"
                   items={[
-                    'Curriculum Design',
+                    'Curriculum Design & Development',
                     'Workshop Facilitation',
-                    'Mentorship',
-                    'Assessment & Feedback',
+                    'Mentorship & Coaching',
+                    'Public Speaking & Presentation',
+                    'Critical Analysis & Writing',
                   ]}
                   onHover={handleHover}
                 />
+              </motion.div>
+            </Section>
+
+            {/* Education */}
+            <Section title="EDUCATION" onHover={handleHover}>
+              <motion.div layout className="space-y-4">
+                <motion.div
+                  layout
+                  className="border-l-4 border-black/20 pl-6 py-2"
+                >
+                  <motion.h3 layout="position" className={styles.h3}>
+                    Literature & Creative Writing
+                  </motion.h3>
+                  <motion.p
+                    layout="position"
+                    className={`${styles.p} text-black/70 font-medium mt-1`}
+                  >
+                    Focus on narrative structure, critical theory, and experimental forms
+                  </motion.p>
+                </motion.div>
               </motion.div>
             </Section>
           </motion.div>
@@ -198,7 +235,7 @@ export default function Architect() {
                   onMouseEnter={handleHover}
                 />
                 <ContactItem
-                  href="https://linkedin.com"
+                  href="https://www.linkedin.com/in/doronreizes"
                   label="LinkedIn"
                   onMouseEnter={handleHover}
                 />
@@ -230,8 +267,8 @@ export default function Architect() {
               <motion.div layout className="space-y-4">
                 <Metric value="10+" label="Years Experience" />
                 <Metric value="3" label="Domains Mastered" />
-                <Metric value="100+" label="Students Taught" />
-                <Metric value="1" label="Startup Led" />
+                <Metric value="150+" label="Students Taught" />
+                <Metric value="1" label="Startup Founded" />
               </motion.div>
             </motion.div>
           </motion.aside>

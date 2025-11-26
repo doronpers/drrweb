@@ -15,9 +15,10 @@
  * - Validation and moderation
  */
 
-import { useState, FormEvent } from 'react';
+import { useState, FormEvent, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import EchoEntry from './EchoEntry';
+import { fetchEchoes, submitEcho, type Echo as SupabaseEcho } from '@/lib/supabase';
 
 // ====================================
 // TYPE DEFINITIONS
@@ -29,98 +30,194 @@ interface Echo {
   timestamp: Date;
 }
 
+interface SubmissionError {
+  message: string;
+  type: 'validation' | 'rate-limit' | 'network' | 'unknown';
+}
+
 // ====================================
-// MOCK DATA (Replace with Supabase later)
+// RATE LIMITING
 // ====================================
 
-const INITIAL_ECHOES: Echo[] = [
-  {
-    id: '1',
-    text: 'A mistake I cherish...',
-    timestamp: new Date('2025-01-20'),
-  },
-  {
-    id: '2',
-    text: 'The sound of a room after everyone leaves',
-    timestamp: new Date('2025-01-19'),
-  },
-  {
-    id: '3',
-    text: 'Learning is remembering in reverse',
-    timestamp: new Date('2025-01-18'),
-  },
-  {
-    id: '4',
-    text: 'I build systems that listen',
-    timestamp: new Date('2025-01-17'),
-  },
-  {
-    id: '5',
-    text: 'The best ideas arrive sideways',
-    timestamp: new Date('2025-01-16'),
-  },
-  {
-    id: '6',
-    text: 'Silence is also a texture',
-    timestamp: new Date('2025-01-15'),
-  },
-  {
-    id: '7',
-    text: 'What if teaching is just curated curiosity?',
-    timestamp: new Date('2025-01-14'),
-  },
-  {
-    id: '8',
-    text: 'Trust compounds exponentially',
-    timestamp: new Date('2025-01-13'),
-  },
-];
+const RATE_LIMIT_WINDOW = 60000; // 1 minute
+const MAX_SUBMISSIONS_PER_WINDOW = 3;
+const lastSubmissions = new Map<string, number[]>();
+
+function checkRateLimit(): { allowed: boolean; remainingTime?: number } {
+  const now = Date.now();
+  const key = 'default'; // In a real app, use user ID or IP
+  
+  const submissions = lastSubmissions.get(key) || [];
+  const recentSubmissions = submissions.filter(
+    (timestamp) => now - timestamp < RATE_LIMIT_WINDOW
+  );
+
+  if (recentSubmissions.length >= MAX_SUBMISSIONS_PER_WINDOW) {
+    const oldestSubmission = Math.min(...recentSubmissions);
+    const remainingTime = Math.ceil(
+      (RATE_LIMIT_WINDOW - (now - oldestSubmission)) / 1000
+    );
+    return { allowed: false, remainingTime };
+  }
+
+  recentSubmissions.push(now);
+  lastSubmissions.set(key, recentSubmissions);
+  return { allowed: true };
+}
+
+// ====================================
+// INPUT SANITIZATION
+// ====================================
+
+function sanitizeInput(input: string): string {
+  // Remove control characters except newlines and tabs
+  return input
+    .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '')
+    .trim();
+}
+
+function validateInput(input: string): { valid: boolean; error?: string } {
+  const sanitized = sanitizeInput(input);
+  
+  if (!sanitized) {
+    return { valid: false, error: 'Echo cannot be empty' };
+  }
+  
+  if (sanitized.length > 100) {
+    return { valid: false, error: 'Echo must be 100 characters or less' };
+  }
+  
+  // Check for potentially malicious patterns
+  if (/<script|javascript:|on\w+\s*=/i.test(sanitized)) {
+    return { valid: false, error: 'Invalid characters detected' };
+  }
+  
+  return { valid: true };
+}
 
 // ====================================
 // COMPONENT
 // ====================================
 
 export default function EchoChamber() {
-  const [echoes, setEchoes] = useState<Echo[]>(INITIAL_ECHOES);
+  const [echoes, setEchoes] = useState<Echo[]>([]);
   const [input, setInput] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showInput, setShowInput] = useState(false);
+  const [error, setError] = useState<SubmissionError | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const errorTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Fetch echoes on mount
+  useEffect(() => {
+    async function loadEchoes() {
+      try {
+        setIsLoading(true);
+        const data = await fetchEchoes();
+        const formattedEchoes: Echo[] = data.map((echo: SupabaseEcho) => ({
+          id: echo.id,
+          text: echo.text,
+          timestamp: new Date(echo.created_at),
+        }));
+        setEchoes(formattedEchoes);
+      } catch (err) {
+        console.error('Failed to load echoes:', err);
+        // Fallback to empty array if Supabase is not configured
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    loadEchoes();
+  }, []);
+
+  // Clear error after timeout
+  useEffect(() => {
+    if (error) {
+      if (errorTimeoutRef.current) {
+        clearTimeout(errorTimeoutRef.current);
+      }
+      errorTimeoutRef.current = setTimeout(() => {
+        setError(null);
+      }, 5000);
+    }
+    return () => {
+      if (errorTimeoutRef.current) {
+        clearTimeout(errorTimeoutRef.current);
+      }
+    };
+  }, [error]);
 
   /**
    * Handle new echo submission
    */
-  const handleSubmit = async (e: FormEvent) => {
+  const handleSubmit = useCallback(async (e: FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isSubmitting) return;
 
-    // Validate length (max 100 characters)
-    if (input.length > 100) {
-      alert('Echo must be 100 characters or less');
+    // Clear previous errors
+    setError(null);
+
+    // Validate input
+    const validation = validateInput(input);
+    if (!validation.valid) {
+      setError({
+        message: validation.error || 'Invalid input',
+        type: 'validation',
+      });
+      return;
+    }
+
+    // Check rate limit
+    const rateLimit = checkRateLimit();
+    if (!rateLimit.allowed) {
+      setError({
+        message: `Please wait ${rateLimit.remainingTime} seconds before submitting again`,
+        type: 'rate-limit',
+      });
       return;
     }
 
     setIsSubmitting(true);
 
     try {
-      // TODO: Replace with Supabase insert
-      const newEcho: Echo = {
-        id: Date.now().toString(),
-        text: input.trim(),
-        timestamp: new Date(),
-      };
+      const sanitized = sanitizeInput(input);
+      const success = await submitEcho(sanitized);
 
-      setEchoes((prev) => [...prev, newEcho]);
-      setInput('');
-      setShowInput(false);
-
-      // In production, this would be:
-      // await supabaseClient.from('echoes').insert({ text: input.trim() })
-    } catch (error) {
-      console.error('Failed to submit echo:', error);
+      if (success) {
+        // Optimistically add to local state
+        const newEcho: Echo = {
+          id: `temp-${Date.now()}`,
+          text: sanitized,
+          timestamp: new Date(),
+        };
+        setEchoes((prev) => [newEcho, ...prev]);
+        setInput('');
+        setShowInput(false);
+        
+        // Refresh from server to get actual ID
+        const data = await fetchEchoes();
+        const formattedEchoes: Echo[] = data.map((echo: SupabaseEcho) => ({
+          id: echo.id,
+          text: echo.text,
+          timestamp: new Date(echo.created_at),
+        }));
+        setEchoes(formattedEchoes);
+      } else {
+        setError({
+          message: 'Failed to submit echo. Please try again.',
+          type: 'network',
+        });
+      }
+    } catch (err) {
+      console.error('Failed to submit echo:', err);
+      setError({
+        message: 'An error occurred. Please try again later.',
+        type: 'unknown',
+      });
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [input, isSubmitting]);
 
   return (
     <div className="fixed inset-0 pointer-events-none z-0">
@@ -212,10 +309,31 @@ export default function EchoChamber() {
               <p className="text-xs text-black/40 mt-4 leading-relaxed">
                 Your echo will float among others. Brief thoughts work best.
               </p>
+
+              {/* Error Message */}
+              <AnimatePresence>
+                {error && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="mt-4 p-3 bg-red-50 border border-red-200 rounded-lg"
+                  >
+                    <p className="text-xs text-red-600">{error.message}</p>
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Loading State */}
+      {isLoading && echoes.length === 0 && (
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="text-black/20 text-sm">Loading echoes...</div>
+        </div>
+      )}
     </div>
   );
 }

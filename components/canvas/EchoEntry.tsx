@@ -10,7 +10,7 @@
  */
 
 import { motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import { memo, useMemo } from 'react';
 
 interface EchoEntryProps {
   id: string;
@@ -19,9 +19,12 @@ interface EchoEntryProps {
   index: number;
 }
 
-export default function EchoEntry({ id, text, timestamp, index }: EchoEntryProps) {
+function EchoEntry({ id, text, timestamp, index }: EchoEntryProps) {
   // Random starting position and movement parameters
-  const [floatParams] = useState(() => ({
+  // Memoized to prevent recalculation on re-renders
+  // Empty dependency array - these are random values that should be stable per component instance
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const floatParams = useMemo(() => ({
     startX: Math.random() * 80 + 10, // 10-90% of width
     startY: Math.random() * 80 + 10, // 10-90% of height
     driftX: (Math.random() - 0.5) * 100, // Random drift direction
@@ -29,7 +32,7 @@ export default function EchoEntry({ id, text, timestamp, index }: EchoEntryProps
     duration: Math.random() * 30 + 40, // 40-70 seconds
     opacity: Math.random() * 0.3 + 0.2, // 0.2-0.5 opacity for "distance"
     rotation: Math.random() * 10 - 5, // -5 to 5 degrees
-  }));
+  }), []); // Empty array - values are random but should be stable per instance
 
   return (
     <motion.div
@@ -72,3 +75,6 @@ export default function EchoEntry({ id, text, timestamp, index }: EchoEntryProps
     </motion.div>
   );
 }
+
+// Memoize component to prevent unnecessary re-renders
+export default memo(EchoEntry);

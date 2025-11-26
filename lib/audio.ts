@@ -27,7 +27,7 @@ type UISoundType = 'click-dry' | 'click-warm' | 'glitch';
 
 class AudioManager {
   private initialized: boolean = false;
-  private muted: boolean = false;
+  private muted: boolean = true; // Default to muted
 
   // Ambient drone components
   private noise: Tone.Noise | null = null;
@@ -53,7 +53,11 @@ class AudioManager {
     try {
       // Start the Tone.js audio context
       await Tone.start();
-      console.log('🔊 Audio context started');
+      
+      // Set muted state immediately after starting context
+      Tone.Destination.mute = this.muted;
+      
+      console.log('🔊 Audio context started', this.muted ? '(muted)' : '');
 
       // ====================================
       // AMBIENT DRONE SYNTHESIS
@@ -220,20 +224,29 @@ class AudioManager {
   }
 
   /**
-   * Toggle mute state for all audio.
+   * Set mute state for all audio.
    */
-  toggleMute(): void {
-    this.muted = !this.muted;
+  setMuted(muted: boolean): void {
+    this.muted = muted;
 
     if (this.muted) {
       this.stopAmbient();
       Tone.Destination.mute = true;
     } else {
       Tone.Destination.mute = false;
-      this.startAmbient();
+      if (this.initialized) {
+        this.startAmbient();
+      }
     }
 
     console.log(`🔇 Audio ${this.muted ? 'muted' : 'unmuted'}`);
+  }
+
+  /**
+   * Toggle mute state for all audio.
+   */
+  toggleMute(): void {
+    this.setMuted(!this.muted);
   }
 
   /**

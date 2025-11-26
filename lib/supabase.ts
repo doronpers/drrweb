@@ -35,7 +35,10 @@
  *
  * 6. Add your Supabase credentials to .env.local:
  *    NEXT_PUBLIC_SUPABASE_URL=your_project_url
- *    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+ *    NEXT_PUBLIC_SUPABASE_ANON_KEY=your_publishable_key
+ *    
+ *    Note: Supabase calls it "publishable key" in the dashboard, but the
+ *    environment variable name is still NEXT_PUBLIC_SUPABASE_ANON_KEY
  */
 
 import { createClient } from '@supabase/supabase-js';
@@ -55,14 +58,57 @@ export interface Echo {
 // CLIENT INITIALIZATION
 // ====================================
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+// Validate environment variables
+function validateEnvVars(): { url: string; key: string } | null {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-// Create Supabase client (will be undefined if env vars not set)
-export const supabase =
-  supabaseUrl && supabaseAnonKey
-    ? createClient(supabaseUrl, supabaseAnonKey)
-    : null;
+  if (!url || !key) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(
+        'Supabase not configured. Echo Chamber will use mock data.\n' +
+        'Set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local'
+      );
+    }
+    return null;
+  }
+
+  // Basic URL validation
+  try {
+    new URL(url);
+  } catch {
+    console.error('Invalid NEXT_PUBLIC_SUPABASE_URL format');
+    return null;
+  }
+
+  // Basic key validation (should be a JWT-like string)
+  if (key.length < 20) {
+    console.error('Invalid NEXT_PUBLIC_SUPABASE_ANON_KEY format');
+    return null;
+  }
+
+  return { url, key };
+}
+
+const envVars = validateEnvVars();
+
+// Create Supabase client (will be null if env vars not set or invalid)
+export const supabase = envVars
+  ? createClient(envVars.url, envVars.key, {
+      auth: {
+        persistSession: false, // Don't persist sessions for anonymous access
+        autoRefreshToken: false,
+      },
+      db: {
+        schema: 'public', // Explicitly use public schema
+      },
+    })
+  : null;
+
+// Log connection info in development
+if (envVars && process.env.NODE_ENV === 'development') {
+  console.log('✅ Supabase connected:', envVars.url);
+}
 
 // ====================================
 // ECHO CHAMBER FUNCTIONS
@@ -79,6 +125,7 @@ export async function fetchEchoes(): Promise<Echo[]> {
   }
 
   try {
+    // Try with explicit schema (public is default but being explicit helps)
     const { data, error } = await supabase
       .from('echoes')
       .select('*')
@@ -86,10 +133,25 @@ export async function fetchEchoes(): Promise<Echo[]> {
       .order('created_at', { ascending: false })
       .limit(20);
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase error fetching echoes:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code,
+      });
+      throw error;
+    }
     return data || [];
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error fetching echoes:', error);
+    // Log more details for debugging
+    if (error?.message) {
+      console.error('Error message:', error.message);
+    }
+    if (error?.details) {
+      console.error('Error details:', error.details);
+    }
     return [];
   }
 }
@@ -110,10 +172,24 @@ export async function submitEcho(text: string): Promise<boolean> {
       approved: false, // Requires manual approval
     });
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase error submitting echo:', {
+        message: error.message,
+        details: error.details,
+        hint: error.hint,
+        code: error.code,
+      });
+      throw error;
+    }
     return true;
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error submitting echo:', error);
+    if (error?.message) {
+      console.error('Error message:', error.message);
+    }
+    if (error?.details) {
+      console.error('Error details:', error.details);
+    }
     return false;
   }
 }
