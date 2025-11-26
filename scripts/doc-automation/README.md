@@ -303,6 +303,18 @@ Generated docs complement existing manual documentation:
 - Add examples in JSDoc for complex functions
 - Keep component files well-organized for better extraction
 
+## ⚠️ Limitations
+
+The documentation extraction uses regex patterns for simplicity and zero dependencies. This means:
+
+- **Nested interfaces**: Complex nested props (e.g., `{ prop: { nested: string } }`) may not be fully extracted
+- **Complex types**: Union types and intersections may not display perfectly
+- **Edge cases**: Very complex TypeScript syntax may not be parsed correctly
+
+For production projects requiring 100% accuracy, consider using a TypeScript AST parser like `@typescript-eslint/parser` or TypeDoc.
+
+For most projects, the current regex-based approach provides a good balance of simplicity, maintainability, and zero dependencies.
+
 ---
 
 **Note**: This system is designed to be extensible. Feel free to add custom extractors, validators, and generators to suit your project needs.

@@ -25,14 +25,19 @@ function hasJSDoc(content) {
   return /\/\*\*[\s\S]*?\*\//.test(content);
 }
 
+// Regex patterns compiled once for performance
+const FUNCTION_PATTERN = /(?:export\s+)?(?:async\s+)?function\s+\w+/g;
+const ARROW_FUNCTION_PATTERN = /(?:export\s+)?const\s+\w+\s*=\s*(?:async\s+)?\([^)]*\)\s*(?::\s*[^=]+)?=>/g;
+const DOCUMENTED_FUNCTION_PATTERN = /\/\*\*[\s\S]*?\*\/\s*(?:export\s+)?(?:async\s+)?(?:function\s+\w+|const\s+\w+\s*=)/g;
+
 /**
  * Count functions in a file
  * @param {string} content - File content
  * @returns {number} - Number of functions
  */
 function countFunctions(content) {
-  const functionMatches = content.match(/(?:export\s+)?(?:async\s+)?function\s+\w+/g) || [];
-  const arrowMatches = content.match(/(?:export\s+)?const\s+\w+\s*=\s*(?:async\s+)?\([^)]*\)\s*(?::\s*[^=]+)?=>/g) || [];
+  const functionMatches = content.match(FUNCTION_PATTERN) || [];
+  const arrowMatches = content.match(ARROW_FUNCTION_PATTERN) || [];
   return functionMatches.length + arrowMatches.length;
 }
 
@@ -42,8 +47,7 @@ function countFunctions(content) {
  * @returns {number} - Number of documented functions
  */
 function countDocumentedFunctions(content) {
-  const pattern = /\/\*\*[\s\S]*?\*\/\s*(?:export\s+)?(?:async\s+)?(?:function\s+\w+|const\s+\w+\s*=)/g;
-  const matches = content.match(pattern) || [];
+  const matches = content.match(DOCUMENTED_FUNCTION_PATTERN) || [];
   return matches.length;
 }
 
