@@ -9,29 +9,47 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "@vercel/speed-insights": "^1.2.0",
+    "framer-motion": "^11.0.0",
     "next": "^14.2.0",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
-    "framer-motion": "^11.0.0",
-    "tone": "^15.0.4",
-    "@supabase/supabase-js": "^2.39.0"
+    "tone": "^15.0.4"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.1",
     "@types/node": "^20.11.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
-    "typescript": "^5.3.0",
-    "tailwindcss": "^3.4.0",
-    "postcss": "^8.4.0",
+    "@typescript-eslint/eslint-plugin": "^8.48.0",
+    "@typescript-eslint/parser": "^8.48.0",
     "autoprefixer": "^10.4.0",
-    "eslint": "^8.57.0",
-    "eslint-config-next": "^14.2.0"
+    "eslint": "^9.39.1",
+    "eslint-config-next": "^15.5.6",
+    "eslint-config-prettier": "^9.1.2",
+    "eslint-plugin-prettier": "^5.5.4",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.3.0"
   },
   "repository": {
     "type": "git",
     "url": "http://local_proxy@127.0.0.1:44250/git/doronreizes/drrweb"
   },
-  "keywords": ["interactive", "theatrical", "sound-design", "portfolio"],
+  "keywords": [
+    "interactive",
+    "theatrical",
+    "sound-design",
+    "portfolio"
+  ],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "overrides": {
+    "eslint": "^9.14.0",
+    "rimraf": "^5.0.5",
+    "glob": "^10.3.10",
+    "@humanwhocodes/config-array": "npm:@eslint/config-array@^0.14.0",
+    "@humanwhocodes/object-schema": "npm:@eslint/object-schema@^2.1.0"
+  }
 }
