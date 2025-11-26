@@ -11,8 +11,12 @@ export default [
       "node_modules/**",
       "out/**",
       ".git/**",
-      "*.config.js",
-      "*.config.mjs",
+      "next.config*.js",
+      "next.config*.mjs",
+      "postcss.config*.js",
+      "postcss.config*.mjs",
+      "tailwind.config*.js",
+      "tailwind.config*.ts",
     ],
   },
   {
@@ -61,10 +65,6 @@ export default [
       "@typescript-eslint/no-unused-vars": [
         "warn",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
-      ],
-      "@typescript-eslint/no-require-imports": [
-        "error",
-        { allow: ["\\.js$"] },
       ],
     },
   },
