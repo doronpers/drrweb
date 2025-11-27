@@ -91,8 +91,9 @@ export default function Landing() {
         console.log('🎵 Suggested audio params:', intentResult.audioParams);
         
         // Slight delay for dramatic effect
+        // Pass the user's input as intent for whispers personalization
         setTimeout(() => {
-          setMode(targetMode);
+          setMode(targetMode, input);
         }, 300);
       } catch (error) {
         console.error('Intent detection failed, using fallback:', error);
@@ -100,7 +101,7 @@ export default function Landing() {
         // Fallback to client-side parsing
         const targetMode = parseIntent(input);
         setTimeout(() => {
-          setMode(targetMode);
+          setMode(targetMode, input);
         }, 300);
       } finally {
         // Reset submitting state after transition
@@ -136,6 +137,7 @@ export default function Landing() {
     await initializeAudio();
     const audioManager = audioManagerRef.current;
     if (audioManager) {
+      // Play a gentle musical welcome tone
       audioManager.playUISound('click-warm');
     }
   }, [initializeAudio]);

@@ -25,14 +25,22 @@ import Architect from '@/components/modes/Architect';
 import Author from '@/components/modes/Author';
 import Lab from '@/components/modes/Lab';
 import EchoChamber from '@/components/canvas/EchoChamber';
+import WhispersChamber from '@/components/canvas/WhispersChamber';
 import AntiPortfolio from '@/components/AntiPortfolio';
 
 export default function Home() {
-  const { currentMode, setMode } = useViewMode();
+  const { currentMode, setMode, userIntent } = useViewMode();
 
   return (
     <main className="relative min-h-screen">
-      {/* Echo Chamber - always present in background */}
+      {/* Whispers Chamber - AI-generated ambient text, always present */}
+      <WhispersChamber 
+        mode={currentMode} 
+        userIntent={userIntent || undefined}
+        density={currentMode === 'landing' ? 6 : 8}
+      />
+      
+      {/* Echo Chamber - user-submitted echoes, visible in modes */}
       {currentMode !== 'landing' && <EchoChamber />}
 
       {/* Mode-specific content */}
