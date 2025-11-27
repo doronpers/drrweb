@@ -178,7 +178,7 @@ export default function Landing() {
           ==================================== */}
       <motion.button
         onClick={handleMuteToggle}
-        className="fixed top-8 right-8 z-50 p-3 text-black/30 hover:text-black/60 transition-colors"
+        className="fixed top-4 right-4 md:top-8 md:right-8 z-50 p-2 md:p-3 text-black/30 hover:text-black/60 transition-colors"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         aria-label={isMuted ? 'Unmute audio' : 'Mute audio'}
@@ -190,8 +190,9 @@ export default function Landing() {
               initial={{ opacity: 0, rotate: -90 }}
               animate={{ opacity: 1, rotate: 0 }}
               exit={{ opacity: 0, rotate: 90 }}
-              width="24"
-              height="24"
+              width="20"
+              height="20"
+              className="md:w-6 md:h-6"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -209,8 +210,9 @@ export default function Landing() {
               initial={{ opacity: 0, rotate: -90 }}
               animate={{ opacity: 1, rotate: 0 }}
               exit={{ opacity: 0, rotate: 90 }}
-              width="24"
-              height="24"
+              width="20"
+              height="20"
+              className="md:w-6 md:h-6"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -340,13 +342,13 @@ export default function Landing() {
           CORNER SIGNATURE
           ==================================== */}
       <motion.div
-        className="fixed bottom-8 left-8 text-black/20 text-xs tracking-widest"
+        className="fixed bottom-4 left-4 md:bottom-8 md:left-8 text-black/20 text-xs tracking-widest"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
       >
-        <p>AN INTERACTIVE INSTALLATION</p>
-        <p className="mt-1 font-light">©2025</p>
+        <p className="text-[10px] md:text-xs">AN INTERACTIVE INSTALLATION</p>
+        <p className="mt-1 font-light text-[10px] md:text-xs">©2025</p>
       </motion.div>
     </div>
   );

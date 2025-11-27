@@ -74,7 +74,7 @@ export default function Lab() {
       </div>
 
       {/* Scan Lines Effect */}
-      <div className="fixed inset-0 pointer-events-none z-50 opacity-5">
+      <div className="fixed inset-0 pointer-events-none z-10 opacity-5">
         <motion.div
           className="w-full h-1 bg-lab-text"
           animate={{

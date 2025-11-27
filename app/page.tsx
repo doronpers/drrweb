@@ -64,12 +64,12 @@ export default function Home() {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="fixed top-8 left-8 z-50 flex gap-3"
+          className="fixed top-4 left-4 md:top-8 md:left-8 z-50 flex gap-2 md:gap-3"
         >
           {/* Back to Landing */}
           <motion.button
             onClick={() => setMode('landing')}
-            className="px-4 py-2 bg-black/5 hover:bg-black/10 backdrop-blur-sm rounded-full border border-black/10 transition-colors text-sm font-medium"
+            className="px-3 py-2 md:px-4 md:py-2 bg-black/5 hover:bg-black/10 backdrop-blur-sm rounded-full border border-black/10 transition-colors text-sm font-medium"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             title="Return to entrance"
@@ -132,7 +132,7 @@ function ModeButton({
     <motion.button
       onClick={onClick}
       className={`
-        px-4 py-2 rounded-full text-sm font-medium transition-all
+        px-3 py-2 md:px-4 md:py-2 rounded-full text-sm font-medium transition-all
         ${
           isActive
             ? 'bg-black text-white'

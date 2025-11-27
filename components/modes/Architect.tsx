@@ -51,14 +51,14 @@ export default function Architect() {
       {/* ====================================
           GRID STRUCTURE WITH LAYOUT ANIMATIONS
           ==================================== */}
-      <div className="container mx-auto px-8 py-16 max-w-6xl">
+      <div className="container mx-auto px-4 md:px-8 py-12 md:py-16 max-w-6xl">
         {/* Header with layout="position" for smooth repositioning */}
         <motion.header
           layout="position"
           initial={animations.fadeInUp.initial}
           animate={animations.fadeInUp.animate}
           transition={{ ...transitions.smooth, delay: 0.2 }}
-          className="mb-20"
+          className="mb-12 md:mb-20"
         >
           <motion.h1 layout="position" className={styles.h1}>
             Doron Reizes
@@ -72,11 +72,11 @@ export default function Architect() {
         </motion.header>
 
         {/* Main Grid */}
-        <div className="grid grid-cols-12 gap-8">
+        <div className="grid grid-cols-12 gap-6 md:gap-8">
           {/* Left Column - Core Information */}
           <motion.div
             layout
-            className="col-span-12 md:col-span-8 space-y-16"
+            className="col-span-12 md:col-span-8 space-y-12 md:space-y-16"
             variants={animations.staggerContainer}
             initial="initial"
             animate="animate"
@@ -212,7 +212,7 @@ export default function Architect() {
           {/* Right Column - Contact & Quick Actions */}
           <motion.aside
             layout
-            className="col-span-12 md:col-span-4 space-y-8"
+            className="col-span-12 md:col-span-4 space-y-6 md:space-y-8"
             initial={animations.fadeInLeft.initial}
             animate={animations.fadeInLeft.animate}
             transition={{ ...transitions.smooth, delay: 0.4 }}
@@ -220,7 +220,7 @@ export default function Architect() {
             {/* Contact Card */}
             <motion.div
               layout
-              className="bg-black text-white p-6 sticky top-8 transition-colors duration-500"
+              className="bg-black text-white p-4 md:p-6 md:sticky md:top-8 z-40 transition-colors duration-500"
             >
               <h3 className="text-xl font-bold mb-4">CONTACT</h3>
               <motion.div layout className="space-y-3 font-light">
@@ -261,7 +261,7 @@ export default function Architect() {
             {/* Key Metrics */}
             <motion.div
               layout
-              className="border-2 border-black p-6 transition-colors duration-500"
+              className="border-2 border-black p-4 md:p-6 transition-colors duration-500"
             >
               <h3 className="text-xl font-bold mb-4">BY THE NUMBERS</h3>
               <motion.div layout className="space-y-4">
