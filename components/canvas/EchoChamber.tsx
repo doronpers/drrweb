@@ -265,7 +265,7 @@ export default function EchoChamber() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-24 right-8 pointer-events-auto z-50 w-96 max-w-[calc(100vw-4rem)]"
+            className="fixed bottom-24 right-8 pointer-events-auto z-[60] w-96 max-w-[calc(100vw-4rem)]"
           >
             <div className="bg-white/90 backdrop-blur-md rounded-lg border border-black/10 shadow-2xl p-6">
               <h3 className="text-sm font-medium mb-4 text-black/60 tracking-wide">
