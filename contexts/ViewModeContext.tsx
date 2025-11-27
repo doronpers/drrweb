@@ -25,8 +25,10 @@ export type ViewMode = 'landing' | 'architect' | 'author' | 'lab';
 interface ViewModeContextType {
   currentMode: ViewMode;
   previousMode: ViewMode | null;
-  setMode: (mode: ViewMode) => void;
+  setMode: (mode: ViewMode, intent?: string) => void;
   isTransitioning: boolean;
+  /** The user's original input/intent from the landing page */
+  userIntent: string | null;
 }
 
 interface ViewModeProviderProps {
@@ -47,15 +49,22 @@ export function ViewModeProvider({ children }: ViewModeProviderProps) {
   const [currentMode, setCurrentMode] = useState<ViewMode>('landing');
   const [previousMode, setPreviousMode] = useState<ViewMode | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [userIntent, setUserIntent] = useState<string | null>(null);
 
   /**
    * Handles mode transitions with a brief transitioning state
    * to allow for smooth animations between modes.
    *
    * @param mode - The target ViewMode to transition to
+   * @param intent - Optional user input that triggered the transition
    */
-  const setMode = useCallback((mode: ViewMode) => {
+  const setMode = useCallback((mode: ViewMode, intent?: string) => {
     if (mode === currentMode) return;
+
+    // Store user intent if provided (for whispers/personalization)
+    if (intent) {
+      setUserIntent(intent);
+    }
 
     // Mark the start of transition
     setIsTransitioning(true);
@@ -78,6 +87,7 @@ export function ViewModeProvider({ children }: ViewModeProviderProps) {
     previousMode,
     setMode,
     isTransitioning,
+    userIntent,
   };
 
   return (

@@ -183,3 +183,45 @@
 .animate-float {
   animation: float 6s ease-in-out infinite;
 }
+
+/* ====================================
+   WHISPER SYSTEM STYLES
+   ==================================== */
+
+/* Whisper text treatment */
+.whisper-text {
+  text-shadow: 
+    0 0 20px rgba(0, 0, 0, 0.03),
+    0 0 40px rgba(0, 0, 0, 0.02);
+  text-rendering: optimizeLegibility;
+}
+
+/* Subtle pulse for AI-generated whispers */
+@keyframes whisper-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+.whisper-ai {
+  animation: whisper-pulse 8s ease-in-out infinite;
+}
+
+/* Whisper container depth layers */
+.whisper-layer-far {
+  filter: blur(0.5px);
+  opacity: 0.12;
+}
+
+.whisper-layer-mid {
+  filter: blur(0.25px);
+  opacity: 0.18;
+}
+
+.whisper-layer-near {
+  filter: blur(0);
+  opacity: 0.25;
+}
