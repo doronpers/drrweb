@@ -47,19 +47,19 @@ export default function Author() {
       {/* ====================================
           EDITORIAL LAYOUT
           ==================================== */}
-      <div className="container mx-auto px-8 py-20 max-w-4xl">
+      <div className="container mx-auto px-4 md:px-8 py-12 md:py-20 max-w-4xl">
         {/* Masthead */}
         <motion.header
           initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.8 }}
-          className="mb-24 border-b border-author-text/20 pb-12"
+          className="mb-12 md:mb-24 border-b border-author-text/20 pb-8 md:pb-12"
         >
           <div className="text-center">
-            <h1 className="text-6xl font-light tracking-tight mb-6 text-balance">
+            <h1 className="text-4xl md:text-6xl font-light tracking-tight mb-4 md:mb-6 text-balance">
               Doron Reizes
             </h1>
-            <p className="text-xl font-light italic text-author-text/70 text-balance">
+            <p className="text-lg md:text-xl font-light italic text-author-text/70 text-balance px-4">
               On improving systems, stories, and the people that tell them
             </p>
           </div>
@@ -67,14 +67,14 @@ export default function Author() {
 
         {/* Main Content */}
         <motion.article
-          className="space-y-16"
+          className="space-y-12 md:space-y-16"
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.5, duration: 0.8 }}
         >
           {/* Opening Statement */}
-          <section className="space-y-6 text-lg leading-loose">
-            <p className="first-letter:text-6xl first-letter:font-bold first-letter:mr-2 first-letter:float-left first-letter:mt-1">
+          <section className="space-y-4 md:space-y-6 text-base md:text-lg leading-relaxed md:leading-loose">
+            <p className="first-letter:text-4xl md:first-letter:text-6xl first-letter:font-bold first-letter:mr-2 first-letter:float-left first-letter:mt-1">
               My work exists at the intersection of{' '}
               <em className="font-semibold">sound</em>,{' '}
               <em className="font-semibold">story</em>, and{' '}
@@ -101,11 +101,11 @@ export default function Author() {
 
           {/* Teaching Philosophy */}
           <motion.section
-            className="border-l-4 border-author-accent pl-8 py-4 my-16"
+            className="border-l-4 border-author-accent pl-4 md:pl-8 py-4 my-8 md:my-16"
             onMouseEnter={handleHover}
           >
-            <h2 className="text-3xl font-light mb-6">On Teaching</h2>
-            <div className="space-y-4 text-lg leading-loose">
+            <h2 className="text-2xl md:text-3xl font-light mb-4 md:mb-6">On Teaching</h2>
+            <div className="space-y-4 text-base md:text-lg leading-relaxed md:leading-loose">
               <p>
                 I teach a university portfolio course, which is really a course in{' '}
                 <strong>curation</strong>. Not the social media kind—the curatorial
@@ -133,10 +133,10 @@ export default function Author() {
 
           {/* On Sound Design */}
           <motion.section
-            className="space-y-6 text-lg leading-loose"
+            className="space-y-4 md:space-y-6 text-base md:text-lg leading-relaxed md:leading-loose"
             onMouseEnter={handleHover}
           >
-            <h2 className="text-3xl font-light mb-6">On Sound</h2>
+            <h2 className="text-2xl md:text-3xl font-light mb-4 md:mb-6">On Sound</h2>
             <p>
               Sound is invisible architecture. You can't see it, but it shapes how
               you move through space, how you feel time, what you remember.
@@ -163,10 +163,10 @@ export default function Author() {
 
           {/* Micro-Motives Section */}
           <motion.section
-            className="bg-author-accent/5 -mx-8 px-8 py-12 my-16"
+            className="bg-author-accent/5 -mx-4 md:-mx-8 px-4 md:px-8 py-8 md:py-12 my-8 md:my-16"
             onMouseEnter={handleHover}
           >
-            <h2 className="text-3xl font-light mb-8 text-center">Micro-Motives</h2>
+            <h2 className="text-2xl md:text-3xl font-light mb-6 md:mb-8 text-center">Micro-Motives</h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-base leading-relaxed">
               <MicroMotive
                 title="On Failure"
@@ -189,7 +189,7 @@ export default function Author() {
 
           {/* Essays Section */}
           <section>
-            <h2 className="text-3xl font-light mb-8">Selected Writing</h2>
+            <h2 className="text-2xl md:text-3xl font-light mb-6 md:mb-8">Selected Writing</h2>
             <div className="space-y-6">
               <EssayLink
                 title="The Pedagogy of Curation"
@@ -217,10 +217,10 @@ export default function Author() {
 
           {/* Background */}
           <motion.section
-            className="space-y-6 text-lg leading-loose border-t border-author-text/20 pt-12 mt-16"
+            className="space-y-4 md:space-y-6 text-base md:text-lg leading-relaxed md:leading-loose border-t border-author-text/20 pt-8 md:pt-12 mt-12 md:mt-16"
             onMouseEnter={handleHover}
           >
-            <h2 className="text-3xl font-light mb-6">Background</h2>
+            <h2 className="text-2xl md:text-3xl font-light mb-4 md:mb-6">Background</h2>
             <p>
               My path has been anything but linear. I've worked as a sound designer
               on film sets and in studios, capturing the texture of places and
@@ -241,7 +241,7 @@ export default function Author() {
           </motion.section>
 
           {/* Closing */}
-          <section className="text-center text-author-text/60 italic text-lg border-t border-author-text/20 pt-12 mt-20">
+          <section className="text-center text-author-text/60 italic text-base md:text-lg border-t border-author-text/20 pt-8 md:pt-12 mt-12 md:mt-20">
             <p>
               If you're interested in conversation—about teaching, sound, startups,
               or the spaces between—reach out. I'm always curious.
@@ -290,15 +290,15 @@ function EssayLink({
   return (
     <motion.a
       href="#"
-      className="block border-l-2 border-author-accent/30 pl-6 py-3 hover:border-author-accent transition-colors"
+      className="block border-l-2 border-author-accent/30 pl-4 md:pl-6 py-3 hover:border-author-accent transition-colors"
       whileHover={{ x: 8 }}
       onMouseEnter={onMouseEnter}
     >
-      <div className="flex justify-between items-baseline mb-2">
-        <h3 className="text-xl font-semibold">{title}</h3>
-        <span className="text-sm text-author-text/50 font-sans">{date}</span>
+      <div className="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2 gap-1">
+        <h3 className="text-lg md:text-xl font-semibold">{title}</h3>
+        <span className="text-xs md:text-sm text-author-text/50 font-sans">{date}</span>
       </div>
-      <p className="text-author-text/70 font-light">{summary}</p>
+      <p className="text-sm md:text-base text-author-text/70 font-light">{summary}</p>
     </motion.a>
   );
 }

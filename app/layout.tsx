@@ -73,6 +73,17 @@ export const metadata: Metadata = {
 };
 
 // ====================================
+// VIEWPORT CONFIGURATION
+// ====================================
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+};
+
+// ====================================
 // ROOT LAYOUT COMPONENT
 // ====================================
 
