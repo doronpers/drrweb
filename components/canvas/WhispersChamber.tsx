@@ -74,6 +74,13 @@ export default function WhispersChamber({
   const refreshTimerRef = useRef<NodeJS.Timeout | null>(null);
   const whisperTimestamps = useRef<Map<string, number>>(new Map());
   const lastAiAttempt = useRef<number>(0);
+  // Ref to track current whispers for use in callbacks (avoids stale closures)
+  const whispersRef = useRef<WhisperType[]>([]);
+
+  // Keep whispersRef in sync with state
+  useEffect(() => {
+    whispersRef.current = whispers;
+  }, [whispers]);
 
   /**
    * Initialize whispers on mount
@@ -144,16 +151,18 @@ export default function WhispersChamber({
     
     try {
       const context = whisperEngine.getContext();
+      // Use ref to get current whispers (avoids stale closure)
+      const currentWhispers = whispersRef.current;
       const result = await generateWhisper({
         mode: context.mode,
         timeOfDay: context.timeOfDay,
         userIntent: context.userIntent,
-        existingWhispers: whispers.map(w => w.text),
+        existingWhispers: currentWhispers.map(w => w.text),
       });
       
       if (result.success && result.whisper) {
         return {
-          id: `ai-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          id: `ai-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
           text: result.whisper,
           mood: result.mood || 'philosophical',
           source: 'ai',
@@ -164,7 +173,7 @@ export default function WhispersChamber({
     }
     
     return null;
-  }, [whispers]);
+  }, []); // No dependencies needed - uses refs
 
   /**
    * Periodic refresh cycle
