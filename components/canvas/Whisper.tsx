@@ -70,10 +70,11 @@ const Whisper = forwardRef<HTMLDivElement, WhisperProps>(function Whisper(
   // Using golden ratio for more organic distribution
   const phi = 1.618033988749895;
   
-  // Memoize random parameters per instance
+  // Memoize ALL random parameters per instance to prevent re-render issues
   const floatParams = useMemo(() => {
-    // Use index for semi-deterministic positioning with some randomness
-    const seed = index / totalCount;
+    // Guard against division by zero
+    const safeTotal = Math.max(totalCount, 1);
+    const seed = index / safeTotal;
     const goldenAngle = seed * phi * 360;
     
     // Distribute across screen using golden angle spiral
@@ -86,6 +87,9 @@ const Whisper = forwardRef<HTMLDivElement, WhisperProps>(function Whisper(
     // Add randomness
     const startX = Math.max(5, Math.min(95, baseX + (Math.random() - 0.5) * 20));
     const startY = Math.max(10, Math.min(90, baseY + (Math.random() - 0.5) * 20));
+    
+    // Memoize opacity variation here to prevent flicker on re-render
+    const opacityVariation = 0.8 + Math.random() * 0.4;
     
     return {
       startX,
@@ -101,14 +105,16 @@ const Whisper = forwardRef<HTMLDivElement, WhisperProps>(function Whisper(
       rotation: (Math.random() - 0.5) * 3,
       // Stagger the appearance
       delay: index * 2.5 + Math.random() * 3,
+      // Opacity variation (memoized to prevent flicker)
+      opacityVariation,
     };
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const { className: moodClassName, baseOpacity } = getMoodStyles(mood);
   
-  // Vary opacity slightly per instance
-  const instanceOpacity = baseOpacity * (0.8 + Math.random() * 0.4);
+  // Use memoized opacity variation
+  const instanceOpacity = baseOpacity * floatParams.opacityVariation;
 
   return (
     <motion.div
@@ -141,7 +147,6 @@ const Whisper = forwardRef<HTMLDivElement, WhisperProps>(function Whisper(
           0,
           instanceOpacity * 0.5,
           instanceOpacity,
-          instanceOpacity,
           instanceOpacity * 0.5,
           0,
         ],
@@ -160,7 +165,7 @@ const Whisper = forwardRef<HTMLDivElement, WhisperProps>(function Whisper(
         repeat: Infinity,
         ease: 'easeInOut',
         delay: floatParams.delay,
-        times: [0, 0.15, 0.5, 0.85, 1],
+        times: [0, 0.2, 0.5, 0.8, 1],
       }}
       style={{
         willChange: 'transform, opacity, filter',

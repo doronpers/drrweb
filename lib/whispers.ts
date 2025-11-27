@@ -275,7 +275,7 @@ class WhisperEngine {
     
     return {
       ...selected,
-      id: `whisper-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+      id: `whisper-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`,
     };
   }
 
