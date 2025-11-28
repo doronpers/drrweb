@@ -49,7 +49,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: 'Doron Reizes - Interactive Installation',
   description:
-    'Systems architect, sound designer, and educator. An interactive installation exploring the intersection of sound, story, and systems.',
+    'Audio postproduction educator and voice trust consultant with 20+ years spanning sound editorial, post-production, and higher education. An interactive installation exploring the intersection of sound, story, and systems.',
   keywords: [
     'sound design',
     'voice fraud detection',
@@ -57,6 +57,8 @@ export const metadata: Metadata = {
     'portfolio',
     'interactive installation',
     'doron reizes',
+    'audio post-production',
+    'Full Sail University',
   ],
   authors: [{ name: 'Doron Reizes' }],
   icons: {

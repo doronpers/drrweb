@@ -126,15 +126,15 @@ export default function Lab() {
                 <Project
                   name="sonotheia.ai"
                   status="IN_DEVELOPMENT"
-                  description="voice fraud detection platform. ML-powered vocal biometric analysis. building auth layer, waveform visualization, real-time processing pipeline. 73% complete. handling drift detection, synthetic voice identification, audio manipulation detection."
-                  tech={['Next.js', 'TypeScript', 'TensorFlow', 'Web Audio API', 'Supabase', 'Python']}
+                  description="voice fraud prevention and audio authentication consultancy. developing vendor-agnostic detection methodologies combining physics-based anomaly testing with human-in-the-loop verification. serving finance, legal, media, and real estate sectors. co-founded with Alexander Forostenko (CEO)."
+                  tech={['Python', 'Physics-Based Analysis', 'Signal Processing', 'Governance Frameworks']}
                   onMouseEnter={handleHover}
                 />
                 <Project
-                  name="portfolio_pedagogy"
+                  name="full_sail_portfolio_course"
                   status="ACTIVE"
-                  description="university course on professional portfolio construction. teaching narrative synthesis, strategic curation, presentation design. semester 2 ongoing. 40+ students across design, development, and creative fields."
-                  tech={['Figma', 'Notion', 'Peer Review Systems', 'Curriculum Design']}
+                  description="course director for sound for film portfolio at full sail university. directing capstone portfolio development for recording arts students. mentoring demo reel creation, professional presence strategy, personal branding. 18 years of curriculum development."
+                  tech={['Pro Tools', 'iZotope RX', 'Curriculum Design', 'Portfolio Development']}
                   onMouseEnter={handleHover}
                 />
                 <Project
@@ -226,9 +226,9 @@ export default function Lab() {
             <TerminalBlock title="STACK" onMouseEnter={handleHover}>
               <div className="space-y-3 text-xs">
                 <StackItem category="FRONTEND" items={['React', 'Next.js', 'Framer Motion', 'Tailwind']} />
-                <StackItem category="AUDIO" items={['Tone.js', 'Ableton Live', 'Reaper', 'Max/MSP']} />
+                <StackItem category="AUDIO" items={['Pro Tools', 'iZotope RX Suite', 'FabFilter', 'SoundMorph', 'Dolby Atmos']} />
                 <StackItem category="BACKEND" items={['Node.js', 'Python', 'PostgreSQL', 'Supabase']} />
-                <StackItem category="ML/AI" items={['TensorFlow', 'scikit-learn', 'Librosa']} />
+                <StackItem category="ML/AI" items={['Python', 'Claude/Claude Code', 'OpenAI', 'MidJourney', 'RunwayML']} />
               </div>
             </TerminalBlock>
 
@@ -246,12 +246,12 @@ export default function Lab() {
             {/* System Info */}
             <TerminalBlock title="SYS_INFO" onMouseEnter={handleHover}>
               <div className="space-y-1 text-xs opacity-70">
-                <p>UPTIME: {'>'}10 years</p>
-                <p>DOMAINS: 3 (sound, text, code)</p>
-                <p>CURRENT_ROLE: acting_president_cto</p>
-                <p>COMPANY: sonotheia.ai</p>
-                <p>TEACHING: active (adjunct)</p>
-                <p>LOCATION: remote</p>
+                <p>UPTIME: {'>'}20 years</p>
+                <p>DOMAINS: sound, education, entrepreneurship</p>
+                <p>CURRENT_ROLE: president_cofounder</p>
+                <p>COMPANY: sonotheia_inc</p>
+                <p>TEACHING: course_director_full_sail</p>
+                <p>LOCATION: Winter Park, FL</p>
                 <p>STATUS: building</p>
               </div>
             </TerminalBlock>

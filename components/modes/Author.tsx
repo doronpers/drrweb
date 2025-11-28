@@ -60,7 +60,7 @@ export default function Author() {
               Doron Reizes
             </h1>
             <p className="text-lg md:text-xl font-light italic text-author-text/70 text-balance px-4">
-              On improving systems, stories, and the people that tell them
+              Audio Postproduction Educator & Voice Trust Consultant
             </p>
           </div>
         </motion.header>
@@ -75,27 +75,25 @@ export default function Author() {
           {/* Opening Statement */}
           <section className="space-y-4 md:space-y-6 text-base md:text-lg leading-relaxed md:leading-loose">
             <p className="first-letter:text-4xl md:first-letter:text-6xl first-letter:font-bold first-letter:mr-2 first-letter:float-left first-letter:mt-1">
-              My work exists at the intersection of{' '}
-              <em className="font-semibold">sound</em>,{' '}
-              <em className="font-semibold">story</em>, and{' '}
-              <em className="font-semibold">systems</em>. I believe that the most
-              compelling ideas emerge not from a single discipline, but from the
-              friction and harmony between multiple ways of knowing.
+              My career exists at the intersection of{' '}
+              <em className="font-semibold">critical listening</em>,{' '}
+              <em className="font-semibold">signal analysis</em>, and{' '}
+              <em className="font-semibold">technology translation</em>. The same ear
+              trained to detect subtle artifacts in dialogue premixes now informs
+              methodologies for identifying synthetic speech.
             </p>
 
             <p>
-              Sound taught me about <em>texture</em>—the grain of experience, the
-              way information can be felt before it's understood. Literature taught
-              me about <em>structure</em>—how meaning is built through pattern,
-              repetition, and subversion. Entrepreneurship taught me about{' '}
-              <em>systems</em>—how small decisions compound, how culture shapes
-              product, how trust is the ultimate currency.
+              Twenty years spanning NYC&apos;s premier audio facilities—Sony Music Studios,
+              Sync Sound—through 18 years shaping curriculum and mentoring students at
+              Full Sail University. Now I&apos;m applying that audio expertise to voice fraud
+              detection and authentication governance at Sonotheia.
             </p>
 
             <p>
-              These aren't separate practices. They're lenses that refract the same
-              questions: <em>How do we make sense? How do we communicate that sense?
-              How do we build structures that allow others to make their own?</em>
+              This synthesis of creative audio craft and emerging detection technologies
+              positions unique value for organizations where voice authenticity carries
+              financial, legal, or reputational weight.
             </p>
           </section>
 
@@ -107,24 +105,22 @@ export default function Author() {
             <h2 className="text-2xl md:text-3xl font-light mb-4 md:mb-6">On Teaching</h2>
             <div className="space-y-4 text-base md:text-lg leading-relaxed md:leading-loose">
               <p>
-                I teach a university portfolio course, which is really a course in{' '}
-                <strong>curation</strong>. Not the social media kind—the curatorial
-                kind. My students learn to ask: <em>What is the through-line? What
-                is the argument my work is making, even when I'm not speaking?</em>
-                Over multiple semesters, I've worked with students from diverse
-                backgrounds—designers, developers, artists, writers—helping them
-                discover the patterns that connect their work and the stories that
-                make their portfolios compelling.
+                As Course Director for Sound for Film Portfolio at Full Sail University,
+                I direct capstone portfolio development for Recording Arts students.
+                My role involves mentoring demo reel creation, professional presence
+                strategy, and personal branding. Previously, I served as Course Director
+                for Interactive Audio (2007–2015), co-authoring the program textbook
+                and establishing curriculum for sound design in emerging media formats.
               </p>
 
               <p>
-                A portfolio is not a container. It's a <em>narrative device</em>. It
-                says, "Here is how I see. Here is what I value. Here is the pattern
-                beneath the projects."
+                A portfolio is not a container. It&apos;s a <em>narrative device</em>. It
+                says, &quot;Here is how I see. Here is what I value. Here is the pattern
+                beneath the projects.&quot;
               </p>
 
               <p className="italic text-author-text/80">
-                The best portfolios don't show everything. They show the right things,
+                The best portfolios don&apos;t show everything. They show the right things,
                 in the right order, with enough space between them to let the viewer
                 draw connections.
               </p>
@@ -138,26 +134,25 @@ export default function Author() {
           >
             <h2 className="text-2xl md:text-3xl font-light mb-4 md:mb-6">On Sound</h2>
             <p>
-              Sound is invisible architecture. You can't see it, but it shapes how
+              Sound is invisible architecture. You can&apos;t see it, but it shapes how
               you move through space, how you feel time, what you remember.
             </p>
 
             <p>
               I work with sound because it operates <em>beneath language</em>. A
-              footstep tells you about weight, intention, surface. A room's reverb
+              footstep tells you about weight, intention, surface. A room&apos;s reverb
               tells you about size, materials, history. A voice tells you
-              everything—even what it's trying to hide.
+              everything—even what it&apos;s trying to hide.
             </p>
 
             <p>
-              At Sonotheia, we're building systems that listen to voices the way a
-              sound designer listens: not just for <em>what</em> is said, but for
-              the microgestures, the tells, the signatures that can't be faked. It's
-              forensic. It's creative. It's both. We're working at the intersection
-              of machine learning and acoustic analysis, creating tools that can
-              detect synthetic voices, manipulated audio, and fraudulent attempts
-              with remarkable accuracy—all while preserving privacy and user
-              experience.
+              At Sonotheia, we&apos;re developing vendor-agnostic detection methodologies
+              combining physics-based anomaly testing with human-in-the-loop verification.
+              We listen to voices the way a sound designer listens: not just for{' '}
+              <em>what</em> is said, but for the microgestures, the tells, the signatures
+              that can&apos;t be faked. Our work serves finance, legal, media, and real
+              estate sectors where voice authenticity carries financial, legal, or
+              reputational weight.
             </p>
           </motion.section>
 
@@ -192,24 +187,24 @@ export default function Author() {
             <h2 className="text-2xl md:text-3xl font-light mb-6 md:mb-8">Selected Writing</h2>
             <div className="space-y-6">
               <EssayLink
-                title="The Pedagogy of Curation"
-                date="2024"
-                summary="How teaching portfolio construction changed how I think about
-                  learning itself."
+                title="Practical Exercises for Critical Listening"
+                date="Publication"
+                summary="Methods for developing the discerning ear essential to
+                  audio post-production and quality control."
                 onMouseEnter={handleHover}
               />
               <EssayLink
-                title="Listening Forensically"
-                date="2023"
-                summary="What voice fraud detection taught me about trust, technology,
-                  and the limits of automation."
+                title="Interactive Audio"
+                date="Publication"
+                summary="Co-authored textbook establishing curriculum for sound design
+                  in emerging media formats."
                 onMouseEnter={handleHover}
               />
               <EssayLink
-                title="The Texture of Time"
-                date="2023"
-                summary="Field recording as a practice of attention. On capturing what
-                  can't be photographed."
+                title="Sound Design and Music: Diluting the Distinctions"
+                date="Publication"
+                summary="Exploring the boundaries between disciplines and strengthening
+                  the art form."
                 onMouseEnter={handleHover}
               />
             </div>
@@ -222,21 +217,20 @@ export default function Author() {
           >
             <h2 className="text-2xl md:text-3xl font-light mb-4 md:mb-6">Background</h2>
             <p>
-              My path has been anything but linear. I've worked as a sound designer
-              on film sets and in studios, capturing the texture of places and
-              moments. I've written and edited, finding patterns in language and
-              narrative. I've built products and led teams, learning how systems
-              shape behavior and how culture shapes product. And now I teach,
-              helping others see the connections I've learned to recognize.
+              My path has been anything but linear. From NYC&apos;s premier audio
+              facilities—Sony Music Studios, Sync Sound—where I contributed to an
+              Emmy Award-winning project, through 18 years shaping curriculum at
+              Full Sail University. I&apos;ve premixed dialogue, edited sound effects,
+              and helped shape how a generation of audio professionals think about
+              their craft.
             </p>
             <p>
-              Each domain has taught me something the others couldn't. Sound taught
-              me to listen—really listen—to what's beneath the surface. Literature
-              taught me that structure is meaning, that form and content are
-              inseparable. Entrepreneurship taught me that the best systems are
-              simple, opinionated, and built for humans. Teaching taught me that
-              the best learning happens when you help someone see what they already
-              know, just from a new angle.
+              Each domain has taught me something the others couldn&apos;t. Sound taught
+              me to listen—really listen—to what&apos;s beneath the surface. Higher
+              education taught me that the best learning happens when you help someone
+              see what they already know, just from a new angle. Now at Sonotheia,
+              I&apos;m applying that trained ear to the emerging challenge of voice
+              authenticity in an age of synthetic media.
             </p>
           </motion.section>
 
