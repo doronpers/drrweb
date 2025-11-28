@@ -220,7 +220,7 @@ export default function Architect() {
             {/* Contact Card */}
             <motion.div
               layout
-              className="bg-black text-white p-4 md:p-6 md:sticky md:top-8 z-40 transition-colors duration-500"
+              className="bg-black text-white p-4 md:p-6 md:sticky md:top-20 z-40 transition-colors duration-500"
             >
               <h3 className="text-xl font-bold mb-4">CONTACT</h3>
               <motion.div layout className="space-y-3 font-light">
