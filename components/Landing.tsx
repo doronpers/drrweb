@@ -241,14 +241,13 @@ export default function Landing() {
       >
         {/* Centered prompt text */}
         <motion.h1
-          className="text-center mb-12 text-black/40 tracking-wide"
+          className="text-center mb-12 text-black/50 tracking-widest font-light"
           style={{
-            fontSize: 'clamp(1rem, 2vw, 1.25rem)',
-            fontWeight: 300,
-            letterSpacing: '0.15em',
+            fontSize: 'clamp(0.875rem, 1.5vw, 1.125rem)',
+            letterSpacing: '0.2em',
           }}
           initial={{ opacity: 0 }}
-          animate={{ opacity: isFocused ? 0.6 : 0.4 }}
+          animate={{ opacity: isFocused ? 0.7 : 0.5 }}
           transition={{ duration: 0.6 }}
         >
           What do you seek?
@@ -273,22 +272,20 @@ export default function Landing() {
               disabled={isSubmitting}
               className={`
                 w-full px-6 py-5 text-center
-                bg-transparent border-b-2 border-black/10
-                text-black text-lg tracking-wide
-                placeholder:text-black/20
-                focus:border-black/30 focus:outline-none
+                bg-transparent border-b border-black/10
+                text-black text-base md:text-lg tracking-wider
+                placeholder:text-black/25 placeholder:tracking-widest
+                focus:border-black/25 focus:outline-none
                 transition-all duration-300
                 disabled:opacity-50 disabled:cursor-not-allowed
+                font-light
               `}
-              style={{
-                fontWeight: isFocused ? 400 : 300,
-              }}
               autoFocus
             />
 
             {/* Animated underline */}
             <motion.div
-              className="absolute bottom-0 left-0 h-0.5 bg-black"
+              className="absolute bottom-0 left-0 h-px bg-black/80"
               initial={{ width: '0%' }}
               animate={{ width: isFocused ? '100%' : '0%' }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -302,9 +299,9 @@ export default function Landing() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="text-center mt-6 text-black/30 text-sm tracking-wider"
+                className="text-center mt-6 text-black/30 text-xs tracking-widest"
               >
-                Press <kbd className="px-2 py-1 bg-black/5 rounded">Enter</kbd> to proceed
+                Press <kbd className="px-2 py-0.5 bg-black/5 rounded text-black/40 font-mono">Enter</kbd> to proceed
               </motion.p>
             )}
           </AnimatePresence>
@@ -316,7 +313,7 @@ export default function Landing() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="text-center mt-6 text-black/30 text-sm tracking-wider"
+                className="text-center mt-6 text-black/30 text-xs tracking-widest"
               >
                 <motion.span
                   animate={{ opacity: [0.3, 1, 0.3] }}
@@ -331,7 +328,7 @@ export default function Landing() {
 
         {/* Subtle hint about modes */}
         <motion.div
-          className="mt-16 text-center text-black/20 text-xs tracking-widest space-y-2"
+          className="mt-16 text-center text-black/25 text-[10px] md:text-xs tracking-widest space-y-2 font-light"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 2, duration: 1 }}
@@ -344,13 +341,13 @@ export default function Landing() {
           CORNER SIGNATURE
           ==================================== */}
       <motion.div
-        className="fixed bottom-4 left-4 md:bottom-8 md:left-8 text-black/20 text-xs tracking-widest"
+        className="fixed bottom-4 left-4 md:bottom-8 md:left-8 text-black/25 tracking-widest"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
       >
-        <p className="text-[10px] md:text-xs">AN INTERACTIVE INSTALLATION</p>
-        <p className="mt-1 font-light text-[10px] md:text-xs">©2025</p>
+        <p className="text-[9px] md:text-[10px] font-light uppercase">An Interactive Installation</p>
+        <p className="mt-0.5 text-[9px] md:text-[10px] font-light">©2025</p>
       </motion.div>
     </div>
   );

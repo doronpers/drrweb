@@ -53,13 +53,13 @@ export default function Author() {
           initial={{ y: -30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.3, duration: 0.8 }}
-          className="mb-12 md:mb-24 border-b border-author-text/20 pb-8 md:pb-12"
+          className="mb-12 md:mb-24 border-b border-author-text/15 pb-8 md:pb-12"
         >
           <div className="text-center">
-            <h1 className="text-4xl md:text-6xl font-light tracking-tight mb-4 md:mb-6 text-balance">
+            <h1 className="text-3xl md:text-5xl font-light tracking-tight mb-4 md:mb-6 text-balance">
               Doron Reizes
             </h1>
-            <p className="text-lg md:text-xl font-light italic text-author-text/70 text-balance px-4">
+            <p className="text-base md:text-lg font-light italic text-author-text/60 text-balance px-4">
               Audio Postproduction Educator & Voice Trust Consultant
             </p>
           </div>
@@ -74,11 +74,11 @@ export default function Author() {
         >
           {/* Opening Statement */}
           <section className="space-y-4 md:space-y-6 text-base md:text-lg leading-relaxed md:leading-loose">
-            <p className="first-letter:text-4xl md:first-letter:text-6xl first-letter:font-bold first-letter:mr-2 first-letter:float-left first-letter:mt-1">
+            <p className="first-letter:text-4xl md:first-letter:text-5xl first-letter:font-normal first-letter:mr-2 first-letter:float-left first-letter:mt-1 first-letter:leading-none">
               My career exists at the intersection of{' '}
-              <em className="font-semibold">critical listening</em>,{' '}
-              <em className="font-semibold">signal analysis</em>, and{' '}
-              <em className="font-semibold">technology translation</em>. The same ear
+              <em className="font-medium not-italic">critical listening</em>,{' '}
+              <em className="font-medium not-italic">signal analysis</em>, and{' '}
+              <em className="font-medium not-italic">technology translation</em>. The same ear
               trained to detect subtle artifacts in dialogue premixes now informs
               methodologies for identifying synthetic speech.
             </p>
@@ -99,10 +99,10 @@ export default function Author() {
 
           {/* Teaching Philosophy */}
           <motion.section
-            className="border-l-4 border-author-accent pl-4 md:pl-8 py-4 my-8 md:my-16"
+            className="border-l-2 border-author-accent/60 pl-4 md:pl-8 py-4 my-8 md:my-16"
             onMouseEnter={handleHover}
           >
-            <h2 className="text-2xl md:text-3xl font-light mb-4 md:mb-6">On Teaching</h2>
+            <h2 className="text-xl md:text-2xl font-light mb-4 md:mb-6 tracking-wide">On Teaching</h2>
             <div className="space-y-4 text-base md:text-lg leading-relaxed md:leading-loose">
               <p>
                 As Course Director for Sound for Film Portfolio at Full Sail University,
@@ -119,7 +119,7 @@ export default function Author() {
                 beneath the projects.&quot;
               </p>
 
-              <p className="italic text-author-text/80">
+              <p className="italic text-author-text/70">
                 The best portfolios don&apos;t show everything. They show the right things,
                 in the right order, with enough space between them to let the viewer
                 draw connections.
@@ -132,7 +132,7 @@ export default function Author() {
             className="space-y-4 md:space-y-6 text-base md:text-lg leading-relaxed md:leading-loose"
             onMouseEnter={handleHover}
           >
-            <h2 className="text-2xl md:text-3xl font-light mb-4 md:mb-6">On Sound</h2>
+            <h2 className="text-xl md:text-2xl font-light mb-4 md:mb-6 tracking-wide">On Sound</h2>
             <p>
               Sound is invisible architecture. You can&apos;t see it, but it shapes how
               you move through space, how you feel time, what you remember.
@@ -161,8 +161,8 @@ export default function Author() {
             className="bg-author-accent/5 -mx-4 md:-mx-8 px-4 md:px-8 py-8 md:py-12 my-8 md:my-16"
             onMouseEnter={handleHover}
           >
-            <h2 className="text-2xl md:text-3xl font-light mb-6 md:mb-8 text-center">Micro-Motives</h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-base leading-relaxed">
+            <h2 className="text-xl md:text-2xl font-light mb-6 md:mb-8 text-center tracking-wide">Micro-Motives</h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 text-sm md:text-base leading-relaxed">
               <MicroMotive
                 title="On Failure"
                 text="Every good project has at least three abandoned versions that nobody sees. That's not failure—that's fluency."
@@ -184,7 +184,7 @@ export default function Author() {
 
           {/* Essays Section */}
           <section>
-            <h2 className="text-2xl md:text-3xl font-light mb-6 md:mb-8">Selected Writing</h2>
+            <h2 className="text-xl md:text-2xl font-light mb-6 md:mb-8 tracking-wide">Selected Writing</h2>
             <div className="space-y-6">
               <EssayLink
                 title="Practical Exercises for Critical Listening"
@@ -212,10 +212,10 @@ export default function Author() {
 
           {/* Background */}
           <motion.section
-            className="space-y-4 md:space-y-6 text-base md:text-lg leading-relaxed md:leading-loose border-t border-author-text/20 pt-8 md:pt-12 mt-12 md:mt-16"
+            className="space-y-4 md:space-y-6 text-base md:text-lg leading-relaxed md:leading-loose border-t border-author-text/15 pt-8 md:pt-12 mt-12 md:mt-16"
             onMouseEnter={handleHover}
           >
-            <h2 className="text-2xl md:text-3xl font-light mb-4 md:mb-6">Background</h2>
+            <h2 className="text-xl md:text-2xl font-light mb-4 md:mb-6 tracking-wide">Background</h2>
             <p>
               My path has been anything but linear. From NYC&apos;s premier audio
               facilities—Sony Music Studios, Sync Sound—where I contributed to an
@@ -235,17 +235,17 @@ export default function Author() {
           </motion.section>
 
           {/* Closing */}
-          <section className="text-center text-author-text/60 italic text-base md:text-lg border-t border-author-text/20 pt-8 md:pt-12 mt-12 md:mt-20">
+          <section className="text-center text-author-text/50 italic text-sm md:text-base border-t border-author-text/15 pt-8 md:pt-12 mt-12 md:mt-20">
             <p>
               If you're interested in conversation—about teaching, sound, startups,
               or the spaces between—reach out. I'm always curious.
             </p>
-            <p className="mt-4 text-base">
+            <p className="mt-4 text-sm not-italic">
               <a
                 href="https://www.linkedin.com/in/doronreizes"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-author-accent hover:underline"
+                className="text-author-accent/80 hover:text-author-accent hover:underline transition-colors"
               >
                 Connect on LinkedIn
               </a>
@@ -264,8 +264,8 @@ export default function Author() {
 function MicroMotive({ title, text }: { title: string; text: string }) {
   return (
     <div className="space-y-2">
-      <h3 className="font-semibold text-author-accent">{title}</h3>
-      <p className="text-author-text/80 italic">{text}</p>
+      <h3 className="font-medium text-author-accent/90 text-sm">{title}</h3>
+      <p className="text-author-text/70 italic">{text}</p>
     </div>
   );
 }
@@ -284,15 +284,15 @@ function EssayLink({
   return (
     <motion.a
       href="#"
-      className="block border-l-2 border-author-accent/30 pl-4 md:pl-6 py-3 hover:border-author-accent transition-colors"
-      whileHover={{ x: 8 }}
+      className="block border-l border-author-accent/30 pl-4 md:pl-6 py-3 hover:border-author-accent/60 transition-colors"
+      whileHover={{ x: 6 }}
       onMouseEnter={onMouseEnter}
     >
       <div className="flex flex-col md:flex-row md:justify-between md:items-baseline mb-2 gap-1">
-        <h3 className="text-lg md:text-xl font-semibold">{title}</h3>
-        <span className="text-xs md:text-sm text-author-text/50 font-sans">{date}</span>
+        <h3 className="text-base md:text-lg font-medium">{title}</h3>
+        <span className="text-xs text-author-text/40 font-sans">{date}</span>
       </div>
-      <p className="text-sm md:text-base text-author-text/70 font-light">{summary}</p>
+      <p className="text-sm text-author-text/60">{summary}</p>
     </motion.a>
   );
 }
