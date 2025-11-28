@@ -27,7 +27,7 @@ const config: Config = {
         lab: {
           bg: "#0A0A0A",
           text: "#00FF00",
-          accent: "#FF00FF",
+          accent: "#00FFFF",
         },
       },
       backgroundImage: {
