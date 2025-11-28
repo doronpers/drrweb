@@ -67,7 +67,7 @@ export default function Architect() {
             layout="position"
             className={`${styles.p} text-black/60 mt-2`}
           >
-            Systems Architect • Sound Designer • Educator
+            Audio Postproduction Educator • Voice Trust Consultant
           </motion.p>
         </motion.header>
 
@@ -95,10 +95,11 @@ export default function Architect() {
                   <span className="font-bold">people</span> that tell them.
                 </p>
                 <p className={styles.p}>
-                  Multi-domain expertise spanning sound design, technical writing,
-                  and entrepreneurship. Currently serving as acting president and
-                  chief technologist at Sonotheia.ai (voice fraud detection), while
-                  teaching portfolio development at the university level.
+                  Seasoned audio professional with 20+ years spanning sound editorial,
+                  post-production, and higher education. Career trajectory moves from
+                  NYC&apos;s premier audio facilities through 18 years shaping curriculum
+                  at Full Sail University, to founding Sonotheia—a venture applying
+                  audio expertise to voice fraud detection and authentication governance.
                 </p>
               </motion.div>
             </Section>
@@ -107,19 +108,19 @@ export default function Architect() {
             <Section title="CURRENT POSITION" onHover={handleHover}>
               <motion.div layout className="space-y-6">
                 <Position
-                  title="Acting President & Chief Technology Officer"
-                  company="Sonotheia.ai"
-                  description="Leading technical infrastructure and product development for voice fraud detection platform. Architecting ML-powered systems that analyze vocal biometrics to detect synthetic and manipulated audio. Responsible for full-stack development, system architecture, team leadership, and strategic direction. Building scalable solutions that balance security, performance, and user experience."
-                  tags={['Voice AI', 'Machine Learning', 'Security', 'Full-Stack Development', 'Product Strategy']}
+                  title="President & Co-Founder"
+                  company="Sonotheia, Inc."
+                  description="Voice fraud prevention and audio authentication consultancy serving finance, legal, media, and real estate sectors. Developing vendor-agnostic detection methodologies combining physics-based anomaly testing with human-in-the-loop verification and legally defensible governance frameworks. Co-founded with Alexander Forostenko (CEO, ex-Morgan Stanley/SVB/RBS)."
+                  tags={['Voice Fraud Detection', 'Audio Authentication', 'Governance Frameworks', 'Physics-Based Analysis']}
                   highlight
                   onHover={handleHover}
                 />
 
                 <Position
-                  title="Adjunct Instructor"
-                  company="Portfolio Development Course"
-                  description="Teaching undergraduate and graduate students the art of professional portfolio construction. Curriculum focuses on narrative synthesis, strategic curation, and compelling presentation of creative and technical work. Students learn to identify through-lines, construct coherent arguments through project selection, and communicate their unique value proposition."
-                  tags={['Pedagogy', 'Narrative Design', 'Professional Development', 'Curriculum Design']}
+                  title="Course Director, Sound for Film Portfolio"
+                  company="Full Sail University"
+                  description="Direct capstone portfolio development for Recording Arts students. Mentor demo reel creation, professional presence strategy, and personal branding. Previously served as Course Director for Interactive Audio (2007–2015), co-authoring the program textbook and establishing curriculum for sound design in emerging media formats."
+                  tags={['Higher Education', 'Curriculum Design', 'Audio Post-Production', 'Portfolio Development']}
                   onHover={handleHover}
                 />
               </motion.div>
@@ -129,10 +130,17 @@ export default function Architect() {
             <Section title="PROFESSIONAL EXPERIENCE" onHover={handleHover}>
               <motion.div layout className="space-y-6">
                 <Position
-                  title="Sound Designer & Technical Consultant"
-                  company="Freelance"
-                  description="Field recording, sound design, and audio post-production for film, installation, and interactive media. Specialized in location sound, spatial audio, and creating immersive sonic environments. Technical consulting on audio systems, workflow optimization, and creative sound design approaches."
-                  tags={['Field Recording', 'Post-Production', 'Spatial Audio', 'Technical Consulting']}
+                  title="Audio Engineer / Sound Editor"
+                  company="Sony Music Studios, NYC"
+                  description="Premixed and edited sound effects, dialogue, and music for long-format programming. Contributed to Emmy Award-winning project Tony Bennett: An American Classic (Outstanding Sound Mixing for a Variety, Music Series, or Special, 2006–2007)."
+                  tags={['Sound Editorial', 'Dialogue Editing', 'Emmy Award', 'Long-Format']}
+                  onHover={handleHover}
+                />
+                <Position
+                  title="Co-Founder & Managing Partner"
+                  company="Touch Interactive Media Group"
+                  description="Media consulting group serving clients including Brighthouse Networks and Enlightened Grain Spirits. Pivoted from production to advisory services based on regional market needs."
+                  tags={['Media Consulting', 'Client Services', 'Strategic Advisory']}
                   onHover={handleHover}
                 />
               </motion.div>
@@ -142,13 +150,13 @@ export default function Architect() {
             <Section title="CORE COMPETENCIES" onHover={handleHover}>
               <motion.div layout className="grid grid-cols-2 gap-6">
                 <CompetencyCard
-                  title="Sound Design & Audio"
+                  title="Audio Production"
                   items={[
-                    'Field Recording & Location Sound',
-                    'Synthesis & Audio Processing',
-                    'Spatial Audio & Ambisonics',
-                    'Music Production & Composition',
-                    'Audio Post-Production',
+                    'Pro Tools (Expert)',
+                    'iZotope RX Suite',
+                    'Dialogue Editing & Sound Design',
+                    'Re-recording Mixing & ADR',
+                    'Dolby Atmos',
                   ]}
                   onHover={handleHover}
                 />
@@ -164,13 +172,13 @@ export default function Architect() {
                   onHover={handleHover}
                 />
                 <CompetencyCard
-                  title="Software Development"
+                  title="Emerging Technologies"
                   items={[
-                    'Full-Stack Web Development',
-                    'Machine Learning & AI',
-                    'Voice & Audio Processing',
-                    'API Design & Integration',
-                    'Database Architecture',
+                    'Python (Active Development)',
+                    'Machine Learning Fundamentals',
+                    'Audio Deepfake Detection',
+                    'Physics-Based Signal Analysis',
+                    'AI Platforms (Claude, OpenAI)',
                   ]}
                   onHover={handleHover}
                 />
@@ -193,16 +201,44 @@ export default function Architect() {
               <motion.div layout className="space-y-4">
                 <motion.div
                   layout
-                  className="border-l-4 border-black/20 pl-6 py-2"
+                  className="border-l-4 border-architect-accent pl-6 py-2"
                 >
                   <motion.h3 layout="position" className={styles.h3}>
-                    Literature & Creative Writing
+                    MS, Innovation & Entrepreneurship
                   </motion.h3>
                   <motion.p
                     layout="position"
                     className={`${styles.p} text-black/70 font-medium mt-1`}
                   >
-                    Focus on narrative structure, critical theory, and experimental forms
+                    Full Sail University | 2020 | GPA: 4.0, Valedictorian
+                  </motion.p>
+                </motion.div>
+                <motion.div
+                  layout
+                  className="border-l-4 border-black/20 pl-6 py-2"
+                >
+                  <motion.h3 layout="position" className={styles.h3}>
+                    Specialized AS, Recording Arts
+                  </motion.h3>
+                  <motion.p
+                    layout="position"
+                    className={`${styles.p} text-black/70 font-medium mt-1`}
+                  >
+                    Full Sail University | 2004
+                  </motion.p>
+                </motion.div>
+                <motion.div
+                  layout
+                  className="border-l-4 border-black/20 pl-6 py-2"
+                >
+                  <motion.h3 layout="position" className={styles.h3}>
+                    BA, Literature & Creative Writing
+                  </motion.h3>
+                  <motion.p
+                    layout="position"
+                    className={`${styles.p} text-black/70 font-medium mt-1`}
+                  >
+                    American University | 2003
                   </motion.p>
                 </motion.div>
               </motion.div>
@@ -226,11 +262,11 @@ export default function Architect() {
               <motion.div layout className="space-y-3 font-light">
                 <ContactItem
                   href="https://sonotheia.ai"
-                  label="Sonotheia.ai"
+                  label="Sonotheia"
                   onMouseEnter={handleHover}
                 />
                 <ContactItem
-                  href="mailto:contact@example.com"
+                  href="mailto:doron@doronreizes.com"
                   label="Email"
                   onMouseEnter={handleHover}
                 />
@@ -265,9 +301,9 @@ export default function Architect() {
             >
               <h3 className="text-xl font-bold mb-4">BY THE NUMBERS</h3>
               <motion.div layout className="space-y-4">
-                <Metric value="10+" label="Years Experience" />
-                <Metric value="3" label="Domains Mastered" />
-                <Metric value="150+" label="Students Taught" />
+                <Metric value="20+" label="Years Experience" />
+                <Metric value="18" label="Years Teaching" />
+                <Metric value="1" label="Emmy Recognition" />
                 <Metric value="1" label="Startup Founded" />
               </motion.div>
             </motion.div>
