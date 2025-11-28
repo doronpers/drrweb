@@ -65,7 +65,7 @@ export default function Architect() {
           </motion.h1>
           <motion.p
             layout="position"
-            className={`${styles.p} text-black/60 mt-2`}
+            className={`${styles.p} text-black/50 mt-3 tracking-wide`}
           >
             Audio Postproduction Educator • Voice Trust Consultant
           </motion.p>
