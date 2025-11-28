@@ -158,6 +158,7 @@ Generate ONE short whisper fragment. Just the text, no quotes, no explanation.`;
         system: SYSTEM_PROMPT,
         prompt: contextPrompt + '\n\n(Keep response under 20 words)',
         temperature: 0.9, // Higher creativity for varied whispers
+        maxOutputTokens: 50,
         abortSignal: controller.signal,
       });
 
