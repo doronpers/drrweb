@@ -238,7 +238,6 @@ class AudioManager {
       this.glitchSynth = new Tone.Synth({
         oscillator: { 
           type: 'sine',    // Pure sine wave - smoothest, most pleasing
-          detune: 0,       // No detuning for pure tone
         },
         envelope: {
           attack: 0.05,    // Slower attack for softer start (less ticky)
@@ -247,6 +246,8 @@ class AudioManager {
           release: 0.8,    // Much longer release for smooth fade (less abrupt)
         },
       });
+      // Set detune programmatically on the instance (no detuning for pure tone)
+      this.glitchSynth.oscillator.detune.value = 0;
       // Add gentle low-pass filter for warmth and smoothness
       const labFilter = new Tone.Filter({
         type: 'lowpass',
@@ -327,8 +328,6 @@ class AudioManager {
    *
    * @param type - The type of UI sound to play
    */
-  private lastSoundTime: number = 0; // Track last sound time to prevent timing conflicts
-
   playUISound(type: UISoundType): void {
     if (!this.initialized) {
       console.warn('⚠️ Audio not initialized yet');
