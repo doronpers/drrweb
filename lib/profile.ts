@@ -30,7 +30,10 @@ export function formatYearsOfExperience(useNarrative = false): string {
   const years = getYearsOfExperience();
   
   if (useNarrative) {
-    return years > 20 ? `Over ${years} years` : 'Twenty years';
+    if (years === 20) {
+      return 'Twenty years';
+    }
+    return years > 20 ? `Over ${years} years` : `${years} years`;
   }
   
   return years.toString();
