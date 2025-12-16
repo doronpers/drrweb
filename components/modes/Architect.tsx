@@ -27,6 +27,11 @@ import { getTypography, animations, transitions } from '@/lib/styles';
 export default function Architect() {
   const styles = getTypography('architect');
 
+  // Calculate years of experience dynamically (started professionally in 2005)
+  const CAREER_START_YEAR = 2005;
+  const currentYear = new Date().getFullYear();
+  const yearsOfExperience = currentYear - CAREER_START_YEAR;
+
   // Play dry click sound on hover for interactive elements
   const handleHover = () => {
     audioManager.playUISound('click-dry');
@@ -301,7 +306,7 @@ export default function Architect() {
             >
               <h3 className="text-xl font-bold mb-4">BY THE NUMBERS</h3>
               <motion.div layout className="space-y-4">
-                <Metric value="20+" label="Years Experience" />
+                <Metric value={`${yearsOfExperience}`} label="Years Experience" />
                 <Metric value="18" label="Years Teaching" />
                 <Metric value="1" label="Emmy Recognition" />
                 <Metric value="3" label="Startups Founded" />

@@ -9,7 +9,7 @@ English (Native) | Hebrew (Professional Working)
 
 ## Professional Summary
 
-Seasoned audio professional with 20+ years spanning sound editorial, post-production, and higher education. Career trajectory moves from NYC's premier audio facilities (Sony Music Studios, Sync Sound) through 18 years shaping curriculum and mentoring students at Full Sail University, to founding Sonotheia—a venture applying audio expertise to voice fraud detection and authentication governance.
+Seasoned audio professional with 20 years spanning sound editorial, post-production, and higher education. Career trajectory moves from NYC's premier audio facilities (Sony Music Studios, Sync Sound) through 18 years shaping curriculum and mentoring students at Full Sail University, to founding Sonotheia—a venture applying audio expertise to voice fraud detection and authentication governance.
 
 Core competency lies at the intersection of critical listening, signal analysis, and technology translation: the same ear trained to detect subtle artifacts in dialogue premixes now informs methodologies for identifying synthetic speech. This synthesis of creative audio craft and emerging detection technologies positions unique value for organizations where voice authenticity carries financial, legal, or reputational weight.
 
