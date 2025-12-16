@@ -19,6 +19,7 @@ import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 import { audioManager } from '@/lib/audio';
 import { getTypography, animations, transitions } from '@/lib/styles';
+import { getYearsOfExperience } from '@/lib/profile';
 
 // ====================================
 // COMPONENT
@@ -26,11 +27,7 @@ import { getTypography, animations, transitions } from '@/lib/styles';
 
 export default function Architect() {
   const styles = getTypography('architect');
-
-  // Calculate years of experience dynamically (started professionally in 2005)
-  const CAREER_START_YEAR = 2005;
-  const currentYear = new Date().getFullYear();
-  const yearsOfExperience = currentYear - CAREER_START_YEAR;
+  const yearsOfExperience = getYearsOfExperience();
 
   // Play dry click sound on hover for interactive elements
   const handleHover = () => {

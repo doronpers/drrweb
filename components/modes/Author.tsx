@@ -18,17 +18,13 @@
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 import { audioManager } from '@/lib/audio';
+import { formatYearsOfExperience } from '@/lib/profile';
 
 // ====================================
 // COMPONENT
 // ====================================
 
 export default function Author() {
-  // Calculate years of experience dynamically (started professionally in 2005)
-  const CAREER_START_YEAR = 2005;
-  const currentYear = new Date().getFullYear();
-  const yearsOfExperience = currentYear - CAREER_START_YEAR;
-
   // Play warm click sound on hover for interactive elements
   const handleHover = () => {
     audioManager.playUISound('click-warm');
@@ -89,7 +85,7 @@ export default function Author() {
             </p>
 
             <p>
-              {yearsOfExperience > 20 ? `Over ${yearsOfExperience} years` : 'Twenty years'} spanning NYC&apos;s premier audio facilities—Sony Music Studios,
+              {formatYearsOfExperience(true)} spanning NYC&apos;s premier audio facilities—Sony Music Studios,
               Sync Sound—through 18 years shaping curriculum and mentoring students at
               Full Sail University. Now I&apos;m applying that audio expertise to voice fraud
               detection and authentication governance at Sonotheia.
