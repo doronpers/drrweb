@@ -304,7 +304,7 @@ export default function Architect() {
                 <Metric value="20+" label="Years Experience" />
                 <Metric value="18" label="Years Teaching" />
                 <Metric value="1" label="Emmy Recognition" />
-                <Metric value="1" label="Startup Founded" />
+                <Metric value="3" label="Startups Founded" />
               </motion.div>
             </motion.div>
           </motion.aside>
