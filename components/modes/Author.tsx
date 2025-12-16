@@ -18,6 +18,7 @@
 import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 import { audioManager } from '@/lib/audio';
+import { formatYearsOfExperience } from '@/lib/profile';
 
 // ====================================
 // COMPONENT
@@ -84,7 +85,7 @@ export default function Author() {
             </p>
 
             <p>
-              Twenty years spanning NYC&apos;s premier audio facilities—Sony Music Studios,
+              {formatYearsOfExperience(true)} spanning NYC&apos;s premier audio facilities—Sony Music Studios,
               Sync Sound—through 18 years shaping curriculum and mentoring students at
               Full Sail University. Now I&apos;m applying that audio expertise to voice fraud
               detection and authentication governance at Sonotheia.

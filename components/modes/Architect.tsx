@@ -19,6 +19,7 @@ import { motion } from 'framer-motion';
 import { useEffect } from 'react';
 import { audioManager } from '@/lib/audio';
 import { getTypography, animations, transitions } from '@/lib/styles';
+import { getYearsOfExperience } from '@/lib/profile';
 
 // ====================================
 // COMPONENT
@@ -26,6 +27,7 @@ import { getTypography, animations, transitions } from '@/lib/styles';
 
 export default function Architect() {
   const styles = getTypography('architect');
+  const yearsOfExperience = getYearsOfExperience();
 
   // Play dry click sound on hover for interactive elements
   const handleHover = () => {
@@ -301,10 +303,10 @@ export default function Architect() {
             >
               <h3 className="text-xl font-bold mb-4">BY THE NUMBERS</h3>
               <motion.div layout className="space-y-4">
-                <Metric value="20+" label="Years Experience" />
+                <Metric value={`${yearsOfExperience}`} label="Years Experience" />
                 <Metric value="18" label="Years Teaching" />
                 <Metric value="1" label="Emmy Recognition" />
-                <Metric value="1" label="Startup Founded" />
+                <Metric value="3" label="Startups Founded" />
               </motion.div>
             </motion.div>
           </motion.aside>
