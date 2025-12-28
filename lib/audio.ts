@@ -22,6 +22,36 @@ import * as Tone from 'tone';
 
 type UISoundType = 'click-dry' | 'click-warm' | 'glitch';
 
+/**
+ * Detune configuration for humanization.
+ * Values are in cents (100 cents = 1 semitone).
+ */
+interface DetuneConfig {
+  /** Minimum detune in cents (typically negative) */
+  min: number;
+  /** Maximum detune in cents (typically positive) */
+  max: number;
+}
+
+/**
+ * Generate a random detune value within a bounded musical range.
+ * This creates subtle pitch variation that humanizes the sound.
+ *
+ * @param config - The detune range configuration
+ * @returns A random detune value in cents
+ */
+function getRandomDetune(config: DetuneConfig = { min: -5, max: 5 }): number {
+  return config.min + Math.random() * (config.max - config.min);
+}
+
+// Detune presets for different modes (values in cents)
+// ±5 cents is subtle humanization, ±10-15 for more character
+const DETUNE_PRESETS = {
+  architect: { min: -3, max: 3 },   // Subtle: clean, precise feel
+  author: { min: -8, max: 8 },      // Warmer: more organic variation
+  lab: { min: -12, max: 12 },       // Character: slightly experimental
+} as const;
+
 // Musical scale: Pentatonic (C, D, E, G, A) - universally pleasing
 // Using frequencies in Hz for multiple octaves
 // Also includes relative minor (A minor pentatonic uses same notes)
@@ -238,7 +268,6 @@ class AudioManager {
       this.glitchSynth = new Tone.Synth({
         oscillator: { 
           type: 'sine',    // Pure sine wave - smoothest, most pleasing
-          detune: 0,       // No detuning for pure tone
         },
         envelope: {
           attack: 0.05,    // Slower attack for softer start (less ticky)
@@ -327,8 +356,6 @@ class AudioManager {
    *
    * @param type - The type of UI sound to play
    */
-  private lastSoundTime: number = 0; // Track last sound time to prevent timing conflicts
-
   playUISound(type: UISoundType): void {
     if (!this.initialized) {
       console.warn('⚠️ Audio not initialized yet');
@@ -370,7 +397,10 @@ class AudioManager {
           ];
           const archNoteIndex = this.interactionCount % architectNotes.length;
           const architectNote = architectNotes[archNoteIndex];
-          console.log(`🎵 Playing musical tone: ${architectNote}Hz (Architect mode) - Note ${archNoteIndex + 1}/${architectNotes.length}`);
+          // Apply subtle humanization detune (±3 cents for clean, precise feel)
+          const archDetune = getRandomDetune(DETUNE_PRESETS.architect);
+          this.clickSynth.detune.value = archDetune;
+          console.log(`🎵 Playing musical tone: ${architectNote}Hz (Architect mode) - Note ${archNoteIndex + 1}/${architectNotes.length} - Detune: ${archDetune.toFixed(1)}¢`);
           this.clickSynth.triggerAttackRelease(architectNote, '0.5', now);
           break;
         }
@@ -398,7 +428,10 @@ class AudioManager {
           ];
           const authNoteIndex = this.interactionCount % authorNotes.length;
           const authorNote = authorNotes[authNoteIndex];
-          console.log(`🎵 Playing musical tone: ${authorNote}Hz (Author mode) - Note ${authNoteIndex + 1}/${authorNotes.length} - Reverb: 75% wet`);
+          // Apply organic humanization detune (±8 cents for warmer, more organic feel)
+          const authDetune = getRandomDetune(DETUNE_PRESETS.author);
+          this.warmSynth.detune.value = authDetune;
+          console.log(`🎵 Playing musical tone: ${authorNote}Hz (Author mode) - Note ${authNoteIndex + 1}/${authorNotes.length} - Reverb: 75% wet - Detune: ${authDetune.toFixed(1)}¢`);
           this.warmSynth.triggerAttackRelease(authorNote, '1.2', now);
           break;
         }
@@ -426,7 +459,10 @@ class AudioManager {
           ];
           const labNoteIndex = this.interactionCount % labNotes.length;
           const labNote = labNotes[labNoteIndex];
-          console.log(`🎵 Playing musical tone: ${labNote}Hz (Lab mode) - Note ${labNoteIndex + 1}/${labNotes.length} - Reverb: 60% wet`);
+          // Apply experimental humanization detune (±12 cents for slightly experimental character)
+          const labDetune = getRandomDetune(DETUNE_PRESETS.lab);
+          this.glitchSynth.detune.value = labDetune;
+          console.log(`🎵 Playing musical tone: ${labNote}Hz (Lab mode) - Note ${labNoteIndex + 1}/${labNotes.length} - Reverb: 60% wet - Detune: ${labDetune.toFixed(1)}¢`);
           // Longer duration for smoother, less ticky sound
           this.glitchSynth.triggerAttackRelease(labNote, '0.9', now);
           break;

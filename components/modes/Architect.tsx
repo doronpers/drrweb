@@ -33,9 +33,12 @@ export default function Architect() {
   };
 
   useEffect(() => {
-    // Mode-specific setup
+    // Play a gentle musical tone on mode entry
+    const timer = setTimeout(() => {
+      audioManager.playUISound('click-dry');
+    }, 500);
     return () => {
-      // Cleanup if needed
+      clearTimeout(timer);
     };
   }, []);
 

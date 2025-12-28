@@ -30,9 +30,12 @@ export default function Author() {
   };
 
   useEffect(() => {
-    // Could adjust ambient audio characteristics for this mode
+    // Play a warm musical tone on mode entry
+    const timer = setTimeout(() => {
+      audioManager.playUISound('click-warm');
+    }, 500);
     return () => {
-      // Cleanup if needed
+      clearTimeout(timer);
     };
   }, []);
 
