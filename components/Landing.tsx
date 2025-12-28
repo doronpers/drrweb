@@ -90,8 +90,10 @@ export default function Landing() {
         const intentResult = await detectIntent(input);
         const targetMode = intentResult.targetMode;
         
-        // Log audio params for future use (Phase 4)
-        console.log('🎵 Suggested audio params:', intentResult.audioParams);
+        // Log audio params for future use (Phase 4) - only in development
+        if (process.env.NODE_ENV === 'development') {
+          console.log('🎵 Suggested audio params:', intentResult.audioParams);
+        }
         
         // Slight delay for dramatic effect
         // Pass the user's input as intent for whispers personalization

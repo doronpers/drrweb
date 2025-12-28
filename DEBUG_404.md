@@ -18,9 +18,9 @@
 ## Common 404 Sources:
 
 ### 1. Supabase API (Most Likely)
-- **URL pattern**: `https://vczocswqgejdxsszcmqc.supabase.co/rest/v1/echoes`
-- **Cause**: Table doesn't exist
-- **Fix**: Run the SQL setup script in Supabase Dashboard
+- **URL pattern**: `https://YOUR_PROJECT.supabase.co/rest/v1/echoes`
+- **Cause**: Table doesn't exist or incorrect URL/key
+- **Fix**: Run the SQL setup script in Supabase Dashboard and verify environment variables
 
 ### 2. Favicon
 - **URL**: `/favicon.ico` or `/favicon.svg`
@@ -40,10 +40,11 @@ Run this in your browser console to test Supabase:
 
 ```javascript
 // Test Supabase connection
-fetch('https://vczocswqgejdxsszcmqc.supabase.co/rest/v1/echoes?select=*&approved=eq.true', {
+// Replace YOUR_SUPABASE_URL and YOUR_ANON_KEY with your actual values from .env.local
+fetch('YOUR_SUPABASE_URL/rest/v1/echoes?select=*&approved=eq.true', {
   headers: {
-    'apikey': 'sb_publishable_Sg9WlSlGiuy9-V6hUUuV5w_J8Ecg69y',
-    'Authorization': 'Bearer sb_publishable_Sg9WlSlGiuy9-V6hUUuV5w_J8Ecg69y'
+    'apikey': 'YOUR_ANON_KEY',
+    'Authorization': 'Bearer YOUR_ANON_KEY'
   }
 })
 .then(r => r.json())

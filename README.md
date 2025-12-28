@@ -2,19 +2,15 @@
 
 A theatrical web design treating the website as an **interactive installation** rather than a traditional portfolio. Built with a focus on atmosphere, sensory feedback, and multi-modal presentation.
 
-## 🆕 What's New
+## ✨ Features
 
 This implementation includes the complete "Prism" architecture with:
 - ✅ **AI-Powered Intent Detection** - Uses Google Gemini 1.5 Flash to intelligently route users
 - ✅ **FailuresLog Component** - Brutally honest table of failures and lessons
 - ✅ **Soundscape Hook** - Mode-specific audio control system
 - ✅ **Server Actions** - AI routing with graceful fallbacks
-
-📚 **New Documentation:**
-- [PRISM_IMPLEMENTATION.md](./PRISM_IMPLEMENTATION.md) - Complete implementation guide
-- [PRISM_FEATURES.md](./PRISM_FEATURES.md) - New features guide
-- [FILE_TREE.txt](./FILE_TREE.txt) - Project structure
-- [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md) - Technical summary
+- ✅ **Whispers Chamber** - AI-generated ambient text fragments
+- ✅ **Echo Chamber** - User-submitted floating guestbook messages
 
 ## 🎭 The Concept
 
@@ -52,25 +48,30 @@ drrweb/
 │   ├── layout.tsx          # Root layout with fonts & providers
 │   ├── page.tsx             # Main Prism router
 │   └── globals.css          # Global styles & animations
-├── actions/                 # Server Actions (NEW)
-│   └── detect-intent.ts     # AI-powered intent detection
+├── actions/                 # Server Actions
+│   ├── detect-intent.ts     # AI-powered intent detection
+│   └── generate-whisper.ts   # AI whisper generation
 ├── components/
 │   ├── canvas/              # Visual/interactive components
 │   │   ├── EchoChamber.tsx  # Floating guestbook
-│   │   └── EchoEntry.tsx    # Individual floating message
+│   │   ├── EchoEntry.tsx    # Individual floating message
+│   │   ├── Whisper.tsx      # Individual whisper display
+│   │   └── WhispersChamber.tsx # AI-generated ambient text
 │   ├── modes/               # The three view modes
 │   │   ├── Architect.tsx    # Mode A: Business view
 │   │   ├── Author.tsx       # Mode B: Editorial view
 │   │   └── Lab.tsx          # Mode C: Process view
 │   ├── Landing.tsx          # Entry point (Antechamber)
 │   ├── AntiPortfolio.tsx    # Failures & uncertainties footer
-│   └── FailuresLog.tsx      # Table-style failures (NEW)
+│   └── FailuresLog.tsx      # Table-style failures
 ├── contexts/
 │   └── ViewModeContext.tsx  # The Prism state management
 ├── lib/
+│   ├── ai-gateway.ts        # Shared AI Gateway configuration
 │   ├── audio.ts             # Tone.js audio engine
-│   ├── useSoundscape.ts     # Audio mode hook (NEW)
-│   └── supabase.ts          # Supabase client & queries
+│   ├── useSoundscape.ts     # Audio mode hook
+│   ├── supabase.ts          # Supabase client & queries
+│   └── whispers.ts          # Whisper engine & curation
 ├── public/
 │   ├── audio/               # Audio assets (if any)
 │   └── textures/            # Grain textures
@@ -267,9 +268,12 @@ Perfect for teaching web development, sound design, or interactive installations
 Comprehensive documentation is available:
 
 - **[PRISM_IMPLEMENTATION.md](./PRISM_IMPLEMENTATION.md)** - Complete implementation guide with setup instructions, testing checklists, and architecture notes
-- **[PRISM_FEATURES.md](./PRISM_FEATURES.md)** - Guide to new features including AI intent detection, FailuresLog, and soundscape hook
-- **[FILE_TREE.txt](./FILE_TREE.txt)** - Complete project structure with smart/dumb component classification
-- **[IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)** - Technical summary of all changes and deliverables
+- **[PRISM_FEATURES.md](./PRISM_FEATURES.md)** - Guide to features including AI intent detection, FailuresLog, and soundscape hook
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Detailed architecture documentation
+- **[SUPABASE_SETUP.md](./SUPABASE_SETUP.md)** - Step-by-step Supabase configuration guide
+- **[DEPLOYMENT.md](./DEPLOYMENT.md)** - Deployment instructions for various platforms
+
+For detailed API documentation, see `docs/generated/` (auto-generated from source code).
 
 ## 📄 License
 

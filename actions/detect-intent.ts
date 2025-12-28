@@ -18,10 +18,10 @@
 
 'use server';
 
-import { createGateway } from '@ai-sdk/gateway';
 import { generateObject } from 'ai';
 import { z } from 'zod';
 import { ViewMode, parseIntent } from '@/contexts/ViewModeContext';
+import { getAIGateway, isAIGatewayAvailable } from '@/lib/ai-gateway';
 
 // ====================================
 // TYPE DEFINITIONS
@@ -55,27 +55,7 @@ export type IntentResponse = z.infer<typeof IntentSchema>;
 // ====================================
 // GATEWAY CONFIGURATION
 // ====================================
-
-/**
- * Creates the Vercel AI Gateway instance.
- * Uses AI_GATEWAY_API_KEY environment variable.
- * Returns null if API key is not available to prevent errors.
- */
-let gateway: ReturnType<typeof createGateway> | null = null;
-
-try {
-  const apiKey = process.env.AI_GATEWAY_API_KEY;
-  if (apiKey) {
-    gateway = createGateway({
-      apiKey: apiKey,
-    });
-  } else {
-    console.warn('⚠️ AI_GATEWAY_API_KEY not set, AI Gateway will not be available');
-  }
-} catch (error) {
-  console.error('❌ Failed to initialize AI Gateway:', error);
-  gateway = null;
-}
+// Gateway is now initialized in lib/ai-gateway.ts and shared across server actions
 
 // ====================================
 // MAPPER FUNCTION
@@ -123,36 +103,48 @@ export async function detectIntent(input: string): Promise<IntentResponse> {
 
   // Single word: Use fast keyword matching
   if (isSingleWord) {
-    console.log('⚡ Single word detected, using keyword matching...');
+    if (process.env.NODE_ENV === 'development') {
+      console.log('⚡ Single word detected, using keyword matching...');
+    }
     const mode = parseIntent(trimmedInput); // returns ViewMode (may include "landing")
     const result = createFallbackResponse(toNarrowMode(mode));
-    console.log('📝 Keyword matching result:', result.targetMode);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('📝 Keyword matching result:', result.targetMode);
+    }
     return result;
   }
 
   // Multiple words: Use AI Gateway for natural language understanding
-  const apiKey = process.env.AI_GATEWAY_API_KEY;
-  
-  if (!apiKey) {
-    console.warn('⚠️  AI_GATEWAY_API_KEY not set. Falling back to keyword matching.');
+  if (!isAIGatewayAvailable()) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('⚠️  AI_GATEWAY_API_KEY not set. Falling back to keyword matching.');
+    }
     const mode = parseIntent(trimmedInput); // returns ViewMode (may include "landing")
     const fallbackResult = createFallbackResponse(toNarrowMode(mode));
-    console.log('📝 Keyword matching result:', fallbackResult.targetMode);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('📝 Keyword matching result:', fallbackResult.targetMode);
+    }
     return fallbackResult;
   }
 
-  // Check if gateway is available
+  const gateway = getAIGateway();
   if (!gateway) {
-    console.warn('⚠️ AI Gateway not available, falling back to keyword matching.');
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('⚠️ AI Gateway not available, falling back to keyword matching.');
+    }
     const mode = parseIntent(trimmedInput);
     const fallbackResult = createFallbackResponse(toNarrowMode(mode));
-    console.log('📝 Keyword matching result:', fallbackResult.targetMode);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('📝 Keyword matching result:', fallbackResult.targetMode);
+    }
     return fallbackResult;
   }
 
   try {
     // Call AI Gateway with Gemini model via structured output
-    console.log('🤖 Multiple words detected, using Vercel AI Gateway for intent detection...');
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🤖 Multiple words detected, using Vercel AI Gateway for intent detection...');
+    }
     const { object } = await generateObject({
       model: gateway('google/gemini-1.5-flash'),
       schema: IntentSchema,
@@ -160,16 +152,22 @@ export async function detectIntent(input: string): Promise<IntentResponse> {
       temperature: 0.3, // Lower temperature for more consistent routing
     });
 
-    console.log('✅ AI Gateway intent detected:', object.targetMode);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('✅ AI Gateway intent detected:', object.targetMode);
+    }
     return object;
 
   } catch (error) {
     console.error('❌ AI Gateway request failed:', error);
-    console.warn('⚠️  Falling back to keyword matching...');
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('⚠️  Falling back to keyword matching...');
+    }
     // Fallback to keyword matching on error
     const mode = parseIntent(trimmedInput); // returns ViewMode (may include "landing")
     const fallbackResult = createFallbackResponse(toNarrowMode(mode));
-    console.log('📝 Keyword matching result:', fallbackResult.targetMode);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('📝 Keyword matching result:', fallbackResult.targetMode);
+    }
     return fallbackResult;
   }
 }

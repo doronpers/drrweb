@@ -11,9 +11,9 @@
  * Uses Vercel AI Gateway (same as intent detection) for generation.
  */
 
-import { createGateway } from '@ai-sdk/gateway';
 import { generateText } from 'ai';
 import { type ViewMode, type TimeOfDay, type WhisperMood } from '@/lib/whispers';
+import { getAIGateway, isAIGatewayAvailable } from '@/lib/ai-gateway';
 
 // ====================================
 // TYPE DEFINITIONS
@@ -37,24 +37,7 @@ interface GenerateWhisperResult {
 // ====================================
 // GATEWAY CONFIGURATION
 // ====================================
-
-/**
- * Creates the Vercel AI Gateway instance.
- * Uses AI_GATEWAY_API_KEY environment variable (same as intent detection).
- */
-let gateway: ReturnType<typeof createGateway> | null = null;
-
-try {
-  const apiKey = process.env.AI_GATEWAY_API_KEY;
-  if (apiKey) {
-    gateway = createGateway({
-      apiKey: apiKey,
-    });
-  }
-} catch (error) {
-  console.error('❌ Failed to initialize AI Gateway for whispers:', error);
-  gateway = null;
-}
+// Gateway is now initialized in lib/ai-gateway.ts and shared across server actions
 
 // ====================================
 // CONFIGURATION
@@ -119,16 +102,15 @@ export async function generateWhisper(
     .slice(0, 10) // Limit number
     .map(w => sanitizeInput(w));
 
-  // Check for API key
-  const apiKey = process.env.AI_GATEWAY_API_KEY;
-  
-  if (!apiKey) {
+  // Check if gateway is available
+  if (!isAIGatewayAvailable()) {
     return {
       success: false,
       error: 'AI generation not configured (AI_GATEWAY_API_KEY not set)',
     };
   }
 
+  const gateway = getAIGateway();
   if (!gateway) {
     return {
       success: false,
@@ -194,7 +176,9 @@ Generate ONE short whisper fragment. Just the text, no quotes, no explanation.`;
       // Determine mood based on content (simple heuristic)
       const inferredMood = inferMood(cleanedWhisper, mode);
 
-      console.log('✨ AI whisper generated:', cleanedWhisper);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('✨ AI whisper generated:', cleanedWhisper);
+      }
 
       return {
         success: true,
