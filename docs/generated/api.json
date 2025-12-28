@@ -1,0 +1,3019 @@
+{
+  "meta": {
+    "generatedAt": "2025-11-28T23:05:28.572Z",
+    "projectName": "DRR Web",
+    "projectDescription": "Interactive Installation - Personal Website with The Prism Architecture",
+    "version": "1.0.0",
+    "totalModules": 20,
+    "totalComponents": 22,
+    "totalFunctions": 14,
+    "totalTypes": 9
+  },
+  "modules": [
+    {
+      "filePath": "app/layout.tsx",
+      "moduleName": "layout",
+      "moduleDoc": {
+        "description": "====================================\nROOT LAYOUT\n====================================\n\nThe foundational layout for the entire application.\nIncludes:\n- Font loading (variable fonts)\n- Global styles\n- ViewModeProvider (The Prism context)\n- Grain texture overlay",
+        "params": [],
+        "examples": [],
+        "tags": []
+      },
+      "isClient": false,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "next",
+          "names": [
+            "Metadata"
+          ],
+          "default": "type"
+        },
+        {
+          "from": "next/font/google",
+          "names": [
+            "Inter",
+            "EB_Garamond",
+            "JetBrains_Mono"
+          ]
+        },
+        {
+          "from": "@/contexts/ViewModeContext",
+          "names": [
+            "ViewModeProvider"
+          ]
+        }
+      ],
+      "exports": [
+        "metadata",
+        "default"
+      ],
+      "types": [],
+      "functions": [
+        {
+          "name": "RootLayout",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "app/layout.tsx",
+          "lineNumber": 79,
+          "signature": "RootLayout({\n  children,\n}: {\n  children: React.ReactNode;\n})",
+          "parameters": [
+            {
+              "name": "props",
+              "type": "object",
+              "optional": false
+            }
+          ]
+        }
+      ],
+      "components": [
+        {
+          "name": "RootLayout",
+          "type": "function",
+          "isClient": false,
+          "isServer": false,
+          "isDefault": true,
+          "filePath": "app/layout.tsx",
+          "lineNumber": 79,
+          "propsType": "React",
+          "hooks": [],
+          "dependencies": [
+            "next",
+            "next/font/google",
+            "@/contexts/ViewModeContext"
+          ]
+        }
+      ],
+      "constants": [
+        {
+          "name": "metadata",
+          "exported": true,
+          "filePath": "app/layout.tsx",
+          "lineNumber": 49,
+          "type": "Metadata",
+          "value": "{\n  title: 'Doron Reizes - Interactive Installation',\n  description:\n    'Systems architect, sound d..."
+        }
+      ]
+    },
+    {
+      "filePath": "app/page.tsx",
+      "moduleName": "page",
+      "isClient": true,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "framer-motion",
+          "names": [
+            "AnimatePresence",
+            "motion"
+          ]
+        },
+        {
+          "from": "@/contexts/ViewModeContext",
+          "names": [
+            "useViewMode"
+          ]
+        },
+        {
+          "from": "@/components/Landing",
+          "names": [],
+          "default": "Landing"
+        },
+        {
+          "from": "@/components/modes/Architect",
+          "names": [],
+          "default": "Architect"
+        },
+        {
+          "from": "@/components/modes/Author",
+          "names": [],
+          "default": "Author"
+        },
+        {
+          "from": "@/components/modes/Lab",
+          "names": [],
+          "default": "Lab"
+        },
+        {
+          "from": "@/components/canvas/EchoChamber",
+          "names": [],
+          "default": "EchoChamber"
+        },
+        {
+          "from": "@/components/canvas/WhispersChamber",
+          "names": [],
+          "default": "WhispersChamber"
+        },
+        {
+          "from": "@/components/AntiPortfolio",
+          "names": [],
+          "default": "AntiPortfolio"
+        }
+      ],
+      "exports": [
+        "default"
+      ],
+      "types": [
+        {
+          "name": "ModeButtonProps",
+          "kind": "interface",
+          "filePath": "app/page.tsx",
+          "lineNumber": 122,
+          "exported": false,
+          "definition": "interface ModeButtonProps {\n  mode: 'architect' | 'author' | 'lab';\n  currentMode: string;\n  onClick: () => void;\n  label: string;\n  title: string;\n}",
+          "properties": [
+            {
+              "name": "mode",
+              "type": "'architect' | 'author' | 'lab'",
+              "optional": false
+            },
+            {
+              "name": "currentMode",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "onClick",
+              "type": "() => void",
+              "optional": false
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "title",
+              "type": "string",
+              "optional": false
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "Home",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "app/page.tsx",
+          "lineNumber": 31,
+          "signature": "Home()",
+          "parameters": []
+        },
+        {
+          "name": "ModeButton",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "app/page.tsx",
+          "lineNumber": 130,
+          "signature": "ModeButton({\n  mode,\n  currentMode,\n  onClick,\n  label,\n  title,\n}: ModeButtonProps)",
+          "parameters": [
+            {
+              "name": "props",
+              "type": "ModeButtonProps",
+              "optional": false
+            }
+          ]
+        }
+      ],
+      "components": [
+        {
+          "name": "Home",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": true,
+          "filePath": "app/page.tsx",
+          "lineNumber": 31,
+          "hooks": [
+            "useViewMode"
+          ],
+          "dependencies": [
+            "framer-motion",
+            "@/contexts/ViewModeContext",
+            "@/components/Landing",
+            "@/components/modes/Architect",
+            "@/components/modes/Author",
+            "@/components/modes/Lab",
+            "@/components/canvas/EchoChamber",
+            "@/components/canvas/WhispersChamber",
+            "@/components/AntiPortfolio"
+          ]
+        },
+        {
+          "name": "ModeButton",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": false,
+          "filePath": "app/page.tsx",
+          "lineNumber": 130,
+          "propsType": "ModeButtonProps",
+          "hooks": [],
+          "dependencies": [
+            "framer-motion",
+            "@/contexts/ViewModeContext",
+            "@/components/Landing",
+            "@/components/modes/Architect",
+            "@/components/modes/Author",
+            "@/components/modes/Lab",
+            "@/components/canvas/EchoChamber",
+            "@/components/canvas/WhispersChamber",
+            "@/components/AntiPortfolio"
+          ]
+        }
+      ],
+      "constants": []
+    },
+    {
+      "filePath": "components/AntiPortfolio.tsx",
+      "moduleName": "AntiPortfolio",
+      "isClient": true,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "framer-motion",
+          "names": [
+            "motion"
+          ]
+        },
+        {
+          "from": "react",
+          "names": [
+            "useState"
+          ]
+        }
+      ],
+      "exports": [
+        "default"
+      ],
+      "types": [
+        {
+          "name": "FailureEntry",
+          "kind": "interface",
+          "filePath": "components/AntiPortfolio.tsx",
+          "lineNumber": 25,
+          "exported": false,
+          "definition": "interface FailureEntry {\n  date: string;\n  project: string;\n  lesson: string;\n  category: 'technical' | 'business' | 'creative' | 'collaboration';\n}",
+          "properties": [
+            {
+              "name": "date",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "project",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "lesson",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "category",
+              "type": "'technical' | 'business' | 'creative' | 'collaboration'",
+              "optional": false
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "AntiPortfolio",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/AntiPortfolio.tsx",
+          "lineNumber": 80,
+          "signature": "AntiPortfolio()",
+          "parameters": []
+        }
+      ],
+      "components": [
+        {
+          "name": "AntiPortfolio",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": true,
+          "filePath": "components/AntiPortfolio.tsx",
+          "lineNumber": 80,
+          "hooks": [
+            "useState"
+          ],
+          "dependencies": [
+            "framer-motion",
+            "react"
+          ]
+        }
+      ],
+      "constants": []
+    },
+    {
+      "filePath": "components/FailuresLog.tsx",
+      "moduleName": "FailuresLog",
+      "isClient": true,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "react",
+          "names": [
+            "useEffect",
+            "useState"
+          ]
+        }
+      ],
+      "exports": [
+        "default"
+      ],
+      "types": [
+        {
+          "name": "FailureEntry",
+          "kind": "interface",
+          "filePath": "components/FailuresLog.tsx",
+          "lineNumber": 26,
+          "exported": false,
+          "definition": "interface FailureEntry {\n  year: string;\n  project: string;\n  outcome: string;\n  lesson: string;\n}",
+          "properties": [
+            {
+              "name": "year",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "project",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "outcome",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "lesson",
+              "type": "string",
+              "optional": false
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "FailuresLog",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/FailuresLog.tsx",
+          "lineNumber": 37,
+          "signature": "FailuresLog()",
+          "parameters": []
+        },
+        {
+          "name": "loadFailures",
+          "kind": "function",
+          "async": true,
+          "exported": false,
+          "filePath": "components/FailuresLog.tsx",
+          "lineNumber": 43,
+          "signature": "loadFailures()",
+          "parameters": []
+        }
+      ],
+      "components": [
+        {
+          "name": "FailuresLog",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": true,
+          "filePath": "components/FailuresLog.tsx",
+          "lineNumber": 37,
+          "hooks": [
+            "useState",
+            "useEffect"
+          ],
+          "dependencies": [
+            "react"
+          ]
+        }
+      ],
+      "constants": []
+    },
+    {
+      "filePath": "components/Landing.tsx",
+      "moduleName": "Landing",
+      "isClient": true,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "react",
+          "names": [
+            "useState",
+            "useEffect",
+            "useCallback",
+            "FormEvent",
+            "useRef"
+          ]
+        },
+        {
+          "from": "framer-motion",
+          "names": [
+            "motion",
+            "AnimatePresence"
+          ]
+        },
+        {
+          "from": "@/contexts/ViewModeContext",
+          "names": [
+            "useViewMode",
+            "parseIntent"
+          ]
+        },
+        {
+          "from": "@/actions/detect-intent",
+          "names": [
+            "detectIntent"
+          ]
+        }
+      ],
+      "exports": [
+        "default"
+      ],
+      "types": [],
+      "functions": [
+        {
+          "name": "Landing",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/Landing.tsx",
+          "lineNumber": 24,
+          "signature": "Landing()",
+          "parameters": []
+        }
+      ],
+      "components": [
+        {
+          "name": "Landing",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": true,
+          "filePath": "components/Landing.tsx",
+          "lineNumber": 24,
+          "hooks": [
+            "useViewMode",
+            "useState",
+            "useCallback",
+            "useEffect"
+          ],
+          "dependencies": [
+            "react",
+            "framer-motion",
+            "@/contexts/ViewModeContext",
+            "@/actions/detect-intent"
+          ]
+        }
+      ],
+      "constants": []
+    },
+    {
+      "filePath": "components/canvas/EchoChamber.tsx",
+      "moduleName": "EchoChamber",
+      "isClient": true,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "react",
+          "names": [
+            "useState",
+            "FormEvent",
+            "useEffect",
+            "useCallback",
+            "useRef"
+          ]
+        },
+        {
+          "from": "framer-motion",
+          "names": [
+            "motion",
+            "AnimatePresence"
+          ]
+        },
+        {
+          "from": "./EchoEntry",
+          "names": [],
+          "default": "EchoEntry"
+        },
+        {
+          "from": "@/lib/supabase",
+          "names": [
+            "fetchEchoes",
+            "submitEcho",
+            "type Echo"
+          ]
+        }
+      ],
+      "exports": [
+        "default"
+      ],
+      "types": [
+        {
+          "name": "Echo",
+          "kind": "interface",
+          "filePath": "components/canvas/EchoChamber.tsx",
+          "lineNumber": 27,
+          "exported": false,
+          "definition": "interface Echo {\n  id: string;\n  text: string;\n  timestamp: Date;\n}",
+          "properties": [
+            {
+              "name": "id",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "text",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "timestamp",
+              "type": "Date",
+              "optional": false
+            }
+          ]
+        },
+        {
+          "name": "SubmissionError",
+          "kind": "interface",
+          "filePath": "components/canvas/EchoChamber.tsx",
+          "lineNumber": 33,
+          "exported": false,
+          "definition": "interface SubmissionError {\n  message: string;\n  type: 'validation' | 'rate-limit' | 'network' | 'unknown';\n}",
+          "properties": [
+            {
+              "name": "message",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "type",
+              "type": "'validation' | 'rate-limit' | 'network' | 'unknown'",
+              "optional": false
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "checkRateLimit",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/canvas/EchoChamber.tsx",
+          "lineNumber": 46,
+          "signature": "checkRateLimit(): ",
+          "parameters": [],
+          "returnType": ""
+        },
+        {
+          "name": "sanitizeInput",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/canvas/EchoChamber.tsx",
+          "lineNumber": 72,
+          "signature": "sanitizeInput(input: string): string",
+          "parameters": [
+            {
+              "name": "input",
+              "optional": false,
+              "type": "string"
+            }
+          ],
+          "returnType": "string"
+        },
+        {
+          "name": "validateInput",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/canvas/EchoChamber.tsx",
+          "lineNumber": 79,
+          "signature": "validateInput(input: string): ",
+          "parameters": [
+            {
+              "name": "input",
+              "optional": false,
+              "type": "string"
+            }
+          ],
+          "returnType": ""
+        },
+        {
+          "name": "EchoChamber",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/canvas/EchoChamber.tsx",
+          "lineNumber": 102,
+          "signature": "EchoChamber()",
+          "parameters": []
+        },
+        {
+          "name": "loadEchoes",
+          "kind": "function",
+          "async": true,
+          "exported": false,
+          "filePath": "components/canvas/EchoChamber.tsx",
+          "lineNumber": 113,
+          "signature": "loadEchoes()",
+          "parameters": []
+        }
+      ],
+      "components": [
+        {
+          "name": "EchoChamber",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": true,
+          "filePath": "components/canvas/EchoChamber.tsx",
+          "lineNumber": 102,
+          "hooks": [
+            "useState",
+            "useEffect",
+            "useCallback"
+          ],
+          "dependencies": [
+            "react",
+            "framer-motion",
+            "./EchoEntry",
+            "@/lib/supabase"
+          ]
+        }
+      ],
+      "constants": []
+    },
+    {
+      "filePath": "components/canvas/EchoEntry.tsx",
+      "moduleName": "EchoEntry",
+      "isClient": true,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "framer-motion",
+          "names": [
+            "motion"
+          ]
+        },
+        {
+          "from": "react",
+          "names": [
+            "memo",
+            "useMemo"
+          ]
+        }
+      ],
+      "exports": [
+        "default"
+      ],
+      "types": [
+        {
+          "name": "EchoEntryProps",
+          "kind": "interface",
+          "filePath": "components/canvas/EchoEntry.tsx",
+          "lineNumber": 15,
+          "exported": false,
+          "definition": "interface EchoEntryProps {\n  id: string;\n  text: string;\n  timestamp: Date;\n  index: number;\n}",
+          "properties": [
+            {
+              "name": "id",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "text",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "timestamp",
+              "type": "Date",
+              "optional": false
+            },
+            {
+              "name": "index",
+              "type": "number",
+              "optional": false
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "EchoEntry",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/canvas/EchoEntry.tsx",
+          "lineNumber": 22,
+          "signature": "EchoEntry({ id, text, timestamp, index }: EchoEntryProps)",
+          "parameters": [
+            {
+              "name": "props",
+              "type": "EchoEntryProps",
+              "optional": false
+            }
+          ]
+        }
+      ],
+      "components": [
+        {
+          "name": "EchoEntry",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": false,
+          "filePath": "components/canvas/EchoEntry.tsx",
+          "lineNumber": 22,
+          "propsType": "EchoEntryProps",
+          "hooks": [
+            "useMemo"
+          ],
+          "dependencies": [
+            "framer-motion",
+            "react"
+          ]
+        }
+      ],
+      "constants": []
+    },
+    {
+      "filePath": "components/canvas/Whisper.tsx",
+      "moduleName": "Whisper",
+      "isClient": true,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "framer-motion",
+          "names": [
+            "motion"
+          ]
+        },
+        {
+          "from": "react",
+          "names": [
+            "memo",
+            "useMemo",
+            "forwardRef"
+          ]
+        },
+        {
+          "from": "@/lib/whispers",
+          "names": [
+            "type WhisperMood"
+          ]
+        }
+      ],
+      "exports": [
+        "default"
+      ],
+      "types": [
+        {
+          "name": "WhisperProps",
+          "kind": "interface",
+          "filePath": "components/canvas/Whisper.tsx",
+          "lineNumber": 20,
+          "exported": false,
+          "definition": "interface WhisperProps {\n  id: string;\n  text: string;\n  mood: WhisperMood;\n  index: number;\n  totalCount: number;\n}",
+          "properties": [
+            {
+              "name": "id",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "text",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "mood",
+              "type": "WhisperMood",
+              "optional": false
+            },
+            {
+              "name": "index",
+              "type": "number",
+              "optional": false
+            },
+            {
+              "name": "totalCount",
+              "type": "number",
+              "optional": false
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "getMoodStyles",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/canvas/Whisper.tsx",
+          "lineNumber": 3,
+          "signature": "getMoodStyles(mood: WhisperMood): ",
+          "parameters": [
+            {
+              "name": "mood",
+              "optional": false,
+              "type": "WhisperMood"
+            }
+          ],
+          "returnType": ""
+        },
+        {
+          "name": "Whisper",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/canvas/Whisper.tsx",
+          "lineNumber": 65,
+          "signature": "Whisper(\n  { id, text, mood, index, totalCount },\n  ref\n)",
+          "parameters": [
+            {
+              "name": "props",
+              "type": "object",
+              "optional": false
+            },
+            {
+              "name": "ref",
+              "optional": false
+            }
+          ]
+        }
+      ],
+      "components": [
+        {
+          "name": "Whisper",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": false,
+          "filePath": "components/canvas/Whisper.tsx",
+          "lineNumber": 65,
+          "hooks": [
+            "useMemo"
+          ],
+          "dependencies": [
+            "framer-motion",
+            "react",
+            "@/lib/whispers"
+          ]
+        }
+      ],
+      "constants": []
+    },
+    {
+      "filePath": "components/canvas/WhispersChamber.tsx",
+      "moduleName": "WhispersChamber",
+      "isClient": true,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "react",
+          "names": [
+            "useState",
+            "useEffect",
+            "useCallback",
+            "useRef"
+          ]
+        },
+        {
+          "from": "framer-motion",
+          "names": [
+            "AnimatePresence"
+          ]
+        },
+        {
+          "from": "./Whisper",
+          "names": [],
+          "default": "Whisper"
+        },
+        {
+          "from": "@/lib/whispers",
+          "names": [
+            "type Whisper",
+            "type ViewMode",
+            "whisperEngine",
+            "getTimeOfDay",
+            "getInitialWhispers"
+          ]
+        },
+        {
+          "from": "@/actions/generate-whisper",
+          "names": [
+            "generateWhisper"
+          ]
+        }
+      ],
+      "exports": [
+        "default"
+      ],
+      "types": [
+        {
+          "name": "WhispersChamberProps",
+          "kind": "interface",
+          "filePath": "components/canvas/WhispersChamber.tsx",
+          "lineNumber": 30,
+          "exported": false,
+          "definition": "interface WhispersChamberProps {\n  mode: ViewMode;\n  userIntent?: string;\n  /** Number of whispers to display (default: 8) */\n  density?: number;\n  /** Whether the chamber is active (default: true) */\n  active?: boolean;\n}",
+          "properties": [
+            {
+              "name": "mode",
+              "type": "ViewMode",
+              "optional": false
+            },
+            {
+              "name": "userIntent",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "density",
+              "type": "number",
+              "optional": true,
+              "doc": "Number of whispers to display (default: 8)"
+            },
+            {
+              "name": "active",
+              "type": "boolean",
+              "optional": true,
+              "doc": "Whether the chamber is active (default: true)"
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "WhispersChamber",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/canvas/WhispersChamber.tsx",
+          "lineNumber": 66,
+          "signature": "WhispersChamber({\n  mode,\n  userIntent,\n  density = 8,\n  active = true,\n}: WhispersChamberProps)",
+          "parameters": [
+            {
+              "name": "props",
+              "type": "WhispersChamberProps",
+              "optional": false
+            }
+          ]
+        },
+        {
+          "name": "updateTime",
+          "kind": "arrow",
+          "async": false,
+          "exported": false,
+          "filePath": "components/canvas/WhispersChamber.tsx",
+          "lineNumber": 259,
+          "signature": "updateTime",
+          "parameters": []
+        }
+      ],
+      "components": [
+        {
+          "name": "WhispersChamber",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": true,
+          "filePath": "components/canvas/WhispersChamber.tsx",
+          "lineNumber": 66,
+          "propsType": "WhispersChamberProps",
+          "hooks": [
+            "useState",
+            "useEffect",
+            "useCallback"
+          ],
+          "dependencies": [
+            "react",
+            "framer-motion",
+            "./Whisper",
+            "@/lib/whispers",
+            "@/actions/generate-whisper"
+          ]
+        }
+      ],
+      "constants": []
+    },
+    {
+      "filePath": "components/modes/Architect.tsx",
+      "moduleName": "Architect",
+      "isClient": true,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "framer-motion",
+          "names": [
+            "motion"
+          ]
+        },
+        {
+          "from": "react",
+          "names": [
+            "useEffect"
+          ]
+        },
+        {
+          "from": "@/lib/audio",
+          "names": [
+            "audioManager"
+          ]
+        },
+        {
+          "from": "@/lib/styles",
+          "names": [
+            "getTypography",
+            "animations",
+            "transitions"
+          ]
+        }
+      ],
+      "exports": [
+        "default"
+      ],
+      "types": [
+        {
+          "name": "SectionProps",
+          "kind": "interface",
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 288,
+          "exported": false,
+          "definition": "interface SectionProps {\n  title: string;\n  children: React.ReactNode;\n  onHover?: () => void;\n}",
+          "properties": [
+            {
+              "name": "title",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "children",
+              "type": "React.ReactNode",
+              "optional": false
+            },
+            {
+              "name": "onHover",
+              "type": "() => void",
+              "optional": true
+            }
+          ]
+        },
+        {
+          "name": "PositionProps",
+          "kind": "interface",
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 310,
+          "exported": false,
+          "definition": "interface PositionProps {\n  title: string;\n  company: string;\n  description: string;\n  tags: string[];\n  highlight?: boolean;\n  onHover?: () => void;\n}",
+          "properties": [
+            {
+              "name": "title",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "company",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "tags",
+              "type": "string[]",
+              "optional": false
+            },
+            {
+              "name": "highlight",
+              "type": "boolean",
+              "optional": true
+            },
+            {
+              "name": "onHover",
+              "type": "() => void",
+              "optional": true
+            }
+          ]
+        },
+        {
+          "name": "CompetencyCardProps",
+          "kind": "interface",
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 359,
+          "exported": false,
+          "definition": "interface CompetencyCardProps {\n  title: string;\n  items: string[];\n  onHover?: () => void;\n}",
+          "properties": [
+            {
+              "name": "title",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "items",
+              "type": "string[]",
+              "optional": false
+            },
+            {
+              "name": "onHover",
+              "type": "() => void",
+              "optional": true
+            }
+          ]
+        },
+        {
+          "name": "ContactItemProps",
+          "kind": "interface",
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 401,
+          "exported": false,
+          "definition": "interface ContactItemProps {\n  href: string;\n  label: string;\n  onMouseEnter?: () => void;\n}",
+          "properties": [
+            {
+              "name": "href",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "onMouseEnter",
+              "type": "() => void",
+              "optional": true
+            }
+          ]
+        },
+        {
+          "name": "MetricProps",
+          "kind": "interface",
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 423,
+          "exported": false,
+          "definition": "interface MetricProps {\n  value: string;\n  label: string;\n}",
+          "properties": [
+            {
+              "name": "value",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "optional": false
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "Architect",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 27,
+          "signature": "Architect()",
+          "parameters": []
+        },
+        {
+          "name": "Section",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 294,
+          "signature": "Section({ title, children, onHover }: SectionProps)",
+          "parameters": [
+            {
+              "name": "props",
+              "type": "SectionProps",
+              "optional": false
+            }
+          ]
+        },
+        {
+          "name": "Position",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 319,
+          "signature": "Position({\n  title,\n  company,\n  description,\n  tags,\n  highlight,\n  onHover,\n}: PositionProps)",
+          "parameters": [
+            {
+              "name": "props",
+              "type": "PositionProps",
+              "optional": false
+            }
+          ]
+        },
+        {
+          "name": "CompetencyCard",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 365,
+          "signature": "CompetencyCard({ title, items, onHover }: CompetencyCardProps)",
+          "parameters": [
+            {
+              "name": "props",
+              "type": "CompetencyCardProps",
+              "optional": false
+            }
+          ]
+        },
+        {
+          "name": "Pill",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 389,
+          "signature": "Pill({ children }: { children: React.ReactNode })",
+          "parameters": [
+            {
+              "name": "props",
+              "type": "object",
+              "optional": false
+            }
+          ]
+        },
+        {
+          "name": "ContactItem",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 407,
+          "signature": "ContactItem({ href, label, onMouseEnter }: ContactItemProps)",
+          "parameters": [
+            {
+              "name": "props",
+              "type": "ContactItemProps",
+              "optional": false
+            }
+          ]
+        },
+        {
+          "name": "Metric",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 428,
+          "signature": "Metric({ value, label }: MetricProps)",
+          "parameters": [
+            {
+              "name": "props",
+              "type": "MetricProps",
+              "optional": false
+            }
+          ]
+        },
+        {
+          "name": "handleHover",
+          "kind": "arrow",
+          "async": false,
+          "exported": false,
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 31,
+          "signature": "handleHover",
+          "parameters": []
+        }
+      ],
+      "components": [
+        {
+          "name": "Architect",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": true,
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 27,
+          "hooks": [
+            "useEffect"
+          ],
+          "dependencies": [
+            "framer-motion",
+            "react",
+            "@/lib/audio",
+            "@/lib/styles"
+          ]
+        },
+        {
+          "name": "Section",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": false,
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 294,
+          "propsType": "SectionProps",
+          "hooks": [],
+          "dependencies": [
+            "framer-motion",
+            "react",
+            "@/lib/audio",
+            "@/lib/styles"
+          ]
+        },
+        {
+          "name": "Position",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": false,
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 319,
+          "propsType": "PositionProps",
+          "hooks": [],
+          "dependencies": [
+            "framer-motion",
+            "react",
+            "@/lib/audio",
+            "@/lib/styles"
+          ]
+        },
+        {
+          "name": "CompetencyCard",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": false,
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 365,
+          "propsType": "CompetencyCardProps",
+          "hooks": [],
+          "dependencies": [
+            "framer-motion",
+            "react",
+            "@/lib/audio",
+            "@/lib/styles"
+          ]
+        },
+        {
+          "name": "Pill",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": false,
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 389,
+          "propsType": "React",
+          "hooks": [],
+          "dependencies": [
+            "framer-motion",
+            "react",
+            "@/lib/audio",
+            "@/lib/styles"
+          ]
+        },
+        {
+          "name": "ContactItem",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": false,
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 407,
+          "propsType": "ContactItemProps",
+          "hooks": [],
+          "dependencies": [
+            "framer-motion",
+            "react",
+            "@/lib/audio",
+            "@/lib/styles"
+          ]
+        },
+        {
+          "name": "Metric",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": false,
+          "filePath": "components/modes/Architect.tsx",
+          "lineNumber": 428,
+          "propsType": "MetricProps",
+          "hooks": [],
+          "dependencies": [
+            "framer-motion",
+            "react",
+            "@/lib/audio",
+            "@/lib/styles"
+          ]
+        }
+      ],
+      "constants": []
+    },
+    {
+      "filePath": "components/modes/Author.tsx",
+      "moduleName": "Author",
+      "isClient": true,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "framer-motion",
+          "names": [
+            "motion"
+          ]
+        },
+        {
+          "from": "react",
+          "names": [
+            "useEffect"
+          ]
+        },
+        {
+          "from": "@/lib/audio",
+          "names": [
+            "audioManager"
+          ]
+        }
+      ],
+      "exports": [
+        "default"
+      ],
+      "types": [],
+      "functions": [
+        {
+          "name": "Author",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/modes/Author.tsx",
+          "lineNumber": 26,
+          "signature": "Author()",
+          "parameters": []
+        },
+        {
+          "name": "MicroMotive",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/modes/Author.tsx",
+          "lineNumber": 273,
+          "signature": "MicroMotive({ title, text }: { title: string; text: string })",
+          "parameters": [
+            {
+              "name": "props",
+              "type": "object",
+              "optional": false
+            }
+          ]
+        },
+        {
+          "name": "handleHover",
+          "kind": "arrow",
+          "async": false,
+          "exported": false,
+          "filePath": "components/modes/Author.tsx",
+          "lineNumber": 28,
+          "signature": "handleHover",
+          "parameters": []
+        }
+      ],
+      "components": [
+        {
+          "name": "Author",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": true,
+          "filePath": "components/modes/Author.tsx",
+          "lineNumber": 26,
+          "hooks": [
+            "useEffect"
+          ],
+          "dependencies": [
+            "framer-motion",
+            "react",
+            "@/lib/audio"
+          ]
+        },
+        {
+          "name": "MicroMotive",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": false,
+          "filePath": "components/modes/Author.tsx",
+          "lineNumber": 273,
+          "propsType": "string",
+          "hooks": [],
+          "dependencies": [
+            "framer-motion",
+            "react",
+            "@/lib/audio"
+          ]
+        }
+      ],
+      "constants": []
+    },
+    {
+      "filePath": "components/modes/Lab.tsx",
+      "moduleName": "Lab",
+      "isClient": true,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "framer-motion",
+          "names": [
+            "motion"
+          ]
+        },
+        {
+          "from": "react",
+          "names": [
+            "useEffect",
+            "useState"
+          ]
+        },
+        {
+          "from": "@/lib/audio",
+          "names": [
+            "audioManager"
+          ]
+        }
+      ],
+      "exports": [
+        "default"
+      ],
+      "types": [],
+      "functions": [
+        {
+          "name": "Lab",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/modes/Lab.tsx",
+          "lineNumber": 27,
+          "signature": "Lab()",
+          "parameters": []
+        },
+        {
+          "name": "StackItem",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/modes/Lab.tsx",
+          "lineNumber": 414,
+          "signature": "StackItem({ category, items }: { category: string; items: string[] })",
+          "parameters": [
+            {
+              "name": "props",
+              "type": "object",
+              "optional": false
+            }
+          ]
+        },
+        {
+          "name": "handleHover",
+          "kind": "arrow",
+          "async": false,
+          "exported": false,
+          "filePath": "components/modes/Lab.tsx",
+          "lineNumber": 31,
+          "signature": "handleHover",
+          "parameters": []
+        }
+      ],
+      "components": [
+        {
+          "name": "Lab",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": true,
+          "filePath": "components/modes/Lab.tsx",
+          "lineNumber": 27,
+          "hooks": [
+            "useState",
+            "useEffect"
+          ],
+          "dependencies": [
+            "framer-motion",
+            "react",
+            "@/lib/audio"
+          ]
+        },
+        {
+          "name": "StackItem",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": false,
+          "filePath": "components/modes/Lab.tsx",
+          "lineNumber": 414,
+          "propsType": "string",
+          "hooks": [],
+          "dependencies": [
+            "framer-motion",
+            "react",
+            "@/lib/audio"
+          ]
+        }
+      ],
+      "constants": []
+    },
+    {
+      "filePath": "contexts/ViewModeContext.tsx",
+      "moduleName": "ViewModeContext",
+      "isClient": true,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "react",
+          "names": [
+            "createContext",
+            "useContext",
+            "useState",
+            "useCallback",
+            "ReactNode"
+          ],
+          "default": "React"
+        }
+      ],
+      "exports": [
+        "ViewMode",
+        "ViewModeProvider",
+        "useViewMode",
+        "MODE_CONFIG",
+        "KEYWORD_MAP",
+        "parseIntent"
+      ],
+      "types": [
+        {
+          "name": "ViewMode",
+          "kind": "type",
+          "filePath": "contexts/ViewModeContext.tsx",
+          "lineNumber": 23,
+          "exported": true,
+          "definition": "'landing' | 'architect' | 'author' | 'lab'"
+        },
+        {
+          "name": "ViewModeContextType",
+          "kind": "interface",
+          "filePath": "contexts/ViewModeContext.tsx",
+          "lineNumber": 25,
+          "exported": false,
+          "definition": "interface ViewModeContextType {\n  currentMode: ViewMode;\n  previousMode: ViewMode | null;\n  setMode: (mode: ViewMode, intent?: string) => void;\n  isTransitioning: boolean;\n  /** The user's original input/intent from the landing page */\n  userIntent: string | null;\n}",
+          "properties": [
+            {
+              "name": "currentMode",
+              "type": "ViewMode",
+              "optional": false
+            },
+            {
+              "name": "previousMode",
+              "type": "ViewMode | null",
+              "optional": false
+            },
+            {
+              "name": "setMode",
+              "type": "(mode: ViewMode, intent?: string) => void",
+              "optional": false
+            },
+            {
+              "name": "isTransitioning",
+              "type": "boolean",
+              "optional": false
+            },
+            {
+              "name": "userIntent",
+              "type": "string | null",
+              "optional": false,
+              "doc": "The user's original input/intent from the landing page"
+            }
+          ]
+        },
+        {
+          "name": "ViewModeProviderProps",
+          "kind": "interface",
+          "filePath": "contexts/ViewModeContext.tsx",
+          "lineNumber": 34,
+          "exported": false,
+          "definition": "interface ViewModeProviderProps {\n  children: ReactNode;\n}",
+          "properties": [
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "optional": false
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "useViewMode",
+          "kind": "function",
+          "async": false,
+          "exported": true,
+          "filePath": "contexts/ViewModeContext.tsx",
+          "lineNumber": 3,
+          "signature": "useViewMode(): ViewModeContextType",
+          "parameters": [],
+          "returnType": "ViewModeContextType"
+        },
+        {
+          "name": "parseIntent",
+          "kind": "function",
+          "async": false,
+          "exported": true,
+          "filePath": "contexts/ViewModeContext.tsx",
+          "lineNumber": 125,
+          "signature": "parseIntent(input: string): ViewMode",
+          "parameters": [
+            {
+              "name": "input",
+              "optional": false,
+              "type": "string"
+            }
+          ],
+          "returnType": "ViewMode"
+        }
+      ],
+      "components": [
+        {
+          "name": "ViewModeProvider",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": false,
+          "filePath": "contexts/ViewModeContext.tsx",
+          "lineNumber": 48,
+          "propsType": "ViewModeProviderProps",
+          "hooks": [
+            "useState",
+            "useCallback",
+            "useViewMode",
+            "useContext"
+          ],
+          "dependencies": [
+            "react"
+          ]
+        }
+      ],
+      "constants": [
+        {
+          "name": "MODE_CONFIG",
+          "exported": true,
+          "filePath": "contexts/ViewModeContext.tsx",
+          "lineNumber": 104,
+          "value": "{\n  architect: {\n    name: 'The Architect',\n    theme: {\n      bg: 'bg-architect-bg',\n      text: 't..."
+        },
+        {
+          "name": "KEYWORD_MAP",
+          "exported": true,
+          "filePath": "contexts/ViewModeContext.tsx",
+          "lineNumber": 178,
+          "type": "Record<string, ViewMode>",
+          "value": "{\n  // MODE A: The Architect (Business/Recruiter)\n  'hire': 'architect',\n  'cv': 'architect',\n  'res..."
+        }
+      ]
+    },
+    {
+      "filePath": "lib/audio.ts",
+      "moduleName": "audio",
+      "moduleDoc": {
+        "description": "====================================\nAUDIO ENGINE - TONE.JS IMPLEMENTATION\n====================================\n\nThis module handles all audio synthesis and playback.\nAudio is a first-class citizen in this installation.\n\nFeatures:\n- Musical ambient drone (filtered noise + harmonic tones)\n- Mode-specific UI sounds (musical intervals, cohesive scale)\n- Graceful handling of browser autoplay policies\n- Real-time audio processing (filters, reverb, musical synthesis)\n- Pentatonic scale for universal musical appeal",
+        "params": [],
+        "examples": [],
+        "tags": []
+      },
+      "isClient": false,
+      "isServer": false,
+      "imports": [],
+      "exports": [
+        "audioManager"
+      ],
+      "types": [
+        {
+          "name": "UISoundType",
+          "kind": "type",
+          "filePath": "lib/audio.ts",
+          "lineNumber": 23,
+          "exported": false,
+          "definition": "'click-dry' | 'click-warm' | 'glitch'"
+        },
+        {
+          "name": "DetuneConfig",
+          "kind": "interface",
+          "filePath": "lib/audio.ts",
+          "lineNumber": 1,
+          "exported": false,
+          "definition": "/**\n * ====================================\n * AUDIO ENGINE - TONE.JS IMPLEMENTATION\n * ====================================\n *\n * This module handles all audio synthesis and playback.\n * Audio is a first-class citizen in this installation.\n *\n * Features:\n * - Musical ambient drone (filtered noise + harmonic tones)\n * - Mode-specific UI sounds (musical intervals, cohesive scale)\n * - Graceful handling of browser autoplay policies\n * - Real-time audio processing (filters, reverb, musical synthesis)\n * - Pentatonic scale for universal musical appeal\n */\n\nimport * as Tone from 'tone';\n\n// ====================================\n// TYPE DEFINITIONS\n// ====================================\n\ntype UISoundType = 'click-dry' | 'click-warm' | 'glitch';\n\n/**\n * Detune configuration for humanization.\n * Values are in cents (100 cents = 1 semitone).\n */\ninterface DetuneConfig {\n  /** Minimum detune in cents (typically negative) */\n  min: number;\n  /** Maximum detune in cents (typically positive) */\n  max: number;\n}",
+          "properties": [
+            {
+              "name": "min",
+              "type": "number",
+              "optional": false,
+              "doc": "Minimum detune in cents (typically negative)"
+            },
+            {
+              "name": "max",
+              "type": "number",
+              "optional": false,
+              "doc": "Maximum detune in cents (typically positive)"
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "getRandomDetune",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "lib/audio.ts",
+          "lineNumber": 1,
+          "signature": "getRandomDetune(config: DetuneConfig = { min: -5, max: 5 }): number",
+          "parameters": [
+            {
+              "name": "config",
+              "optional": true,
+              "type": "DetuneConfig",
+              "defaultValue": "{ min: -5, max: 5 }"
+            }
+          ],
+          "returnType": "number"
+        }
+      ],
+      "components": [],
+      "constants": [
+        {
+          "name": "audioManager",
+          "exported": true,
+          "filePath": "lib/audio.ts",
+          "lineNumber": 542,
+          "value": "new AudioManager()"
+        }
+      ]
+    },
+    {
+      "filePath": "lib/styles.ts",
+      "moduleName": "styles",
+      "moduleDoc": {
+        "description": "====================================\nTYPOGRAPHY & STYLE CONFIGURATION\n====================================\n\nCentralized typography and style configuration for all view modes.\nMakes it easy to adjust hierarchy and maintain consistency.\n\nUsage:\n  import { getTypography } from '@/lib/styles';\n  const styles = getTypography('architect');\n  <h1 className={styles.h1}>Title</h1>",
+        "params": [],
+        "examples": [],
+        "tags": []
+      },
+      "isClient": false,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "@/lib/styles",
+          "names": [
+            "getTypography"
+          ]
+        }
+      ],
+      "exports": [
+        "ViewMode",
+        "getTypography",
+        "animations",
+        "transitions"
+      ],
+      "types": [
+        {
+          "name": "ViewMode",
+          "kind": "type",
+          "filePath": "lib/styles.ts",
+          "lineNumber": 1,
+          "exported": true,
+          "definition": "'architect' | 'author' | 'lab'"
+        },
+        {
+          "name": "TypographyConfig",
+          "kind": "interface",
+          "filePath": "lib/styles.ts",
+          "lineNumber": 17,
+          "exported": false,
+          "definition": "interface TypographyConfig {\n  container: string;\n  h1: string;\n  h2: string;\n  h3: string;\n  p: string;\n  small: string;\n  label: string;\n  link: string;\n}",
+          "properties": [
+            {
+              "name": "container",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "h1",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "h2",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "h3",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "p",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "small",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "label",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "link",
+              "type": "string",
+              "optional": false
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "getTypography",
+          "kind": "function",
+          "async": false,
+          "exported": true,
+          "filePath": "lib/styles.ts",
+          "lineNumber": 1,
+          "signature": "getTypography(mode: ViewMode): TypographyConfig",
+          "parameters": [
+            {
+              "name": "mode",
+              "optional": false,
+              "type": "ViewMode"
+            }
+          ],
+          "returnType": "TypographyConfig"
+        }
+      ],
+      "components": [],
+      "constants": [
+        {
+          "name": "animations",
+          "exported": true,
+          "filePath": "lib/styles.ts",
+          "lineNumber": 1,
+          "value": "{\n  // Fade in from below\n  fadeInUp: {\n    initial: { opacity: 0, y: 20 },\n    animate: { opacity: ..."
+        },
+        {
+          "name": "transitions",
+          "exported": true,
+          "filePath": "lib/styles.ts",
+          "lineNumber": 128,
+          "value": "{\n  // Smooth, theatrical\n  smooth: {\n    duration: 0.6,\n    ease: [0.645, 0.045, 0.355, 1], // Cust..."
+        }
+      ]
+    },
+    {
+      "filePath": "lib/supabase.ts",
+      "moduleName": "supabase",
+      "moduleDoc": {
+        "description": "====================================\nSUPABASE CLIENT CONFIGURATION\n====================================\n\nClient for interacting with Supabase backend.\nCurrently used for the Echo Chamber feature.\n\nSetup Instructions:\n1. Create a Supabase project at https://supabase.com\n2. Create an 'echoes' table with the following schema:\n\n   CREATE TABLE echoes (\n     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),\n     text TEXT NOT NULL CHECK (char_length(text) <= 100),\n     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),\n     approved BOOLEAN DEFAULT false\n   );\n\n3. Enable Row Level Security (RLS):\n\n   ALTER TABLE echoes ENABLE ROW LEVEL SECURITY;\n\n4. Create a policy for public reads of approved echoes:\n\n   CREATE POLICY \"Public can read approved echoes\"\n   ON echoes FOR SELECT\n   USING (approved = true);\n\n5. Create a policy for authenticated inserts:\n\n   CREATE POLICY \"Anyone can insert echoes for moderation\"\n   ON echoes FOR INSERT\n   WITH CHECK (true);\n\n6. Add your Supabase credentials to .env.local:\n   NEXT_PUBLIC_SUPABASE_URL=your_project_url\n   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_publishable_key\n   \n   Note: Supabase calls it \"publishable key\" in the dashboard, but the\n   environment variable name is still NEXT_PUBLIC_SUPABASE_ANON_KEY",
+        "params": [],
+        "examples": [],
+        "tags": []
+      },
+      "isClient": false,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "@supabase/supabase-js",
+          "names": [
+            "createClient"
+          ]
+        }
+      ],
+      "exports": [
+        "Echo",
+        "supabase"
+      ],
+      "types": [
+        {
+          "name": "Echo",
+          "kind": "interface",
+          "filePath": "lib/supabase.ts",
+          "lineNumber": 50,
+          "exported": true,
+          "definition": "export interface Echo {\n  id: string;\n  text: string;\n  created_at: string;\n  approved: boolean;\n}",
+          "properties": [
+            {
+              "name": "id",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "text",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "created_at",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "approved",
+              "type": "boolean",
+              "optional": false
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "fetchEchoes",
+          "kind": "function",
+          "async": true,
+          "exported": true,
+          "filePath": "lib/supabase.ts",
+          "lineNumber": 1,
+          "signature": "fetchEchoes(): Promise<Echo[]>",
+          "parameters": [],
+          "returnType": "Promise<Echo[]>"
+        },
+        {
+          "name": "submitEcho",
+          "kind": "function",
+          "async": true,
+          "exported": true,
+          "filePath": "lib/supabase.ts",
+          "lineNumber": 159,
+          "signature": "submitEcho(text: string): Promise<boolean>",
+          "parameters": [
+            {
+              "name": "text",
+              "optional": false,
+              "type": "string"
+            }
+          ],
+          "returnType": "Promise<boolean>"
+        }
+      ],
+      "components": [],
+      "constants": [
+        {
+          "name": "supabase",
+          "exported": true,
+          "filePath": "lib/supabase.ts",
+          "lineNumber": 96,
+          "value": "envVars\n  ? createClient(envVars.url, envVars.key, {\n      auth: {\n        persistSession: false, //..."
+        }
+      ]
+    },
+    {
+      "filePath": "lib/useSoundscape.ts",
+      "moduleName": "useSoundscape",
+      "moduleDoc": {
+        "description": "====================================\nSOUNDSCAPE HOOK - TONE.JS INTEGRATION\n====================================\n\nCustom React hook for managing mode-specific audio synthesis.\nSmoothly transitions audio parameters when view mode changes.\n\nFeatures:\n- Mode-specific reverb and filter settings\n- Smooth parameter ramping (2-second transitions)\n- Automatic cleanup on unmount\n- Integration with global AudioManager\n\nUsage:\n  const { isReady, isMuted, toggleMute } = useSoundscape(currentMode);",
+        "params": [],
+        "examples": [],
+        "tags": []
+      },
+      "isClient": true,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "react",
+          "names": [
+            "useEffect",
+            "useState",
+            "useCallback"
+          ]
+        },
+        {
+          "from": "./audio",
+          "names": [
+            "audioManager"
+          ]
+        },
+        {
+          "from": "@/contexts/ViewModeContext",
+          "names": [
+            "ViewMode"
+          ],
+          "default": "type"
+        }
+      ],
+      "exports": [
+        "useSoundscape",
+        "getAudioParamsForMode",
+        "validateAudioParams"
+      ],
+      "types": [
+        {
+          "name": "SoundscapeParams",
+          "kind": "interface",
+          "filePath": "lib/useSoundscape.ts",
+          "lineNumber": 29,
+          "exported": false,
+          "definition": "interface SoundscapeParams {\n  reverb: number;  // 0-1 (wet/dry mix)\n  filter: number;  // 200-2000 Hz\n}",
+          "properties": [
+            {
+              "name": "reverb",
+              "type": "number",
+              "optional": false
+            },
+            {
+              "name": "filter",
+              "type": "number",
+              "optional": false
+            }
+          ]
+        },
+        {
+          "name": "UseSoundscapeReturn",
+          "kind": "interface",
+          "filePath": "lib/useSoundscape.ts",
+          "lineNumber": 34,
+          "exported": false,
+          "definition": "interface UseSoundscapeReturn {\n  isReady: boolean;\n  isMuted: boolean;\n  toggleMute: () => void;\n  setParams: (params: SoundscapeParams) => void;\n}",
+          "properties": [
+            {
+              "name": "isReady",
+              "type": "boolean",
+              "optional": false
+            },
+            {
+              "name": "isMuted",
+              "type": "boolean",
+              "optional": false
+            },
+            {
+              "name": "toggleMute",
+              "type": "() => void",
+              "optional": false
+            },
+            {
+              "name": "setParams",
+              "type": "(params: SoundscapeParams) => void",
+              "optional": false
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "useSoundscape",
+          "kind": "function",
+          "async": false,
+          "exported": true,
+          "filePath": "lib/useSoundscape.ts",
+          "lineNumber": 1,
+          "signature": "useSoundscape(mode: ViewMode): UseSoundscapeReturn",
+          "parameters": [
+            {
+              "name": "mode",
+              "optional": false,
+              "type": "ViewMode"
+            }
+          ],
+          "returnType": "UseSoundscapeReturn"
+        },
+        {
+          "name": "getAudioParamsForMode",
+          "kind": "function",
+          "async": false,
+          "exported": true,
+          "filePath": "lib/useSoundscape.ts",
+          "lineNumber": 79,
+          "signature": "getAudioParamsForMode(mode: ViewMode): SoundscapeParams | null",
+          "parameters": [
+            {
+              "name": "mode",
+              "optional": false,
+              "type": "ViewMode"
+            }
+          ],
+          "returnType": "SoundscapeParams | null"
+        },
+        {
+          "name": "validateAudioParams",
+          "kind": "function",
+          "async": false,
+          "exported": true,
+          "filePath": "lib/useSoundscape.ts",
+          "lineNumber": 175,
+          "signature": "validateAudioParams(params: SoundscapeParams): boolean",
+          "parameters": [
+            {
+              "name": "params",
+              "optional": false,
+              "type": "SoundscapeParams"
+            }
+          ],
+          "returnType": "boolean"
+        }
+      ],
+      "components": [],
+      "constants": []
+    },
+    {
+      "filePath": "lib/whispers.ts",
+      "moduleName": "whispers",
+      "moduleDoc": {
+        "description": "====================================\nWHISPERS - AI-POWERED AMBIENT TEXT\n====================================\n\nA system for generating and selecting contextual,\nephemeral text fragments that drift through the experience.\n\nFeatures:\n- Mode-aware content selection\n- Time-of-day sensitivity\n- User intent memory\n- Curated + AI-generated blend",
+        "params": [],
+        "examples": [],
+        "tags": []
+      },
+      "isClient": false,
+      "isServer": false,
+      "imports": [],
+      "exports": [
+        "ViewMode",
+        "TimeOfDay",
+        "WhisperMood",
+        "Whisper",
+        "WhisperContext",
+        "getTimeOfDay",
+        "whisperEngine",
+        "getInitialWhispers",
+        "getContextualWhispers"
+      ],
+      "types": [
+        {
+          "name": "ViewMode",
+          "kind": "type",
+          "filePath": "lib/whispers.ts",
+          "lineNumber": 20,
+          "exported": true,
+          "definition": "'landing' | 'architect' | 'author' | 'lab'"
+        },
+        {
+          "name": "TimeOfDay",
+          "kind": "type",
+          "filePath": "lib/whispers.ts",
+          "lineNumber": 21,
+          "exported": true,
+          "definition": "'dawn' | 'morning' | 'afternoon' | 'dusk' | 'night' | 'witching'"
+        },
+        {
+          "name": "WhisperMood",
+          "kind": "type",
+          "filePath": "lib/whispers.ts",
+          "lineNumber": 22,
+          "exported": true,
+          "definition": "'contemplative' | 'technical' | 'creative' | 'mysterious' | 'philosophical'"
+        },
+        {
+          "name": "Whisper",
+          "kind": "interface",
+          "filePath": "lib/whispers.ts",
+          "lineNumber": 24,
+          "exported": true,
+          "definition": "export interface Whisper {\n  id: string;\n  text: string;\n  mood: WhisperMood;\n  source: 'curated' | 'ai' | 'echo';\n}",
+          "properties": [
+            {
+              "name": "id",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "text",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "mood",
+              "type": "WhisperMood",
+              "optional": false
+            },
+            {
+              "name": "source",
+              "type": "'curated' | 'ai' | 'echo'",
+              "optional": false
+            }
+          ]
+        },
+        {
+          "name": "WhisperContext",
+          "kind": "interface",
+          "filePath": "lib/whispers.ts",
+          "lineNumber": 31,
+          "exported": true,
+          "definition": "export interface WhisperContext {\n  mode: ViewMode;\n  timeOfDay: TimeOfDay;\n  userIntent?: string;\n  sessionDuration?: number; // minutes\n}",
+          "properties": [
+            {
+              "name": "mode",
+              "type": "ViewMode",
+              "optional": false
+            },
+            {
+              "name": "timeOfDay",
+              "type": "TimeOfDay",
+              "optional": false
+            },
+            {
+              "name": "userIntent",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "sessionDuration",
+              "type": "number",
+              "optional": true
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "getInitialWhispers",
+          "kind": "function",
+          "async": false,
+          "exported": true,
+          "filePath": "lib/whispers.ts",
+          "lineNumber": 1,
+          "signature": "getInitialWhispers(count: number = 8): Whisper[]",
+          "parameters": [
+            {
+              "name": "count",
+              "optional": true,
+              "type": "number",
+              "defaultValue": "8"
+            }
+          ],
+          "returnType": "Whisper[]"
+        },
+        {
+          "name": "getContextualWhispers",
+          "kind": "function",
+          "async": false,
+          "exported": true,
+          "filePath": "lib/whispers.ts",
+          "lineNumber": 393,
+          "signature": "getContextualWhispers(\n  context: Partial<WhisperContext>,\n  count: number = 5\n): Whisper[]",
+          "parameters": [
+            {
+              "name": "context",
+              "optional": false,
+              "type": "Partial<WhisperContext>"
+            },
+            {
+              "name": "count",
+              "optional": true,
+              "type": "number",
+              "defaultValue": "5"
+            }
+          ],
+          "returnType": "Whisper[]"
+        }
+      ],
+      "components": [],
+      "constants": [
+        {
+          "name": "whisperEngine",
+          "exported": true,
+          "filePath": "lib/whispers.ts",
+          "lineNumber": 380,
+          "value": "new WhisperEngine()"
+        }
+      ]
+    },
+    {
+      "filePath": "actions/detect-intent.ts",
+      "moduleName": "detect-intent",
+      "moduleDoc": {
+        "description": "====================================\nGHOST ROUTER - INTENT DETECTION SERVER ACTION\n====================================\n\nThis Server Action uses Vercel AI Gateway with Google's Gemini 1.5 Flash model\nto analyze user input and route to the appropriate view mode.\n\nPhilosophy:\n- Generate routing data, not chat responses\n- Fast inference (Flash model)\n- Audio parameters derived from intent\n- Fallback to keyword matching if AI unavailable\n\nInput: User string from Landing Page\nOutput: { targetMode, audioParams }",
+        "params": [],
+        "examples": [],
+        "tags": []
+      },
+      "isClient": false,
+      "isServer": true,
+      "imports": [
+        {
+          "from": "@ai-sdk/gateway",
+          "names": [
+            "createGateway"
+          ]
+        },
+        {
+          "from": "ai",
+          "names": [
+            "generateObject"
+          ]
+        },
+        {
+          "from": "zod",
+          "names": [
+            "z"
+          ]
+        },
+        {
+          "from": "@/contexts/ViewModeContext",
+          "names": [
+            "ViewMode",
+            "parseIntent"
+          ]
+        }
+      ],
+      "exports": [
+        "IntentResponse"
+      ],
+      "types": [
+        {
+          "name": "NarrowMode",
+          "kind": "type",
+          "filePath": "actions/detect-intent.ts",
+          "lineNumber": 1,
+          "exported": false,
+          "definition": "'architect' | 'author' | 'lab'"
+        },
+        {
+          "name": "IntentResponse",
+          "kind": "type",
+          "filePath": "actions/detect-intent.ts",
+          "lineNumber": 53,
+          "exported": true,
+          "definition": "z.infer<typeof IntentSchema>"
+        }
+      ],
+      "functions": [
+        {
+          "name": "toNarrowMode",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "actions/detect-intent.ts",
+          "lineNumber": 1,
+          "signature": "toNarrowMode(mode: ViewMode): NarrowMode",
+          "parameters": [
+            {
+              "name": "mode",
+              "optional": false,
+              "type": "ViewMode"
+            }
+          ],
+          "returnType": "NarrowMode"
+        },
+        {
+          "name": "detectIntent",
+          "kind": "function",
+          "async": true,
+          "exported": true,
+          "filePath": "actions/detect-intent.ts",
+          "lineNumber": 105,
+          "signature": "detectIntent(input: string): Promise<IntentResponse>",
+          "parameters": [
+            {
+              "name": "input",
+              "optional": false,
+              "type": "string"
+            }
+          ],
+          "returnType": "Promise<IntentResponse>"
+        },
+        {
+          "name": "buildPrompt",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "actions/detect-intent.ts",
+          "lineNumber": 181,
+          "signature": "buildPrompt(input: string): string",
+          "parameters": [
+            {
+              "name": "input",
+              "optional": false,
+              "type": "string"
+            }
+          ],
+          "returnType": "string"
+        },
+        {
+          "name": "createFallbackResponse",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "actions/detect-intent.ts",
+          "lineNumber": 216,
+          "signature": "createFallbackResponse(mode: NarrowMode): IntentResponse",
+          "parameters": [
+            {
+              "name": "mode",
+              "optional": false,
+              "type": "NarrowMode"
+            }
+          ],
+          "returnType": "IntentResponse"
+        },
+        {
+          "name": "testIntentDetection",
+          "kind": "function",
+          "async": true,
+          "exported": true,
+          "filePath": "actions/detect-intent.ts",
+          "lineNumber": 238,
+          "signature": "testIntentDetection(inputs: string[]): Promise<void>",
+          "parameters": [
+            {
+              "name": "inputs",
+              "optional": false,
+              "type": "string[]"
+            }
+          ],
+          "returnType": "Promise<void>"
+        }
+      ],
+      "components": [],
+      "constants": []
+    },
+    {
+      "filePath": "actions/generate-whisper.ts",
+      "moduleName": "generate-whisper",
+      "isClient": false,
+      "isServer": true,
+      "imports": [
+        {
+          "from": "@ai-sdk/gateway",
+          "names": [
+            "createGateway"
+          ]
+        },
+        {
+          "from": "ai",
+          "names": [
+            "generateText"
+          ]
+        },
+        {
+          "from": "@/lib/whispers",
+          "names": [
+            "type ViewMode",
+            "type TimeOfDay",
+            "type WhisperMood"
+          ]
+        }
+      ],
+      "exports": [],
+      "types": [
+        {
+          "name": "GenerateWhisperParams",
+          "kind": "interface",
+          "filePath": "actions/generate-whisper.ts",
+          "lineNumber": 22,
+          "exported": false,
+          "definition": "interface GenerateWhisperParams {\n  mode: ViewMode;\n  timeOfDay: TimeOfDay;\n  userIntent?: string;\n  mood?: WhisperMood;\n  existingWhispers?: string[];\n}",
+          "properties": [
+            {
+              "name": "mode",
+              "type": "ViewMode",
+              "optional": false
+            },
+            {
+              "name": "timeOfDay",
+              "type": "TimeOfDay",
+              "optional": false
+            },
+            {
+              "name": "userIntent",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "mood",
+              "type": "WhisperMood",
+              "optional": true
+            },
+            {
+              "name": "existingWhispers",
+              "type": "string[]",
+              "optional": true
+            }
+          ]
+        },
+        {
+          "name": "GenerateWhisperResult",
+          "kind": "interface",
+          "filePath": "actions/generate-whisper.ts",
+          "lineNumber": 30,
+          "exported": false,
+          "definition": "interface GenerateWhisperResult {\n  success: boolean;\n  whisper?: string;\n  mood?: WhisperMood;\n  error?: string;\n}",
+          "properties": [
+            {
+              "name": "success",
+              "type": "boolean",
+              "optional": false
+            },
+            {
+              "name": "whisper",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "mood",
+              "type": "WhisperMood",
+              "optional": true
+            },
+            {
+              "name": "error",
+              "type": "string",
+              "optional": true
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "sanitizeInput",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "actions/generate-whisper.ts",
+          "lineNumber": 3,
+          "signature": "sanitizeInput(input: string): string",
+          "parameters": [
+            {
+              "name": "input",
+              "optional": false,
+              "type": "string"
+            }
+          ],
+          "returnType": "string"
+        },
+        {
+          "name": "generateWhisper",
+          "kind": "function",
+          "async": true,
+          "exported": true,
+          "filePath": "actions/generate-whisper.ts",
+          "lineNumber": 109,
+          "signature": "generateWhisper(\n  params: GenerateWhisperParams\n): Promise<GenerateWhisperResult>",
+          "parameters": [
+            {
+              "name": "params",
+              "optional": false,
+              "type": "GenerateWhisperParams"
+            }
+          ],
+          "returnType": "Promise<GenerateWhisperResult>"
+        },
+        {
+          "name": "generateWhisperBatch",
+          "kind": "function",
+          "async": true,
+          "exported": true,
+          "filePath": "actions/generate-whisper.ts",
+          "lineNumber": 225,
+          "signature": "generateWhisperBatch(\n  params: GenerateWhisperParams,\n  count: number = 3\n): Promise<GenerateWhisperResult[]>",
+          "parameters": [
+            {
+              "name": "params",
+              "optional": false,
+              "type": "GenerateWhisperParams"
+            },
+            {
+              "name": "count",
+              "optional": true,
+              "type": "number",
+              "defaultValue": "3"
+            }
+          ],
+          "returnType": "Promise<GenerateWhisperResult[]>"
+        },
+        {
+          "name": "inferMood",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "actions/generate-whisper.ts",
+          "lineNumber": 262,
+          "signature": "inferMood(text: string, mode: ViewMode): WhisperMood",
+          "parameters": [
+            {
+              "name": "text",
+              "optional": false,
+              "type": "string"
+            },
+            {
+              "name": "mode",
+              "optional": false,
+              "type": "ViewMode"
+            }
+          ],
+          "returnType": "WhisperMood"
+        }
+      ],
+      "components": [],
+      "constants": []
+    }
+  ],
+  "componentIndex": [
+    {
+      "name": "RootLayout",
+      "filePath": "app/layout.tsx",
+      "isClient": false,
+      "propsType": "React"
+    },
+    {
+      "name": "Home",
+      "filePath": "app/page.tsx",
+      "isClient": true
+    },
+    {
+      "name": "ModeButton",
+      "filePath": "app/page.tsx",
+      "isClient": true,
+      "propsType": "ModeButtonProps"
+    },
+    {
+      "name": "AntiPortfolio",
+      "filePath": "components/AntiPortfolio.tsx",
+      "isClient": true
+    },
+    {
+      "name": "FailuresLog",
+      "filePath": "components/FailuresLog.tsx",
+      "isClient": true
+    },
+    {
+      "name": "Landing",
+      "filePath": "components/Landing.tsx",
+      "isClient": true
+    },
+    {
+      "name": "EchoChamber",
+      "filePath": "components/canvas/EchoChamber.tsx",
+      "isClient": true
+    },
+    {
+      "name": "EchoEntry",
+      "filePath": "components/canvas/EchoEntry.tsx",
+      "isClient": true,
+      "propsType": "EchoEntryProps"
+    },
+    {
+      "name": "Whisper",
+      "filePath": "components/canvas/Whisper.tsx",
+      "isClient": true
+    },
+    {
+      "name": "WhispersChamber",
+      "filePath": "components/canvas/WhispersChamber.tsx",
+      "isClient": true,
+      "propsType": "WhispersChamberProps"
+    },
+    {
+      "name": "Architect",
+      "filePath": "components/modes/Architect.tsx",
+      "isClient": true
+    },
+    {
+      "name": "Section",
+      "filePath": "components/modes/Architect.tsx",
+      "isClient": true,
+      "propsType": "SectionProps"
+    },
+    {
+      "name": "Position",
+      "filePath": "components/modes/Architect.tsx",
+      "isClient": true,
+      "propsType": "PositionProps"
+    },
+    {
+      "name": "CompetencyCard",
+      "filePath": "components/modes/Architect.tsx",
+      "isClient": true,
+      "propsType": "CompetencyCardProps"
+    },
+    {
+      "name": "Pill",
+      "filePath": "components/modes/Architect.tsx",
+      "isClient": true,
+      "propsType": "React"
+    },
+    {
+      "name": "ContactItem",
+      "filePath": "components/modes/Architect.tsx",
+      "isClient": true,
+      "propsType": "ContactItemProps"
+    },
+    {
+      "name": "Metric",
+      "filePath": "components/modes/Architect.tsx",
+      "isClient": true,
+      "propsType": "MetricProps"
+    },
+    {
+      "name": "Author",
+      "filePath": "components/modes/Author.tsx",
+      "isClient": true
+    },
+    {
+      "name": "MicroMotive",
+      "filePath": "components/modes/Author.tsx",
+      "isClient": true,
+      "propsType": "string"
+    },
+    {
+      "name": "Lab",
+      "filePath": "components/modes/Lab.tsx",
+      "isClient": true
+    },
+    {
+      "name": "StackItem",
+      "filePath": "components/modes/Lab.tsx",
+      "isClient": true,
+      "propsType": "string"
+    },
+    {
+      "name": "ViewModeProvider",
+      "filePath": "contexts/ViewModeContext.tsx",
+      "isClient": true,
+      "propsType": "ViewModeProviderProps"
+    }
+  ],
+  "functionIndex": [
+    {
+      "name": "useViewMode",
+      "filePath": "contexts/ViewModeContext.tsx",
+      "signature": "useViewMode(): ViewModeContextType"
+    },
+    {
+      "name": "parseIntent",
+      "filePath": "contexts/ViewModeContext.tsx",
+      "signature": "parseIntent(input: string): ViewMode"
+    },
+    {
+      "name": "getTypography",
+      "filePath": "lib/styles.ts",
+      "signature": "getTypography(mode: ViewMode): TypographyConfig"
+    },
+    {
+      "name": "fetchEchoes",
+      "filePath": "lib/supabase.ts",
+      "signature": "fetchEchoes(): Promise<Echo[]>"
+    },
+    {
+      "name": "submitEcho",
+      "filePath": "lib/supabase.ts",
+      "signature": "submitEcho(text: string): Promise<boolean>"
+    },
+    {
+      "name": "useSoundscape",
+      "filePath": "lib/useSoundscape.ts",
+      "signature": "useSoundscape(mode: ViewMode): UseSoundscapeReturn"
+    },
+    {
+      "name": "getAudioParamsForMode",
+      "filePath": "lib/useSoundscape.ts",
+      "signature": "getAudioParamsForMode(mode: ViewMode): SoundscapeParams | null"
+    },
+    {
+      "name": "validateAudioParams",
+      "filePath": "lib/useSoundscape.ts",
+      "signature": "validateAudioParams(params: SoundscapeParams): boolean"
+    },
+    {
+      "name": "getInitialWhispers",
+      "filePath": "lib/whispers.ts",
+      "signature": "getInitialWhispers(count: number = 8): Whisper[]"
+    },
+    {
+      "name": "getContextualWhispers",
+      "filePath": "lib/whispers.ts",
+      "signature": "getContextualWhispers(\n  context: Partial<WhisperContext>,\n  count: number = 5\n): Whisper[]"
+    },
+    {
+      "name": "detectIntent",
+      "filePath": "actions/detect-intent.ts",
+      "signature": "detectIntent(input: string): Promise<IntentResponse>"
+    },
+    {
+      "name": "testIntentDetection",
+      "filePath": "actions/detect-intent.ts",
+      "signature": "testIntentDetection(inputs: string[]): Promise<void>"
+    },
+    {
+      "name": "generateWhisper",
+      "filePath": "actions/generate-whisper.ts",
+      "signature": "generateWhisper(\n  params: GenerateWhisperParams\n): Promise<GenerateWhisperResult>"
+    },
+    {
+      "name": "generateWhisperBatch",
+      "filePath": "actions/generate-whisper.ts",
+      "signature": "generateWhisperBatch(\n  params: GenerateWhisperParams,\n  count: number = 3\n): Promise<GenerateWhisperResult[]>"
+    }
+  ],
+  "typeIndex": [
+    {
+      "name": "ViewMode",
+      "kind": "type",
+      "filePath": "contexts/ViewModeContext.tsx"
+    },
+    {
+      "name": "ViewMode",
+      "kind": "type",
+      "filePath": "lib/styles.ts"
+    },
+    {
+      "name": "Echo",
+      "kind": "interface",
+      "filePath": "lib/supabase.ts"
+    },
+    {
+      "name": "ViewMode",
+      "kind": "type",
+      "filePath": "lib/whispers.ts"
+    },
+    {
+      "name": "TimeOfDay",
+      "kind": "type",
+      "filePath": "lib/whispers.ts"
+    },
+    {
+      "name": "WhisperMood",
+      "kind": "type",
+      "filePath": "lib/whispers.ts"
+    },
+    {
+      "name": "Whisper",
+      "kind": "interface",
+      "filePath": "lib/whispers.ts"
+    },
+    {
+      "name": "WhisperContext",
+      "kind": "interface",
+      "filePath": "lib/whispers.ts"
+    },
+    {
+      "name": "IntentResponse",
+      "kind": "type",
+      "filePath": "actions/detect-intent.ts"
+    }
+  ]
+}

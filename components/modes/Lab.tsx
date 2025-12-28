@@ -38,15 +38,23 @@ export default function Lab() {
   };
 
   useEffect(() => {
-    // Random glitch effects on mount
+    // Play a musical tone on mode entry
+    const timer = setTimeout(() => {
+      audioManager.playUISound('glitch');
+    }, 500);
+    
+    // Random glitch effects on mount (less frequent)
     const interval = setInterval(() => {
-      if (Math.random() > 0.95) {
+      if (Math.random() > 0.98) {
         setGlitchActive(true);
         setTimeout(() => setGlitchActive(false), 50);
       }
-    }, 2000);
+    }, 3000); // Less frequent
 
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(timer);
+      clearInterval(interval);
+    };
   }, []);
 
   return (

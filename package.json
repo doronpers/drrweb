@@ -6,12 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "docs": "npx ts-node scripts/docs/generate.ts",
+    "docs:generate": "npx ts-node scripts/docs/generate.ts",
+    "docs:watch": "npx ts-node scripts/docs/watch.ts",
+    "prebuild": "npm run docs:generate"
   },
   "dependencies": {
     "@ai-sdk/gateway": "^1.0.0",
     "@ai-sdk/google": "^2.0.43",
     "@supabase/supabase-js": "^2.39.0",
+    "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "ai": "^5.0.102",
     "framer-motion": "^11.0.0",
@@ -24,6 +29,7 @@
   "devDependencies": {
     "@eslint/compat": "^2.0.0",
     "@eslint/js": "^9.39.1",
+    "@types/glob": "^8.1.0",
     "@types/node": "^20.11.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
@@ -39,6 +45,8 @@
     "globals": "^16.5.0",
     "postcss": "^8.4.0",
     "tailwindcss": "^3.4.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.6",
     "typescript": "^5.3.0",
     "typescript-eslint": "^8.48.0"
   },

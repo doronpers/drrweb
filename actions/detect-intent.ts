@@ -59,10 +59,23 @@ export type IntentResponse = z.infer<typeof IntentSchema>;
 /**
  * Creates the Vercel AI Gateway instance.
  * Uses AI_GATEWAY_API_KEY environment variable.
+ * Returns null if API key is not available to prevent errors.
  */
-const gateway = createGateway({
-  apiKey: process.env.AI_GATEWAY_API_KEY,
-});
+let gateway: ReturnType<typeof createGateway> | null = null;
+
+try {
+  const apiKey = process.env.AI_GATEWAY_API_KEY;
+  if (apiKey) {
+    gateway = createGateway({
+      apiKey: apiKey,
+    });
+  } else {
+    console.warn('⚠️ AI_GATEWAY_API_KEY not set, AI Gateway will not be available');
+  }
+} catch (error) {
+  console.error('❌ Failed to initialize AI Gateway:', error);
+  gateway = null;
+}
 
 // ====================================
 // MAPPER FUNCTION
@@ -91,7 +104,9 @@ function toNarrowMode(mode: ViewMode): NarrowMode {
 
 /**
  * Analyzes user input and returns routing information.
- * Uses Vercel AI Gateway with Gemini 1.5 Flash for intent classification.
+ * Uses hybrid approach:
+ * - Single word: Fast keyword matching (free, instant)
+ * - Multiple words: AI Gateway for natural language understanding (uses credits)
  *
  * @param input - The user's search query
  * @returns Promise<IntentResponse> - Target mode and audio parameters
@@ -102,32 +117,60 @@ export async function detectIntent(input: string): Promise<IntentResponse> {
     return createFallbackResponse('architect');
   }
 
-  // Check for API key
+  const trimmedInput = input.trim();
+  const words = trimmedInput.split(/\s+/).filter(word => word.length > 0);
+  const isSingleWord = words.length === 1;
+
+  // Single word: Use fast keyword matching
+  if (isSingleWord) {
+    console.log('⚡ Single word detected, using keyword matching...');
+    const mode = parseIntent(trimmedInput); // returns ViewMode (may include "landing")
+    const result = createFallbackResponse(toNarrowMode(mode));
+    console.log('📝 Keyword matching result:', result.targetMode);
+    return result;
+  }
+
+  // Multiple words: Use AI Gateway for natural language understanding
   const apiKey = process.env.AI_GATEWAY_API_KEY;
   
   if (!apiKey) {
     console.warn('⚠️  AI_GATEWAY_API_KEY not set. Falling back to keyword matching.');
-    const mode = parseIntent(input); // returns ViewMode (may include "landing")
-    return createFallbackResponse(toNarrowMode(mode)); // narrowed to valid union
+    const mode = parseIntent(trimmedInput); // returns ViewMode (may include "landing")
+    const fallbackResult = createFallbackResponse(toNarrowMode(mode));
+    console.log('📝 Keyword matching result:', fallbackResult.targetMode);
+    return fallbackResult;
+  }
+
+  // Check if gateway is available
+  if (!gateway) {
+    console.warn('⚠️ AI Gateway not available, falling back to keyword matching.');
+    const mode = parseIntent(trimmedInput);
+    const fallbackResult = createFallbackResponse(toNarrowMode(mode));
+    console.log('📝 Keyword matching result:', fallbackResult.targetMode);
+    return fallbackResult;
   }
 
   try {
     // Call AI Gateway with Gemini model via structured output
+    console.log('🤖 Multiple words detected, using Vercel AI Gateway for intent detection...');
     const { object } = await generateObject({
       model: gateway('google/gemini-1.5-flash'),
       schema: IntentSchema,
-      prompt: buildPrompt(input),
+      prompt: buildPrompt(trimmedInput),
       temperature: 0.3, // Lower temperature for more consistent routing
     });
 
-    console.log('✅ Intent detected:', object.targetMode);
+    console.log('✅ AI Gateway intent detected:', object.targetMode);
     return object;
 
   } catch (error) {
-    console.error('❌ Intent detection failed:', error);
+    console.error('❌ AI Gateway request failed:', error);
+    console.warn('⚠️  Falling back to keyword matching...');
     // Fallback to keyword matching on error
-    const mode = parseIntent(input); // returns ViewMode (may include "landing")
-    return createFallbackResponse(toNarrowMode(mode)); // narrowed to valid union
+    const mode = parseIntent(trimmedInput); // returns ViewMode (may include "landing")
+    const fallbackResult = createFallbackResponse(toNarrowMode(mode));
+    console.log('📝 Keyword matching result:', fallbackResult.targetMode);
+    return fallbackResult;
   }
 }
 

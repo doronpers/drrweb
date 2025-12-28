@@ -31,6 +31,9 @@ export default function Landing() {
   
   // Cache audio manager once loaded
   const audioManagerRef = useRef<typeof import('@/lib/audio').audioManager | null>(null);
+  
+  // Form ref for programmatic submission
+  const formRef = useRef<HTMLFormElement>(null);
 
   /**
    * Initialize audio on first user interaction.
@@ -253,7 +256,7 @@ export default function Landing() {
         </motion.h1>
 
         {/* Input form */}
-        <form onSubmit={handleSubmit}>
+        <form ref={formRef} onSubmit={handleSubmit}>
           <motion.div
             className="relative"
             animate={{
@@ -267,6 +270,14 @@ export default function Landing() {
               onChange={(e) => setInput(e.target.value)}
               onFocus={handleFocus}
               onBlur={() => setIsFocused(false)}
+              onKeyDown={(e) => {
+                // Explicitly handle Enter/Return key for form submission
+                if (e.key === 'Enter' && input.trim() && !isSubmitting) {
+                  e.preventDefault();
+                  // Use requestSubmit to properly trigger form's onSubmit handler
+                  formRef.current?.requestSubmit();
+                }
+              }}
               placeholder="Type your intent..."
               disabled={isSubmitting}
               className={`
@@ -292,6 +303,11 @@ export default function Landing() {
               transition={{ duration: 0.4, ease: 'easeOut' }}
             />
           </motion.div>
+
+          {/* Hidden submit button for form submission via Enter key */}
+          <button type="submit" className="sr-only" aria-hidden="true">
+            Submit
+          </button>
 
           {/* Submit hint */}
           <AnimatePresence>
