@@ -231,3 +231,67 @@
   filter: blur(0);
   opacity: 0.25;
 }
+
+/* ====================================
+   INTRO SECTION STYLES
+   ==================================== */
+
+/* Static intro block for accessibility and indexing
+   Added for fast skimming; interactive experience remains below. */
+.intro-section {
+  /* Ensure content is above background but below fixed elements */
+  position: relative;
+  z-index: 10;
+}
+
+.intro-content {
+  max-width: 100%;
+}
+
+.intro-text,
+.intro-subtext {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.intro-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.intro-link {
+  display: inline-block;
+  position: relative;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+/* Ensure visible focus for keyboard navigation */
+.intro-link:focus-visible {
+  outline: 2px solid rgba(0, 0, 0, 0.2);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .intro-section {
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+  }
+  
+  .intro-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  
+  .intro-subtext {
+    font-size: 0.85rem;
+  }
+  
+  .intro-nav ul {
+    gap: 1rem;
+  }
+}
