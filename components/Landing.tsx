@@ -87,9 +87,6 @@ export default function Landing() {
         const intentResult = await detectIntent(input);
         const targetMode = intentResult.targetMode;
         
-        // Log audio params for future use (Phase 4)
-        console.log('🎵 Suggested audio params:', intentResult.audioParams);
-        
         // Slight delay for dramatic effect
         // Pass the user's input as intent for whispers personalization
         setTimeout(() => {
@@ -176,67 +173,15 @@ export default function Landing() {
       />
 
       {/* ====================================
-          STATIC INTRO SECTION
-          Added for accessibility and fast skimming; interactive experience remains below.
-          ==================================== */}
-      <section
-        id="intro"
-        className="intro-section relative z-10 w-full max-w-3xl px-8 pt-16 pb-8"
-      >
-        <div className="intro-content text-center">
-          <p className="intro-text text-black/70 text-base md:text-lg leading-relaxed mb-3 font-light">
-            Audio engineer and educator focused on audio authenticity under adversarial conditions. 
-            I build and test short-slice evaluation tooling (10–15s) and review workflows that surface 
-            uncertainty rather than hide it.
-          </p>
-          <p className="intro-subtext text-black/60 text-sm md:text-base leading-relaxed mb-6 font-light">
-            Current work: stress-testing synthetic speech, calibrated deferral signals, and audit-grade evidence records.
-          </p>
-          
-          <nav aria-label="Primary" className="intro-nav">
-            <ul className="flex justify-center gap-4 md:gap-6 text-sm md:text-base">
-              <li>
-                <a 
-                  href="https://github.com/doronpers/sonotheia-examples" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="intro-link text-black/60 hover:text-black/90 transition-colors underline underline-offset-4 focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2 rounded-sm px-1"
-                >
-                  GitHub
-                </a>
-              </li>
-              <li aria-hidden="true" className="text-black/30">·</li>
-              <li>
-                <a 
-                  href="/about"
-                  className="intro-link text-black/60 hover:text-black/90 transition-colors underline underline-offset-4 focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2 rounded-sm px-1"
-                >
-                  About
-                </a>
-              </li>
-              <li aria-hidden="true" className="text-black/30">·</li>
-              <li>
-                <a 
-                  href="/contact"
-                  className="intro-link text-black/60 hover:text-black/90 transition-colors underline underline-offset-4 focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2 rounded-sm px-1"
-                >
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </section>
-
-      {/* ====================================
           MUTE TOGGLE
           ==================================== */}
       <motion.button
         onClick={handleMuteToggle}
-        className="fixed top-4 right-4 md:top-8 md:right-8 z-50 p-2 md:p-3 text-black/30 hover:text-black/60 transition-colors"
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        className="fixed top-6 right-6 md:top-8 md:right-8 z-50 p-3 md:p-3.5 text-black/40 hover:text-black/70 transition-colors rounded-full hover:bg-black/5"
+        whileHover={{ scale: 1.08 }}
+        whileTap={{ scale: 0.92 }}
         aria-label={isMuted ? 'Unmute audio' : 'Mute audio'}
+        title={isMuted ? 'Unmute audio' : 'Mute audio'}
       >
         <AnimatePresence mode="wait">
           {isMuted ? (
@@ -245,9 +190,9 @@ export default function Landing() {
               initial={{ opacity: 0, rotate: -90 }}
               animate={{ opacity: 1, rotate: 0 }}
               exit={{ opacity: 0, rotate: 90 }}
-              width="20"
-              height="20"
-              className="md:w-6 md:h-6"
+              width="22"
+              height="22"
+              className="md:w-7 md:h-7"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -265,9 +210,9 @@ export default function Landing() {
               initial={{ opacity: 0, rotate: -90 }}
               animate={{ opacity: 1, rotate: 0 }}
               exit={{ opacity: 0, rotate: 90 }}
-              width="20"
-              height="20"
-              className="md:w-6 md:h-6"
+              width="22"
+              height="22"
+              className="md:w-7 md:h-7"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -287,24 +232,34 @@ export default function Landing() {
           INTERACTIVE CONTENT - THE HANDSHAKE
           ==================================== */}
       <motion.div
-        className="relative z-10 w-full max-w-2xl px-8 pt-8"
+        className="relative z-10 w-full max-w-2xl px-8 pt-20 md:pt-24"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: 'easeOut', delay: 0.3 }}
       >
         {/* Centered prompt text */}
         <motion.h1
-          className="text-center mb-12 text-black/50 tracking-widest font-light"
+          className="text-center mb-4 text-black/60 tracking-wide font-light"
           style={{
-            fontSize: 'clamp(0.875rem, 1.5vw, 1.125rem)',
-            letterSpacing: '0.2em',
+            fontSize: 'clamp(1rem, 2vw, 1.25rem)',
+            letterSpacing: '0.15em',
           }}
           initial={{ opacity: 0 }}
-          animate={{ opacity: isFocused ? 0.7 : 0.5 }}
+          animate={{ opacity: isFocused ? 0.8 : 0.6 }}
           transition={{ duration: 0.6 }}
         >
-          What do you seek?
+          How may I inform your journey?
         </motion.h1>
+        
+        {/* Context hint - appears before interaction */}
+        <motion.p
+          className="text-center mb-10 text-black/40 text-xs md:text-sm tracking-wide font-light"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isFocused ? 0 : 0.5 }}
+          transition={{ duration: 0.4 }}
+        >
+          Explore work, writing, or process
+        </motion.p>
 
         {/* Input form */}
         <form onSubmit={handleSubmit}>
@@ -321,14 +276,14 @@ export default function Landing() {
               onChange={(e) => setInput(e.target.value)}
               onFocus={handleFocus}
               onBlur={() => setIsFocused(false)}
-              placeholder="Type your intent..."
+              placeholder="Type to explore..."
               disabled={isSubmitting}
               className={`
-                w-full px-6 py-5 text-center
-                bg-transparent border-b border-black/10
-                text-black text-base md:text-lg tracking-wider
-                placeholder:text-black/25 placeholder:tracking-widest
-                focus:border-black/25 focus:outline-none
+                w-full px-6 py-4 text-center
+                bg-transparent border-b-2 border-black/15
+                text-black text-base md:text-lg tracking-wide
+                placeholder:text-black/30 placeholder:tracking-wide
+                focus:border-black/40 focus:outline-none
                 transition-all duration-300
                 disabled:opacity-50 disabled:cursor-not-allowed
                 font-light
@@ -338,7 +293,7 @@ export default function Landing() {
 
             {/* Animated underline */}
             <motion.div
-              className="absolute bottom-0 left-0 h-px bg-black/80"
+              className="absolute bottom-0 left-0 h-0.5 bg-black/70"
               initial={{ width: '0%' }}
               animate={{ width: isFocused ? '100%' : '0%' }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -352,9 +307,9 @@ export default function Landing() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="text-center mt-6 text-black/30 text-xs tracking-widest"
+                className="text-center mt-6 text-black/40 text-sm tracking-wide"
               >
-                Press <kbd className="px-2 py-0.5 bg-black/5 rounded text-black/40 font-mono">Enter</kbd> to proceed
+                Press <kbd className="px-2 py-1 bg-black/8 rounded text-black/50 font-mono text-xs">↵</kbd> to continue
               </motion.p>
             )}
           </AnimatePresence>
@@ -366,41 +321,84 @@ export default function Landing() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="text-center mt-6 text-black/30 text-xs tracking-widest"
+                className="text-center mt-6 text-black/40 text-sm tracking-wide"
               >
                 <motion.span
-                  animate={{ opacity: [0.3, 1, 0.3] }}
+                  animate={{ opacity: [0.4, 1, 0.4] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                 >
-                  Refracting...
+                  Navigating...
                 </motion.span>
               </motion.div>
             )}
           </AnimatePresence>
         </form>
-
-        {/* Subtle hint about modes */}
-        <motion.div
-          className="mt-16 text-center text-black/25 text-[10px] md:text-xs tracking-widest space-y-2 font-light"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2, duration: 1 }}
-        >
-          <p>Try: hire • story • process</p>
-        </motion.div>
       </motion.div>
+
+      {/* ====================================
+          STATIC INTRO SECTION
+          Added for accessibility and fast skimming; interactive experience remains above.
+          ==================================== */}
+      <section
+        id="intro"
+        className="intro-section relative z-10 w-full max-w-3xl px-8 pt-16 pb-16"
+      >
+        <div className="intro-content text-center">
+          <p className="intro-text text-black/75 text-base md:text-lg leading-relaxed mb-4 font-light max-w-2xl mx-auto">
+            Audio engineer and educator focused on audio authenticity under adversarial conditions. 
+            I build and test short-slice evaluation tooling (10–15s) and review workflows that surface 
+            uncertainty rather than hide it.
+          </p>
+          <p className="intro-subtext text-black/60 text-sm md:text-base leading-relaxed mb-8 font-light max-w-2xl mx-auto">
+            Current work: stress-testing synthetic speech, calibrated deferral signals, and audit-grade evidence records.
+          </p>
+          
+          <nav aria-label="Primary" className="intro-nav">
+            <ul className="flex justify-center gap-6 md:gap-8 text-sm md:text-base">
+              <li>
+                <a 
+                  href="https://github.com/doronpers/sonotheia-examples" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="intro-link text-black/65 hover:text-black/95 transition-colors underline underline-offset-4 decoration-black/30 hover:decoration-black/60 focus:outline-none focus:ring-2 focus:ring-black/30 focus:ring-offset-2 rounded-sm px-1"
+                >
+                  GitHub
+                </a>
+              </li>
+              <li aria-hidden="true" className="text-black/30">·</li>
+              <li>
+                <a 
+                  href="/about"
+                  className="intro-link text-black/65 hover:text-black/95 transition-colors underline underline-offset-4 decoration-black/30 hover:decoration-black/60 focus:outline-none focus:ring-2 focus:ring-black/30 focus:ring-offset-2 rounded-sm px-1"
+                >
+                  About
+                </a>
+              </li>
+              <li aria-hidden="true" className="text-black/30">·</li>
+              <li>
+                <a 
+                  href="/contact"
+                  className="intro-link text-black/65 hover:text-black/95 transition-colors underline underline-offset-4 decoration-black/30 hover:decoration-black/60 focus:outline-none focus:ring-2 focus:ring-black/30 focus:ring-offset-2 rounded-sm px-1"
+                >
+                  Contact
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </section>
 
       {/* ====================================
           CORNER SIGNATURE
           ==================================== */}
       <motion.div
-        className="fixed bottom-4 left-4 md:bottom-8 md:left-8 text-black/25 tracking-widest"
+        className="fixed bottom-6 left-6 md:bottom-8 md:left-8 text-black/30 tracking-wide"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
       >
-        <p className="text-[9px] md:text-[10px] font-light uppercase">An Interactive Installation</p>
-        <p className="mt-0.5 text-[9px] md:text-[10px] font-light">©2025</p>
+        <p className="text-[10px] md:text-[11px] font-light uppercase">An Interactive Installation</p>
+        <p className="mt-1 text-[10px] md:text-[11px] font-light">©2025</p>
       </motion.div>
     </div>
   );
