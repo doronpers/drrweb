@@ -120,7 +120,9 @@ export async function detectIntent(input: string): Promise<IntentResponse> {
       temperature: 0.3, // Lower temperature for more consistent routing
     });
 
-    console.log('✅ Intent detected:', object.targetMode);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('✅ Intent detected:', object.targetMode);
+    }
     return object;
 
   } catch (error) {

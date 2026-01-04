@@ -99,7 +99,9 @@ class AudioManager {
       // Set muted state immediately after starting context
       Tone.Destination.mute = this.muted;
       
-      console.log('🔊 Audio context started', this.muted ? '(muted)' : '');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🔊 Audio context started', this.muted ? '(muted)' : '');
+      }
 
       // ====================================
       // AMBIENT DRONE SYNTHESIS
@@ -267,7 +269,9 @@ class AudioManager {
       this.labReverb.connect(this.uiVolume);
 
       this.initialized = true;
-      console.log('✅ Audio system initialized');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('✅ Audio system initialized');
+      }
     } catch (error) {
       console.error('❌ Failed to initialize audio:', error);
       throw error;
@@ -292,10 +296,14 @@ class AudioManager {
         this.ambientTone2.start();
         // Fade in musical tones
         this.ambientToneVolume?.volume.rampTo(-28, 2);
-        console.log('🎵 Musical ambient tones started (C4 + G4 pentatonic)');
+        if (process.env.NODE_ENV === 'development') {
+          console.log('🎵 Musical ambient tones started (C4 + G4 pentatonic)');
+        }
       }
       
-      console.log('🌬️  Ambient drone started (with musical tones)');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🌬️  Ambient drone started (with musical tones)');
+      }
     } catch (error) {
       console.error('Failed to start ambient:', error);
     }
@@ -316,7 +324,9 @@ class AudioManager {
         this.ambientTone1?.stop();
         this.ambientTone2?.stop();
       }, 1000);
-      console.log('🌬️  Ambient drone stopped');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🌬️  Ambient drone stopped');
+      }
     } catch (error) {
       console.error('Failed to stop ambient:', error);
     }
@@ -335,7 +345,9 @@ class AudioManager {
     }
     
     if (this.muted) {
-      console.log('🔇 Audio is muted, skipping sound');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🔇 Audio is muted, skipping sound');
+      }
       return;
     }
 
@@ -344,7 +356,9 @@ class AudioManager {
     this.lastSoundTime = now;
     this.interactionCount++;
 
-    console.log(`🎵 Attempting to play ${type} sound (interaction #${this.interactionCount})`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🎵 Attempting to play ${type} sound (interaction #${this.interactionCount})`);
+    }
 
     try {
       switch (type) {
@@ -369,7 +383,9 @@ class AudioManager {
           ];
           const archNoteIndex = this.interactionCount % architectNotes.length;
           const architectNote = architectNotes[archNoteIndex];
-          console.log(`🎵 Playing musical tone: ${architectNote}Hz (Architect mode) - Note ${archNoteIndex + 1}/${architectNotes.length}`);
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`🎵 Playing musical tone: ${architectNote}Hz (Architect mode) - Note ${archNoteIndex + 1}/${architectNotes.length}`);
+          }
           this.clickSynth.triggerAttackRelease(architectNote, '0.5', now);
           break;
         }
@@ -397,7 +413,9 @@ class AudioManager {
           ];
           const authNoteIndex = this.interactionCount % authorNotes.length;
           const authorNote = authorNotes[authNoteIndex];
-          console.log(`🎵 Playing musical tone: ${authorNote}Hz (Author mode) - Note ${authNoteIndex + 1}/${authorNotes.length} - Reverb: 75% wet`);
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`🎵 Playing musical tone: ${authorNote}Hz (Author mode) - Note ${authNoteIndex + 1}/${authorNotes.length} - Reverb: 75% wet`);
+          }
           this.warmSynth.triggerAttackRelease(authorNote, '1.2', now);
           break;
         }
@@ -425,13 +443,17 @@ class AudioManager {
           ];
           const labNoteIndex = this.interactionCount % labNotes.length;
           const labNote = labNotes[labNoteIndex];
-          console.log(`🎵 Playing musical tone: ${labNote}Hz (Lab mode) - Note ${labNoteIndex + 1}/${labNotes.length} - Reverb: 60% wet`);
+          if (process.env.NODE_ENV === 'development') {
+            console.log(`🎵 Playing musical tone: ${labNote}Hz (Lab mode) - Note ${labNoteIndex + 1}/${labNotes.length} - Reverb: 60% wet`);
+          }
           // Longer duration for smoother, less ticky sound
           this.glitchSynth.triggerAttackRelease(labNote, '0.9', now);
           break;
         }
       }
-      console.log('✅ Sound triggered successfully');
+      if (process.env.NODE_ENV === 'development') {
+        console.log('✅ Sound triggered successfully');
+      }
     } catch (error) {
       console.error(`❌ Failed to play ${type}:`, error);
     }
@@ -453,7 +475,9 @@ class AudioManager {
       }
     }
 
-    console.log(`🔇 Audio ${this.muted ? 'muted' : 'unmuted'}`);
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🔇 Audio ${this.muted ? 'muted' : 'unmuted'}`);
+    }
   }
 
   /**
@@ -493,7 +517,9 @@ class AudioManager {
 
     this.initialized = false;
     this.interactionCount = 0;
-    console.log('🗑️  Audio system disposed');
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🗑️  Audio system disposed');
+    }
   }
 }
 

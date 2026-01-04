@@ -1,8 +1,8 @@
 # Component Documentation
 
-*Auto-generated on 2025-11-26*
+*Auto-generated on 2026-01-04*
 
-Total components: 8
+Total components: 10
 
 ---
 
@@ -143,6 +143,84 @@ Uses physics-based motion to create organic floating effect.
 
 ---
 
+# Whisper
+
+====================================
+WHISPER - ETHEREAL FLOATING TEXT
+====================================
+
+Individual whisper in the ambient text system.
+Distinguished from user Echoes by visual treatment:
+- More transparent, ghostly appearance
+- Slower, more organic motion
+- Subtle blur and glow effects
+- Typography feels more "voice-like"
+
+**File:** `components/canvas/Whisper.tsx`
+
+## Props
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `id` | `string` | ✓ |  |
+| `text` | `string` | ✓ |  |
+| `mood` | `WhisperMood` | ✓ |  |
+| `index` | `number` | ✓ |  |
+| `totalCount` | `number` | ✓ |  |
+
+## Hooks Used
+
+- `useMemo`
+
+## Dependencies
+
+- `@/lib/whispers`
+
+
+---
+
+# WhispersChamber
+
+====================================
+WHISPERS CHAMBER - AI AMBIENT TEXT
+====================================
+
+Container for the floating whisper system.
+Manages whisper lifecycle, context adaptation, and density.
+
+Features:
+- Context-aware whisper selection
+- Automatic refresh cycle
+- Adaptive density based on activity
+- User intent memory
+
+**File:** `components/canvas/WhispersChamber.tsx`
+
+## Props
+
+| Prop | Type | Required | Description |
+|------|------|----------|-------------|
+| `mode` | `ViewMode` | ✓ |  |
+| `userIntent` | `string` |  |  |
+| `density` | `number` |  | Number of whispers to display (default: 8) |
+| `active` | `boolean` |  | Whether the chamber is active (default: true) |
+
+## Hooks Used
+
+- `useState`
+- `useEffect`
+- `useCallback`
+- `useRef`
+
+## Dependencies
+
+- `./Whisper`
+- `@/lib/whispers`
+- `@/actions/generate-whisper`
+
+
+---
+
 # Architect
 
 ====================================
@@ -168,6 +246,7 @@ REFACTORING HIGHLIGHTS:
 
 - `@/lib/audio`
 - `@/lib/styles`
+- `@/lib/profile`
 
 
 ---
@@ -196,6 +275,7 @@ Design principles:
 ## Dependencies
 
 - `@/lib/audio`
+- `@/lib/profile`
 
 
 ---

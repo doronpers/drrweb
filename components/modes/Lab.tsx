@@ -285,34 +285,6 @@ export default function Lab() {
           </div>
         </motion.div>
       </div>
-
-      {/* Glitch Effect Styles */}
-      <style jsx>{`
-        .glitch {
-          animation: glitch 0.1s infinite;
-        }
-
-        @keyframes glitch {
-          0% {
-            transform: translate(0);
-          }
-          20% {
-            transform: translate(-2px, 2px);
-          }
-          40% {
-            transform: translate(-2px, -2px);
-          }
-          60% {
-            transform: translate(2px, 2px);
-          }
-          80% {
-            transform: translate(2px, -2px);
-          }
-          100% {
-            transform: translate(0);
-          }
-        }
-      `}</style>
     </motion.div>
   );
 }

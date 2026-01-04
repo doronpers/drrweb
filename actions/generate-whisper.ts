@@ -194,7 +194,9 @@ Generate ONE short whisper fragment. Just the text, no quotes, no explanation.`;
       // Determine mood based on content (simple heuristic)
       const inferredMood = inferMood(cleanedWhisper, mode);
 
-      console.log('✨ AI whisper generated:', cleanedWhisper);
+      if (process.env.NODE_ENV === 'development') {
+        console.log('✨ AI whisper generated:', cleanedWhisper);
+      }
 
       return {
         success: true,

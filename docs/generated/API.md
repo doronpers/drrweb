@@ -1,6 +1,6 @@
 # API Documentation
 
-*Auto-generated on 2025-11-26*
+*Auto-generated on 2026-01-04*
 
 ## actions/detect-intent.ts
 
@@ -64,6 +64,46 @@ function testIntentDetection(inputs: string[]): Promise<void>
 
 ---
 
+## actions/generate-whisper.ts
+
+### `sanitizeInput`
+
+```typescript
+function sanitizeInput(input: string): string
+```
+
+**Parameters:**
+
+- `input` (`string`) - 
+
+---
+
+### `generateWhisperBatch`
+
+```typescript
+function generateWhisperBatch(params: GenerateWhisperParams, count: number = 3): Promise<GenerateWhisperResult[]>
+```
+
+**Parameters:**
+
+- `params` (`GenerateWhisperParams`) - 
+- `count` (`number = 3`) - 
+
+---
+
+### `inferMood`
+
+```typescript
+function inferMood(text: string, mode: ViewMode): WhisperMood
+```
+
+**Parameters:**
+
+- `text` (`string`) - 
+- `mode` (`ViewMode`) - 
+
+---
+
 ## contexts/ViewModeContext.tsx
 
 ### `useViewMode`
@@ -83,6 +123,24 @@ function parseIntent(input: string): ViewMode
 **Parameters:**
 
 - `input` (`string`) - 
+
+---
+
+## lib/profile.ts
+
+### `getYearsOfExperience`
+
+```typescript
+function getYearsOfExperience(): number
+```
+
+---
+
+### `formatYearsOfExperience`
+
+```typescript
+function formatYearsOfExperience(): string
+```
 
 ---
 
@@ -157,6 +215,33 @@ function validateAudioParams(params: SoundscapeParams): boolean
 **Parameters:**
 
 - `params` (`SoundscapeParams`) - 
+
+---
+
+## lib/whispers.ts
+
+### `getInitialWhispers`
+
+```typescript
+function getInitialWhispers(count: number = 8): Whisper[]
+```
+
+**Parameters:**
+
+- `count` (`number = 8`) - 
+
+---
+
+### `getContextualWhispers`
+
+```typescript
+function getContextualWhispers(context: Partial<WhisperContext>, count: number = 5): Whisper[]
+```
+
+**Parameters:**
+
+- `context` (`Partial<WhisperContext>`) - 
+- `count` (`number = 5`) - 
 
 ---
 
