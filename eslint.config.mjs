@@ -74,4 +74,10 @@ export default [
       "@typescript-eslint/no-require-imports": "off",
     },
   },
+  {
+    files: ["**/*.cjs"],
+    rules: {
+      "@typescript-eslint/no-require-imports": "off",
+    },
+  },
 ];
