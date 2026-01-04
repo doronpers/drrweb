@@ -155,7 +155,7 @@ export default function Landing() {
   }, [audioInitialized]);
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center bg-white overflow-hidden">
+    <div className="relative min-h-screen flex flex-col items-center justify-start bg-white overflow-hidden">
       {/* ====================================
           BREATHING BACKGROUND GRADIENT
           ==================================== */}

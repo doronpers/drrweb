@@ -268,15 +268,8 @@
   letter-spacing: 0.02em;
 }
 
-/* Ensure visible focus for keyboard navigation */
-.intro-link:focus-visible {
-  outline: 2px solid rgba(0, 0, 0, 0.2);
-  outline-offset: 4px;
-  border-radius: 2px;
-}
-
 /* Responsive adjustments */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
   .intro-section {
     padding-top: 3rem;
     padding-bottom: 2rem;
