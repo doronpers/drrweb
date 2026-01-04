@@ -36,20 +36,35 @@ interface EchoEntryProps {
  * @param props - Component props
  * @returns A memoized motion.div with animated floating message
  */
-function EchoEntry({ id, text, timestamp, index }: EchoEntryProps) {
-  // Random starting position and movement parameters
-  // Memoized to prevent recalculation on re-renders
-  // Empty dependency array - these are random values that should be stable per component instance
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const floatParams = useMemo(() => ({
-    startX: Math.random() * 80 + 10, // 10-90% of width
-    startY: Math.random() * 80 + 10, // 10-90% of height
-    driftX: (Math.random() - 0.5) * 100, // Random drift direction
-    driftY: (Math.random() - 0.5) * 100,
-    duration: Math.random() * 30 + 40, // 40-70 seconds
-    opacity: Math.random() * 0.3 + 0.2, // 0.2-0.5 opacity for "distance"
-    rotation: Math.random() * 10 - 5, // -5 to 5 degrees
-  }), []); // Empty array - values are random but should be stable per instance
+function EchoEntry({ id, text, index }: EchoEntryProps) {
+  // Generate deterministic pseudo-random values based on the id
+  // This ensures stable values per component instance while appearing random
+  // Using a simple hash of the id for deterministic randomness
+  const floatParams = useMemo(() => {
+    // Simple hash function to convert id to a number
+    const hash = id.split('').reduce((acc, char) => {
+      return char.charCodeAt(0) + ((acc << 5) - acc);
+    }, 0);
+    
+    // Use hash to generate pseudo-random values in deterministic way
+    const rand1 = Math.abs(Math.sin(hash * 1.0)) * 80 + 10;
+    const rand2 = Math.abs(Math.sin(hash * 2.0)) * 80 + 10;
+    const rand3 = (Math.sin(hash * 3.0)) * 100;
+    const rand4 = (Math.sin(hash * 4.0)) * 100;
+    const rand5 = Math.abs(Math.sin(hash * 5.0)) * 30 + 40;
+    const rand6 = Math.abs(Math.sin(hash * 6.0)) * 0.3 + 0.2;
+    const rand7 = (Math.sin(hash * 7.0)) * 10 - 5;
+    
+    return {
+      startX: rand1, // 10-90% of width
+      startY: rand2, // 10-90% of height
+      driftX: rand3, // Random drift direction
+      driftY: rand4,
+      duration: rand5, // 40-70 seconds
+      opacity: rand6, // 0.2-0.5 opacity for "distance"
+      rotation: rand7, // -5 to 5 degrees
+    };
+  }, [id]); // Depend on id for deterministic stability
 
   return (
     <motion.div

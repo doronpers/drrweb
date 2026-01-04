@@ -143,14 +143,15 @@ export async function fetchEchoes(): Promise<Echo[]> {
       throw error;
     }
     return data || [];
-  } catch (error: any) {
+  } catch (error) {
+    const err = error as Error & { message?: string; details?: string };
     console.error('Error fetching echoes:', error);
     // Log more details for debugging
-    if (error?.message) {
-      console.error('Error message:', error.message);
+    if (err?.message) {
+      console.error('Error message:', err.message);
     }
-    if (error?.details) {
-      console.error('Error details:', error.details);
+    if (err?.details) {
+      console.error('Error details:', err.details);
     }
     return [];
   }
@@ -182,13 +183,14 @@ export async function submitEcho(text: string): Promise<boolean> {
       throw error;
     }
     return true;
-  } catch (error: any) {
+  } catch (error) {
+    const err = error as Error & { message?: string; details?: string };
     console.error('Error submitting echo:', error);
-    if (error?.message) {
-      console.error('Error message:', error.message);
+    if (err?.message) {
+      console.error('Error message:', err.message);
     }
-    if (error?.details) {
-      console.error('Error details:', error.details);
+    if (err?.details) {
+      console.error('Error details:', err.details);
     }
     return false;
   }

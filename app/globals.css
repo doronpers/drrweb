@@ -190,6 +190,32 @@
   animation: float 6s ease-in-out infinite;
 }
 
+/* Glitch effect for Lab mode */
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+.glitch {
+  animation: glitch 0.1s infinite;
+}
+
 /* ====================================
    WHISPER SYSTEM STYLES
    ==================================== */

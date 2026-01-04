@@ -71,9 +71,8 @@ function checkRateLimit(): { allowed: boolean; remainingTime?: number } {
 
 function sanitizeInput(input: string): string {
   // Remove control characters except newlines and tabs
-  return input
-    .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '')
-    .trim();
+  // eslint-disable-next-line no-control-regex
+  return input.replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '').trim();
 }
 
 function validateInput(input: string): { valid: boolean; error?: string } {

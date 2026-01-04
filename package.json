@@ -1,6 +1,7 @@
 {
   "name": "drrweb",
   "version": "1.0.0",
+  "type": "module",
   "description": "Personal website as an interactive installation",
   "scripts": {
     "dev": "next dev",
