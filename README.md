@@ -9,6 +9,9 @@ This implementation includes the complete "Prism" architecture with:
 - ✅ **FailuresLog Component** - Brutally honest table of failures and lessons
 - ✅ **Soundscape Hook** - Mode-specific audio control system
 - ✅ **Server Actions** - AI routing with graceful fallbacks
+- ✅ **Static Intro Block** - Accessible, indexable text above interactive experience
+
+> **Note:** The homepage now includes a static intro block for accessibility and fast skimming. This server-delivered HTML content appears above the interactive experience, ensuring the site is usable without JavaScript and easily indexed by search engines. The interactive landing prompt remains fully functional below.
 
 📚 **New Documentation:**
 - [PRISM_IMPLEMENTATION.md](./PRISM_IMPLEMENTATION.md) - Complete implementation guide

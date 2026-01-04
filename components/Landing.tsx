@@ -155,7 +155,7 @@ export default function Landing() {
   }, [audioInitialized]);
 
   return (
-    <div className="relative min-h-screen flex items-center justify-center bg-white overflow-hidden">
+    <div className="relative min-h-screen flex flex-col items-center justify-start bg-white overflow-hidden">
       {/* ====================================
           BREATHING BACKGROUND GRADIENT
           ==================================== */}
@@ -174,6 +174,59 @@ export default function Landing() {
           ease: 'easeInOut',
         }}
       />
+
+      {/* ====================================
+          STATIC INTRO SECTION
+          Added for accessibility and fast skimming; interactive experience remains below.
+          ==================================== */}
+      <section
+        id="intro"
+        className="intro-section relative z-10 w-full max-w-3xl px-8 pt-16 pb-8"
+      >
+        <div className="intro-content text-center">
+          <p className="intro-text text-black/70 text-base md:text-lg leading-relaxed mb-3 font-light">
+            Audio engineer and educator focused on audio authenticity under adversarial conditions. 
+            I build and test short-slice evaluation tooling (10–15s) and review workflows that surface 
+            uncertainty rather than hide it.
+          </p>
+          <p className="intro-subtext text-black/60 text-sm md:text-base leading-relaxed mb-6 font-light">
+            Current work: stress-testing synthetic speech, calibrated deferral signals, and audit-grade evidence records.
+          </p>
+          
+          <nav aria-label="Primary" className="intro-nav">
+            <ul className="flex justify-center gap-4 md:gap-6 text-sm md:text-base">
+              <li>
+                <a 
+                  href="https://github.com/doronpers/sonotheia-examples" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="intro-link text-black/60 hover:text-black/90 transition-colors underline underline-offset-4 focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2 rounded-sm px-1"
+                >
+                  GitHub
+                </a>
+              </li>
+              <li aria-hidden="true" className="text-black/30">·</li>
+              <li>
+                <a 
+                  href="/about"
+                  className="intro-link text-black/60 hover:text-black/90 transition-colors underline underline-offset-4 focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2 rounded-sm px-1"
+                >
+                  About
+                </a>
+              </li>
+              <li aria-hidden="true" className="text-black/30">·</li>
+              <li>
+                <a 
+                  href="/contact"
+                  className="intro-link text-black/60 hover:text-black/90 transition-colors underline underline-offset-4 focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2 rounded-sm px-1"
+                >
+                  Contact
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </section>
 
       {/* ====================================
           MUTE TOGGLE
@@ -231,13 +284,13 @@ export default function Landing() {
       </motion.button>
 
       {/* ====================================
-          MAIN CONTENT - THE HANDSHAKE
+          INTERACTIVE CONTENT - THE HANDSHAKE
           ==================================== */}
       <motion.div
-        className="relative z-10 w-full max-w-2xl px-8"
+        className="relative z-10 w-full max-w-2xl px-8 pt-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, ease: 'easeOut' }}
+        transition={{ duration: 1, ease: 'easeOut', delay: 0.3 }}
       >
         {/* Centered prompt text */}
         <motion.h1
