@@ -8,10 +8,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "docs:generate": "node scripts/doc-automation/generate-all-docs.js",
-    "docs:validate": "node scripts/doc-automation/validate-docs.js .",
-    "docs:components": "node scripts/doc-automation/extract-component-docs.js",
-    "docs:api": "node scripts/doc-automation/generate-api-docs.js lib"
+    "docs:generate": "node scripts/doc-automation/generate-all-docs.cjs",
+    "docs:validate": "node scripts/doc-automation/validate-docs.cjs .",
+    "docs:components": "node scripts/doc-automation/extract-component-docs.cjs",
+    "docs:api": "node scripts/doc-automation/generate-api-docs.cjs lib"
   },
   "dependencies": {
     "@ai-sdk/gateway": "^1.0.0",

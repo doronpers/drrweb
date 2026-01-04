@@ -17,9 +17,9 @@
 
 const fs = require('fs');
 const path = require('path');
-const { processComponent, generateMarkdown: generateComponentMarkdown } = require('./extract-component-docs');
-const { processDirectory, generateAPIMarkdown } = require('./generate-api-docs');
-const { validateDirectory, generateReport } = require('./validate-docs');
+const { processComponent, generateMarkdown: generateComponentMarkdown } = require('./extract-component-docs.cjs');
+const { processDirectory, generateAPIMarkdown } = require('./generate-api-docs.cjs');
+const { validateDirectory, generateReport } = require('./validate-docs.cjs');
 
 /**
  * Configuration for documentation generation
