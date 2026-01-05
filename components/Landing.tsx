@@ -357,7 +357,7 @@ export default function Landing() {
             <ul className="flex justify-center gap-6 md:gap-8 text-sm md:text-base">
               <li>
                 <a 
-                  href="https://github.com/doronpers/sonotheia-examples" 
+                  href="https://github.com/doronpers" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="intro-link text-black/65 hover:text-black/95 transition-colors underline underline-offset-4 decoration-black/30 hover:decoration-black/60 focus:outline-none focus:ring-2 focus:ring-black/30 focus:ring-offset-2 rounded-sm px-1"
