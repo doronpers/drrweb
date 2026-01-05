@@ -152,7 +152,7 @@ export default function Landing() {
   }, [audioInitialized]);
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-start bg-white overflow-hidden">
+    <div className="relative min-h-screen flex flex-col items-center justify-center bg-white overflow-hidden">
       {/* ====================================
           BREATHING BACKGROUND GRADIENT
           ==================================== */}
@@ -232,7 +232,7 @@ export default function Landing() {
           INTERACTIVE CONTENT - THE HANDSHAKE
           ==================================== */}
       <motion.div
-        className="relative z-10 w-full max-w-2xl px-8 pt-20 md:pt-24"
+        className="relative z-10 w-full max-w-2xl px-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: 'easeOut', delay: 0.3 }}
@@ -341,7 +341,7 @@ export default function Landing() {
           ==================================== */}
       <section
         id="intro"
-        className="intro-section relative z-10 w-full max-w-3xl px-8 pt-16 pb-16"
+        className="intro-section relative z-10 w-full max-w-3xl px-8 pt-12 pb-16"
       >
         <div className="intro-content text-center">
           <p className="intro-text text-black/75 text-base md:text-lg leading-relaxed mb-4 font-light max-w-2xl mx-auto">
