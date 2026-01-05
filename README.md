@@ -17,7 +17,7 @@ This implementation includes the complete "Prism" architecture with:
 - [PRISM_IMPLEMENTATION.md](./PRISM_IMPLEMENTATION.md) - Complete implementation guide
 - [PRISM_FEATURES.md](./PRISM_FEATURES.md) - New features guide
 - [FILE_TREE.txt](./FILE_TREE.txt) - Project structure
-- [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md) - Technical summary
+- [ARCHITECTURE.md](./ARCHITECTURE.md) - System architecture overview
 
 ## 🎭 The Concept
 
@@ -273,7 +273,7 @@ Comprehensive documentation is available:
 - **[PRISM_IMPLEMENTATION.md](./PRISM_IMPLEMENTATION.md)** - Complete implementation guide with setup instructions, testing checklists, and architecture notes
 - **[PRISM_FEATURES.md](./PRISM_FEATURES.md)** - Guide to new features including AI intent detection, FailuresLog, and soundscape hook
 - **[FILE_TREE.txt](./FILE_TREE.txt)** - Complete project structure with smart/dumb component classification
-- **[IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)** - Technical summary of all changes and deliverables
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - System architecture overview and design patterns
 
 ### Auto-Generated Documentation
 - **[docs/generated/](./docs/generated/)** - Auto-generated documentation from code

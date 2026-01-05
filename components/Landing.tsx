@@ -152,7 +152,7 @@ export default function Landing() {
   }, [audioInitialized]);
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-start bg-white overflow-hidden">
+    <div className="relative min-h-screen flex flex-col items-center justify-center bg-white overflow-hidden">
       {/* ====================================
           BREATHING BACKGROUND GRADIENT
           ==================================== */}
@@ -232,7 +232,7 @@ export default function Landing() {
           INTERACTIVE CONTENT - THE HANDSHAKE
           ==================================== */}
       <motion.div
-        className="relative z-10 w-full max-w-2xl px-8 pt-20 md:pt-24"
+        className="relative z-10 w-full max-w-2xl px-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: 'easeOut', delay: 0.3 }}
@@ -341,7 +341,7 @@ export default function Landing() {
           ==================================== */}
       <section
         id="intro"
-        className="intro-section relative z-10 w-full max-w-3xl px-8 pt-16 pb-16"
+        className="intro-section relative z-10 w-full max-w-3xl px-8 pt-12 pb-16"
       >
         <div className="intro-content text-center">
           <p className="intro-text text-black/75 text-base md:text-lg leading-relaxed mb-4 font-light max-w-2xl mx-auto">
@@ -357,7 +357,7 @@ export default function Landing() {
             <ul className="flex justify-center gap-6 md:gap-8 text-sm md:text-base">
               <li>
                 <a 
-                  href="https://github.com/doronpers/sonotheia-examples" 
+                  href="https://github.com/doronpers" 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="intro-link text-black/65 hover:text-black/95 transition-colors underline underline-offset-4 decoration-black/30 hover:decoration-black/60 focus:outline-none focus:ring-2 focus:ring-black/30 focus:ring-offset-2 rounded-sm px-1"

@@ -5,8 +5,8 @@ This file documents the new features added to implement the "Prism" personal web
 ## Quick Links
 
 - **Implementation Guide:** See [PRISM_IMPLEMENTATION.md](./PRISM_IMPLEMENTATION.md)
-- **Project Structure:** See [FILE_TREE.txt](./FILE_TREE.txt)
-- **Full Summary:** See [IMPLEMENTATION_SUMMARY.md](./IMPLEMENTATION_SUMMARY.md)
+- **Architecture Overview:** See [ARCHITECTURE.md](./ARCHITECTURE.md)
+- **Security Review:** See [SECURITY_SUMMARY.md](./SECURITY_SUMMARY.md)
 
 ## What's New
 
