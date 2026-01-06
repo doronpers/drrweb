@@ -10,8 +10,7 @@
     "lint": "eslint .",
     "docs": "tsx scripts/docs/generate.ts",
     "docs:generate": "tsx scripts/docs/generate.ts",
-    "docs:watch": "tsx scripts/docs/watch.ts",
-    "prebuild": "npm run docs:generate 2>/dev/null || true"
+    "docs:watch": "tsx scripts/docs/watch.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.6",
