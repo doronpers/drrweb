@@ -26,6 +26,7 @@ import EchoChamber from '@/components/canvas/EchoChamber';
 import WhispersChamber from '@/components/canvas/WhispersChamber';
 import AntiPortfolio from '@/components/AntiPortfolio';
 import VoiceSelector from '@/components/VoiceSelector';
+import AudioControls from '@/components/AudioControls';
 
 // Code splitting: Lazy load mode components for better performance
 const Architect = dynamic(() => import('@/components/modes/Architect'), {
@@ -57,6 +58,9 @@ export default function Home() {
 
       {/* Voice Selector - for ElevenLabs voice preference */}
       <VoiceSelector />
+      
+      {/* Audio Controls - for tone, velocity, and key settings */}
+      <AudioControls />
 
       {/* Mode-specific content */}
       <AnimatePresence mode="wait">

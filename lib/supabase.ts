@@ -142,19 +142,22 @@ export async function fetchEchoes(): Promise<Echo[]> {
         hint: error.hint,
         code: error.code,
       });
-      throw error;
+      // Don't throw - return empty array for graceful degradation
+      return [];
     }
     return data || [];
   } catch (error) {
+    // Handle network errors, DNS errors, etc.
     console.error('Error fetching echoes:', error);
-    // Log more details for debugging
-    if (error instanceof Error) {
+    
+    // Check if it's a network/DNS error
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      console.warn('Network error connecting to Supabase. Echo Chamber will be unavailable.');
+    } else if (error instanceof Error) {
       console.error('Error message:', error.message);
     }
-    // Check if error has details property (Supabase error structure)
-    if (error && typeof error === 'object' && 'details' in error) {
-      console.error('Error details:', (error as { details?: string }).details);
-    }
+    
+    // Always return empty array for graceful degradation
     return [];
   }
 }
@@ -189,18 +192,26 @@ export async function submitEcho(text: string): Promise<boolean> {
         hint: error.hint,
         code: error.code,
       });
-      throw error;
+      // Return false instead of throwing for graceful error handling
+      return false;
     }
     return true;
   } catch (error) {
     console.error('Error submitting echo:', error);
-    if (error instanceof Error) {
+    
+    // Check if it's a network/DNS error
+    if (error instanceof TypeError && error.message.includes('fetch')) {
+      console.warn('Network error connecting to Supabase. Echo submission failed.');
+    } else if (error instanceof Error) {
       console.error('Error message:', error.message);
     }
+    
     // Check if error has details property (Supabase error structure)
     if (error && typeof error === 'object' && 'details' in error) {
       console.error('Error details:', (error as { details?: string }).details);
     }
+    
+    // Always return false for graceful error handling
     return false;
   }
 }

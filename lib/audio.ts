@@ -15,12 +15,28 @@
  */
 
 import * as Tone from 'tone';
+import { 
+  MusicalKey, 
+  KeyMode, 
+  KeyConfig, 
+  loadKeyConfig, 
+  getHarmonicNoteSet,
+  getNoteFrequency
+} from './audio-keys';
 
 // ====================================
 // TYPE DEFINITIONS
 // ====================================
 
 type UISoundType = 'click-dry' | 'click-warm' | 'glitch';
+type OscillatorType = 'sine' | 'triangle' | 'sawtooth' | 'square';
+
+export interface AudioSettings {
+  key: MusicalKey;
+  mode: KeyMode;
+  tone: OscillatorType;
+  velocity: number; // 0-100
+}
 
 /**
  * Detune configuration for humanization.
@@ -93,6 +109,12 @@ class AudioManager {
   private interactionCount: number = 0; // Track interactions for musical progression
   private lastSoundTime: number = 0; // Track last sound time to prevent timing conflicts
 
+  // Audio settings
+  private currentKeyConfig: KeyConfig = loadKeyConfig();
+  private currentTone: OscillatorType = 'sine';
+  private currentVelocity: number = 50; // 0-100, maps to volume
+  private harmonicNotes: ReturnType<typeof getHarmonicNoteSet> | null = null;
+
   // Ambient drone components
   private noise: Tone.Noise | null = null;
   private filter: Tone.Filter | null = null;
@@ -124,6 +146,10 @@ class AudioManager {
     if (this.initialized) return;
 
     try {
+      // Load key config on init
+      this.currentKeyConfig = loadKeyConfig();
+      this.updateHarmonicNotes();
+      
       // Start the Tone.js audio context
       await Tone.start();
       
@@ -188,19 +214,24 @@ class AudioManager {
       vibrato1.connect(this.ambientToneVolume);
       vibrato2.connect(this.ambientToneVolume);
 
-      // First harmonic tone (C4, fundamental)
+      // Initialize harmonic notes based on current key config
+      this.updateHarmonicNotes();
+
+      // First harmonic tone (root, fundamental)
+      const rootFreq = this.getRootFrequency();
       this.ambientTone1 = new Tone.Oscillator({
         type: 'sine',
-        frequency: PENTATONIC_SCALE.C4,
+        frequency: rootFreq,
         volume: -30, // More audible
       });
       // Route: Oscillator → Vibrato → Volume
       this.ambientTone1.connect(vibrato1);
 
-      // Second harmonic tone (G4, perfect fifth - most harmonious interval)
+      // Second harmonic tone (perfect fifth - most harmonious interval)
+      const fifthFreq = this.getFifthFrequency();
       this.ambientTone2 = new Tone.Oscillator({
         type: 'sine',
-        frequency: PENTATONIC_SCALE.G4,
+        frequency: fifthFreq,
         volume: -32, // More audible
       });
       // Route: Oscillator → Vibrato → Volume
@@ -217,7 +248,9 @@ class AudioManager {
       });
       await this.reverb.generate(); // Pre-compute impulse response
 
-      this.uiVolume = new Tone.Volume(-2); // Slightly below unity to avoid clipping
+      // Calculate volume from velocity (0-100 maps to -20dB to 0dB)
+      const volumeDb = this.velocityToDb(this.currentVelocity);
+      this.uiVolume = new Tone.Volume(volumeDb);
       this.uiVolume.toDestination();
 
       // DRY CLICK (Architect mode) - More musical, less percussive
@@ -230,12 +263,14 @@ class AudioManager {
       await this.architectReverb.generate();
       
       this.clickSynth = new Tone.Synth({
-        oscillator: { type: 'sine' }, // Pure sine for smoothness
+        oscillator: { 
+          type: this.currentTone,   // User-selectable tone
+        },
         envelope: {
-          attack: 0.01,   // Gentle attack (was 0.001)
-          decay: 0.15,    // Longer decay (was 0.05)
-          sustain: 0.1,   // Small sustain for musicality (was 0)
-          release: 0.2,   // Longer release (was 0.05)
+          attack: 0.01,   // Short but non-zero attack to prevent clicks
+          decay: 0.15,    // Longer decay
+          sustain: 0.1,   // Small sustain for musicality
+          release: 0.3,   // Longer release to fade to zero smoothly
         },
       });
       // Route: Synth → Reverb → Volume (subtle reverb for cohesion)
@@ -252,12 +287,14 @@ class AudioManager {
       await this.warmReverb.generate();
       
       this.warmSynth = new Tone.Synth({
-        oscillator: { type: 'sine' },
+        oscillator: { 
+          type: this.currentTone,   // User-selectable tone
+        },
         envelope: {
-          attack: 0.02,   // Gentle attack
+          attack: 0.02,  // Short but non-zero attack to prevent clicks
           decay: 0.5,     // Longer decay
           sustain: 0.3,   // More sustain for musicality
-          release: 0.8,    // Very long release for musical tail
+          release: 1.0,   // Very long release to fade to zero smoothly
         },
       });
       // Route: Synth → Reverb → Volume
@@ -268,13 +305,13 @@ class AudioManager {
       // Using sine wave for pure, smooth tones with gentle filtering
       this.glitchSynth = new Tone.Synth({
         oscillator: { 
-          type: 'sine',    // Pure sine wave - smoothest, most pleasing
+          type: this.currentTone,    // User-selectable tone
         },
         envelope: {
-          attack: 0.05,    // Slower attack for softer start (less ticky)
-          decay: 0.4,      // Longer decay
-          sustain: 0.3,    // More sustain for musicality
-          release: 0.8,    // Much longer release for smooth fade (less abrupt)
+          attack: 0.02,   // Short but non-zero attack to prevent clicks
+          decay: 0.4,     // Longer decay
+          sustain: 0.3,   // More sustain for musicality
+          release: 1.0,   // Very long release to fade to zero smoothly
         },
       });
       // Add gentle low-pass filter for warmth and smoothness
@@ -378,94 +415,56 @@ class AudioManager {
     try {
       switch (type) {
         case 'click-dry': {
-          if (!this.clickSynth) {
+          if (!this.clickSynth || !this.harmonicNotes) {
             console.error('❌ clickSynth not initialized');
             return;
           }
-          // Musical tone from pentatonic scale (Architect: higher, clearer)
-          // Expanded note set with more variation across octaves
-          const architectNotes = [
-            PENTATONIC_SCALE.E4,
-            PENTATONIC_SCALE.G4,
-            PENTATONIC_SCALE.C5,
-            PENTATONIC_SCALE.D5,
-            PENTATONIC_SCALE.E5,
-            PENTATONIC_SCALE.G5,
-            PENTATONIC_SCALE.A4,
-            PENTATONIC_SCALE.C6,
-            PENTATONIC_SCALE.D6,
-            PENTATONIC_SCALE.E6,
-          ];
+          // Use harmonic notes from selected key
+          const architectNotes = this.harmonicNotes.architect;
           const archNoteIndex = this.interactionCount % architectNotes.length;
           const architectNote = architectNotes[archNoteIndex];
           // Apply subtle humanization detune (±3 cents for clean, precise feel)
           const archDetune = getRandomDetune(DETUNE_PRESETS.architect);
           this.clickSynth.detune.value = archDetune;
-          console.log(`🎵 Playing musical tone: ${architectNote}Hz (Architect mode) - Note ${archNoteIndex + 1}/${architectNotes.length} - Detune: ${archDetune.toFixed(1)}¢`);
-          this.clickSynth.triggerAttackRelease(architectNote, '0.5', now);
+          console.log(`🎵 Playing musical tone: ${architectNote.toFixed(2)}Hz (Architect mode, ${this.currentKeyConfig.key} ${this.currentKeyConfig.mode}) - Note ${archNoteIndex + 1}/${architectNotes.length} - Detune: ${archDetune.toFixed(1)}¢`);
+          // Duration must be long enough to allow full release fade-out (attack + decay + sustain + release)
+          this.clickSynth.triggerAttackRelease(architectNote, '0.6', now);
           break;
         }
 
         case 'click-warm': {
-          if (!this.warmSynth) {
+          if (!this.warmSynth || !this.harmonicNotes) {
             console.error('❌ warmSynth not initialized');
             return;
           }
-          // Lower, warmer tones from pentatonic scale (Author: warm, spacious)
-          // Expanded with lower octave and middle range for more variation
-          const authorNotes = [
-            PENTATONIC_SCALE.C3,
-            PENTATONIC_SCALE.D3,
-            PENTATONIC_SCALE.E3,
-            PENTATONIC_SCALE.G3,
-            PENTATONIC_SCALE.A3,
-            PENTATONIC_SCALE.C4,
-            PENTATONIC_SCALE.D4,
-            PENTATONIC_SCALE.E4,
-            PENTATONIC_SCALE.G4,
-            PENTATONIC_SCALE.A4,
-            PENTATONIC_SCALE.C5,
-            PENTATONIC_SCALE.D5,
-          ];
+          // Use harmonic notes from selected key
+          const authorNotes = this.harmonicNotes.author;
           const authNoteIndex = this.interactionCount % authorNotes.length;
           const authorNote = authorNotes[authNoteIndex];
           // Apply organic humanization detune (±8 cents for warmer, more organic feel)
           const authDetune = getRandomDetune(DETUNE_PRESETS.author);
           this.warmSynth.detune.value = authDetune;
-          console.log(`🎵 Playing musical tone: ${authorNote}Hz (Author mode) - Note ${authNoteIndex + 1}/${authorNotes.length} - Reverb: 75% wet - Detune: ${authDetune.toFixed(1)}¢`);
-          this.warmSynth.triggerAttackRelease(authorNote, '1.2', now);
+          console.log(`🎵 Playing musical tone: ${authorNote.toFixed(2)}Hz (Author mode, ${this.currentKeyConfig.key} ${this.currentKeyConfig.mode}) - Note ${authNoteIndex + 1}/${authorNotes.length} - Reverb: 75% wet - Detune: ${authDetune.toFixed(1)}¢`);
+          // Duration must be long enough to allow full release fade-out (attack + decay + sustain + release)
+          this.warmSynth.triggerAttackRelease(authorNote, '1.5', now);
           break;
         }
 
         case 'glitch': {
-          if (!this.glitchSynth) {
+          if (!this.glitchSynth || !this.harmonicNotes) {
             console.error('❌ glitchSynth not initialized');
             return;
           }
-          // Musical but with character (Lab: interesting intervals)
-          // Expanded with more octave jumps and varied intervals for interest
-          const labNotes = [
-            PENTATONIC_SCALE.D3,
-            PENTATONIC_SCALE.G3,
-            PENTATONIC_SCALE.A3,
-            PENTATONIC_SCALE.D4,
-            PENTATONIC_SCALE.G4,
-            PENTATONIC_SCALE.A4,
-            PENTATONIC_SCALE.E4,
-            PENTATONIC_SCALE.C5,
-            PENTATONIC_SCALE.E5,
-            PENTATONIC_SCALE.G5,
-            PENTATONIC_SCALE.A5,
-            PENTATONIC_SCALE.D5,
-          ];
+          // Use harmonic notes from selected key
+          const labNotes = this.harmonicNotes.lab;
           const labNoteIndex = this.interactionCount % labNotes.length;
           const labNote = labNotes[labNoteIndex];
           // Apply experimental humanization detune (±12 cents for slightly experimental character)
           const labDetune = getRandomDetune(DETUNE_PRESETS.lab);
           this.glitchSynth.detune.value = labDetune;
-          console.log(`🎵 Playing musical tone: ${labNote}Hz (Lab mode) - Note ${labNoteIndex + 1}/${labNotes.length} - Reverb: 60% wet - Detune: ${labDetune.toFixed(1)}¢`);
-          // Longer duration for smoother, less ticky sound
-          this.glitchSynth.triggerAttackRelease(labNote, '0.9', now);
+          console.log(`🎵 Playing musical tone: ${labNote.toFixed(2)}Hz (Lab mode, ${this.currentKeyConfig.key} ${this.currentKeyConfig.mode}) - Note ${labNoteIndex + 1}/${labNotes.length} - Reverb: 60% wet - Detune: ${labDetune.toFixed(1)}¢`);
+          // Duration must be long enough to allow full release fade-out (attack + decay + sustain + release)
+          this.glitchSynth.triggerAttackRelease(labNote, '1.2', now);
           break;
         }
       }
@@ -557,6 +556,101 @@ class AudioManager {
    */
   getAmbientVolume(): Tone.Volume | null {
     return this.ambientVolume;
+  }
+
+  /**
+   * Update audio settings (key, mode, tone, velocity)
+   */
+  updateSettings(settings: Partial<AudioSettings>): void {
+    let needsReinit = false;
+
+    // Update key configuration
+    if (settings.key !== undefined || settings.mode !== undefined) {
+      this.currentKeyConfig = {
+        key: settings.key ?? this.currentKeyConfig.key,
+        mode: settings.mode ?? this.currentKeyConfig.mode,
+      };
+      this.updateHarmonicNotes();
+      this.updateAmbientTones();
+      needsReinit = true;
+    }
+
+    // Update tone (oscillator type)
+    if (settings.tone !== undefined && settings.tone !== this.currentTone) {
+      this.currentTone = settings.tone;
+      if (this.clickSynth) {
+        this.clickSynth.oscillator.type = settings.tone;
+      }
+      if (this.warmSynth) {
+        this.warmSynth.oscillator.type = settings.tone;
+      }
+      if (this.glitchSynth) {
+        this.glitchSynth.oscillator.type = settings.tone;
+      }
+    }
+
+    // Update velocity (volume)
+    if (settings.velocity !== undefined) {
+      this.currentVelocity = settings.velocity;
+      if (this.uiVolume) {
+        const volumeDb = this.velocityToDb(settings.velocity);
+        this.uiVolume.volume.value = volumeDb;
+      }
+    }
+  }
+
+  /**
+   * Convert velocity (0-100) to dB (-20 to 0)
+   */
+  private velocityToDb(velocity: number): number {
+    // Map 0-100 to -20dB to 0dB
+    return -20 + (velocity / 100) * 20;
+  }
+
+  /**
+   * Update harmonic notes based on current key config
+   */
+  private updateHarmonicNotes(): void {
+    this.harmonicNotes = getHarmonicNoteSet(this.currentKeyConfig);
+  }
+
+  /**
+   * Get root frequency for current key
+   */
+  private getRootFrequency(): number {
+    // Get root note in octave 4
+    return getNoteFrequency(this.currentKeyConfig.key, this.currentKeyConfig.mode, 4, 0);
+  }
+
+  /**
+   * Get perfect fifth frequency for current key
+   */
+  private getFifthFrequency(): number {
+    // Get fifth degree in octave 4
+    return getNoteFrequency(this.currentKeyConfig.key, this.currentKeyConfig.mode, 4, 4);
+  }
+
+  /**
+   * Update ambient tones to match current key
+   */
+  private updateAmbientTones(): void {
+    if (!this.ambientTone1 || !this.ambientTone2) return;
+
+    const rootFreq = this.getRootFrequency();
+    const fifthFreq = this.getFifthFrequency();
+
+    // Update frequencies if oscillators are running
+    if (this.ambientTone1.state === 'started') {
+      this.ambientTone1.frequency.value = rootFreq;
+    } else {
+      this.ambientTone1.frequency.value = rootFreq;
+    }
+
+    if (this.ambientTone2.state === 'started') {
+      this.ambientTone2.frequency.value = fifthFreq;
+    } else {
+      this.ambientTone2.frequency.value = fifthFreq;
+    }
   }
 
   /**
