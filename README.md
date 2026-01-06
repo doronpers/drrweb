@@ -187,7 +187,7 @@ WITH CHECK (true);
 
 ### 1. The Antechamber (Landing)
 
-- Minimal input field: "What do you seek?"
+- Minimal input field: "How may I inform your journey?"
 - Keyword mapping routes to appropriate mode
 - Audio initialization with user consent
 

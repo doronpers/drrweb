@@ -1,0 +1,29 @@
+# Vercel ignore file
+# Files/directories to exclude from Vercel deployments
+
+# Development files
+.env.local
+.env*.local
+
+# Documentation generation (optional, non-critical)
+scripts/docs/
+
+# Archive files (not needed for deployment)
+archive/
+
+# Test files
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db

@@ -252,6 +252,7 @@ export default function Landing() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: 'easeOut' }}
       >
+
         {/* Input form */}
         <form ref={formRef} onSubmit={handleSubmit}>
           <motion.div
