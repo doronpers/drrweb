@@ -252,20 +252,6 @@ export default function Landing() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: 'easeOut' }}
       >
-        {/* Centered prompt text */}
-        <motion.h1
-          className="text-center mb-12 text-black/40 tracking-wide"
-          style={{
-            fontSize: 'clamp(1rem, 2vw, 1.25rem)',
-            fontWeight: 300,
-            letterSpacing: '0.15em',
-          }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isFocused ? 0.6 : 0.4 }}
-          transition={{ duration: 0.6 }}
-        >
-          What do you seek?
-        </motion.h1>
 
         {/* Input form */}
         <form ref={formRef} onSubmit={handleSubmit}>
@@ -290,7 +276,7 @@ export default function Landing() {
                   formRef.current?.requestSubmit();
                 }
               }}
-              placeholder="What brings you here?"
+              placeholder="How may I inform your journey?"
               disabled={isSubmitting}
               className={`
                 w-full px-6 py-5 text-center

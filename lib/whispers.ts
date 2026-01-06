@@ -74,7 +74,7 @@ const UNIVERSAL_WHISPERS: string[] = [
 
 const MODE_WHISPERS: Record<ViewMode, string[]> = {
   landing: [
-    "What brings you here?",
+    "How may I inform your journey?",
     "The threshold holds all possibilities",
     "Every journey begins with a question",
     "The door opens inward",
