@@ -23,19 +23,19 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { parseModule } from './parser';
+import { parseModule } from './parser.js';
 import {
   formatFullDocumentation,
   formatComponentIndex,
   formatFunctionIndex,
   formatTypeIndex,
   formatAsJson,
-} from './formatter';
+} from './formatter.js';
 import type {
   DocGeneratorConfig,
   DocumentationOutput,
   ModuleDefinition,
-} from './types';
+} from './types.js';
 
 // ====================================
 // CONFIGURATION
