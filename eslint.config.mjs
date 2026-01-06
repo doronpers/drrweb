@@ -50,8 +50,6 @@ export default [
       "react/no-unescaped-entities": "off",
       "react/react-in-jsx-scope": "off",
       "react/prop-types": "off",
-      // Allow ref access during render for initialization patterns
-      "react-hooks/refs": "warn",
     },
     settings: {
       react: {
