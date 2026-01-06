@@ -97,6 +97,7 @@ class AudioManager {
   private noise: Tone.Noise | null = null;
   private filter: Tone.Filter | null = null;
   private ambientVolume: Tone.Volume | null = null;
+  private originalAmbientVolume: number = -25; // Store original volume for ducking restoration
   
   // Musical ambient tones (subtle harmonic layers)
   private ambientTone1: Tone.Oscillator | null = null;
@@ -505,6 +506,57 @@ class AudioManager {
    */
   isMuted(): boolean {
     return this.muted;
+  }
+
+  /**
+   * Duck the ambient drone volume subtly (for voice playback).
+   * Uses smooth ramping to make the change unnoticeable.
+   * 
+   * @param amountDb - Amount to duck in dB (default: -2dB, barely noticeable)
+   * @param duration - Ramp duration in seconds (default: 0.3s for smooth transition)
+   */
+  duckAmbient(amountDb: number = -2, duration: number = 0.3): void {
+    if (!this.ambientVolume || this.muted) return;
+    
+    // Store current volume as original if not already stored
+    this.originalAmbientVolume = this.ambientVolume.volume.value;
+    
+    // Ramp to ducked volume
+    this.ambientVolume.volume.rampTo(
+      this.originalAmbientVolume + amountDb,
+      duration
+    );
+    
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🔉 Ducking ambient by ${amountDb}dB (${duration}s)`);
+    }
+  }
+
+  /**
+   * Restore ambient drone volume to original level.
+   * 
+   * @param duration - Ramp duration in seconds (default: 0.3s for smooth transition)
+   */
+  restoreAmbient(duration: number = 0.3): void {
+    if (!this.ambientVolume || this.muted) return;
+    
+    // Restore to original volume
+    this.ambientVolume.volume.rampTo(
+      this.originalAmbientVolume,
+      duration
+    );
+    
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🔊 Restoring ambient to ${this.originalAmbientVolume}dB (${duration}s)`);
+    }
+  }
+
+  /**
+   * Get the ambient volume node for external control.
+   * Exposed for voice manager integration.
+   */
+  getAmbientVolume(): Tone.Volume | null {
+    return this.ambientVolume;
   }
 
   /**

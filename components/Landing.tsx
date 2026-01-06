@@ -13,6 +13,7 @@ import { useState, useEffect, useCallback, FormEvent, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useViewMode, parseIntent } from '@/contexts/ViewModeContext';
 import { detectIntent } from '@/actions/detect-intent';
+import OnboardingHint from '@/components/OnboardingHint';
 
 // Lazy load audio module to reduce initial bundle size
 // Using regular dynamic import instead of Next.js dynamic() since we're importing a module, not a component
@@ -103,11 +104,19 @@ export default function Landing() {
       } catch (error) {
         console.error('Intent detection failed, using fallback:', error);
         
-        // Fallback to client-side parsing
-        const targetMode = parseIntent(input);
-        setTimeout(() => {
-          setMode(targetMode, input);
-        }, 300);
+        // Fallback to client-side parsing with error handling
+        try {
+          const targetMode = parseIntent(input);
+          setTimeout(() => {
+            setMode(targetMode, input);
+          }, 300);
+        } catch (fallbackError) {
+          console.error('Fallback parsing also failed:', fallbackError);
+          // Graceful degradation: default to architect mode
+          setTimeout(() => {
+            setMode('architect', input);
+          }, 300);
+        }
       } finally {
         // Reset submitting state after transition
         setTimeout(() => {
@@ -185,10 +194,11 @@ export default function Landing() {
           ==================================== */}
       <motion.button
         onClick={handleMuteToggle}
-        className="fixed top-8 right-8 z-50 p-3 text-black/30 hover:text-black/60 transition-colors"
+        className="fixed top-8 right-8 z-50 p-3 text-black/30 hover:text-black/60 transition-colors focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2 rounded-full"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         aria-label={isMuted ? 'Unmute audio' : 'Mute audio'}
+        aria-pressed={!isMuted}
       >
         <AnimatePresence mode="wait">
           {isMuted ? (
@@ -280,21 +290,22 @@ export default function Landing() {
                   formRef.current?.requestSubmit();
                 }
               }}
-              placeholder="Type your intent..."
+              placeholder="What brings you here?"
               disabled={isSubmitting}
               className={`
                 w-full px-6 py-5 text-center
                 bg-transparent border-b-2 border-black/10
                 text-black text-lg tracking-wide
                 placeholder:text-black/20
-                focus:border-black/30 focus:outline-none
-                transition-all duration-300
+                focus:border-black/30 focus:outline-none focus:ring-2 focus:ring-black/10 focus:ring-offset-2
+                transition-all duration-normal
                 disabled:opacity-50 disabled:cursor-not-allowed
               `}
               style={{
                 fontWeight: isFocused ? 400 : 300,
               }}
               autoFocus
+              aria-label="Enter your intent or question"
             />
 
             {/* Animated underline */}
@@ -320,54 +331,157 @@ export default function Landing() {
                 exit={{ opacity: 0, y: -10 }}
                 className="text-center mt-6 text-black/30 text-sm tracking-wider"
               >
-                Press <kbd className="px-2 py-1 bg-black/5 rounded">Enter</kbd> to proceed
+                Press <kbd className="px-2 py-1 bg-black/5 rounded text-xs">Enter</kbd> to proceed
               </motion.p>
             )}
           </AnimatePresence>
 
-          {/* Submitting state */}
+          {/* Submitting state with skeleton loader */}
           <AnimatePresence>
             {isSubmitting && (
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="text-center mt-6 text-black/30 text-sm tracking-wider"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="text-center mt-6 space-y-3"
+                aria-live="polite"
+                aria-busy="true"
               >
-                <motion.span
+                {/* Loading indicator */}
+                <div className="flex items-center justify-center gap-2">
+                  <motion.div
+                    className="w-1.5 h-1.5 bg-black/30 rounded-full"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      delay: 0,
+                    }}
+                  />
+                  <motion.div
+                    className="w-1.5 h-1.5 bg-black/30 rounded-full"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      delay: 0.2,
+                    }}
+                  />
+                  <motion.div
+                    className="w-1.5 h-1.5 bg-black/30 rounded-full"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      delay: 0.4,
+                    }}
+                  />
+                </div>
+                <motion.p
+                  className="text-black/30 text-sm tracking-wider"
                   animate={{ opacity: [0.3, 1, 0.3] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                 >
-                  Refracting...
-                </motion.span>
+                  Analyzing intent...
+                </motion.p>
               </motion.div>
             )}
           </AnimatePresence>
         </form>
 
-        {/* Subtle hint about modes */}
+        {/* Mode previews */}
         <motion.div
-          className="mt-16 text-center text-black/20 text-xs tracking-widest space-y-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2, duration: 1 }}
+          className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.8 }}
+          aria-label="Mode descriptions"
         >
-          <p>Try: hire • story • process</p>
+          <ModePreview
+            letter="A"
+            title="Architect"
+            description="Business & professional"
+            keywords={['hire', 'resume', 'experience']}
+          />
+          <ModePreview
+            letter="B"
+            title="Author"
+            description="Editorial & narrative"
+            keywords={['story', 'philosophy', 'teaching']}
+          />
+          <ModePreview
+            letter="C"
+            title="Lab"
+            description="Process & technical"
+            keywords={['code', 'process', 'build']}
+          />
         </motion.div>
       </motion.div>
+
+      {/* Onboarding hint for first-time visitors */}
+      <OnboardingHint
+        id="landing-intent"
+        message="Type what you're looking for. The site will guide you to the right view."
+        position="bottom"
+        delay={3000}
+      />
 
       {/* ====================================
           CORNER SIGNATURE
           ==================================== */}
       <motion.div
-        className="fixed bottom-8 left-8 text-black/20 text-xs tracking-widest"
+        className="fixed bottom-8 right-8 text-black/20 text-xs tracking-widest"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
       >
         <p>AN INTERACTIVE INSTALLATION</p>
-        <p className="mt-1 font-light">©2025</p>
+        <p className="mt-2 font-light">©2025</p>
       </motion.div>
     </div>
+  );
+}
+
+// ====================================
+// MODE PREVIEW COMPONENT
+// ====================================
+
+interface ModePreviewProps {
+  letter: string;
+  title: string;
+  description: string;
+  keywords: string[];
+}
+
+function ModePreview({ letter, title, description, keywords }: ModePreviewProps) {
+  return (
+    <motion.div
+      className="text-center p-6 border border-black/5 rounded-lg hover:border-black/10 transition-colors"
+      whileHover={{ y: -2 }}
+      transition={{ duration: 0.2 }}
+    >
+      <div className="text-2xl font-bold mb-2 text-black/40">{letter}</div>
+      <h3 className="text-sm font-semibold mb-1 text-black/70">{title}</h3>
+      <p className="text-xs text-black/50 mb-3">{description}</p>
+      <div className="flex flex-wrap justify-center gap-2">
+        {keywords.map((keyword) => (
+          <span
+            key={keyword}
+            className="text-xs px-2 py-1 bg-black/5 rounded text-black/40"
+          >
+            {keyword}
+          </span>
+        ))}
+      </div>
+    </motion.div>
   );
 }

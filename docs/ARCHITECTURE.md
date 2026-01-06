@@ -1,8 +1,12 @@
-# Architecture Overview
+# Architecture Documentation
+
+## Overview
+
+This document describes the system architecture of the DRR Web interactive installation. The core concept is **"The Prism"** - a metaphor where a single identity refracts into multiple presentations based on viewer intent.
 
 ## The Prism System
 
-The core architectural concept is **"The Prism"** - a metaphor from optics and sound where a single source (white light, complex audio) splits into constituent parts.
+The Prism architecture allows a single website to refract into three distinct modes based on user intent:
 
 ```
                     ┌─────────────────┐
@@ -18,7 +22,7 @@ The core architectural concept is **"The Prism"** - a metaphor from optics and s
                              │
                    ┌─────────┴─────────┐
                    │  INTENT PARSING   │
-                   │  (Keyword Map)    │
+                   │  (AI + Keywords)  │
                    └─────────┬─────────┘
                              │
               ┌──────────────┼──────────────┐
@@ -29,13 +33,23 @@ The core architectural concept is **"The Prism"** - a metaphor from optics and s
          └─────────┘    └─────────┘   └─────────┘
 ```
 
+### Mode Descriptions
+
+| Mode | Name | Audience | Aesthetic |
+|------|------|----------|-----------|
+| **A** | The Architect | Recruiters, Business | Swiss Style, utilitarian, high contrast |
+| **B** | The Author | Students, Explorers | Editorial, breathable, warm |
+| **C** | The Lab | Makers, Developers | Brutalist, raw, experimental |
+
 ## Component Hierarchy
 
 ```
 RootLayout (app/layout.tsx)
 ├── ViewModeProvider (contexts/ViewModeContext.tsx)
 │   └── Home (app/page.tsx)
-│       ├── EchoChamber (background, all modes except landing)
+│       ├── WhispersChamber (background, all modes)
+│       ├── EchoChamber (background, modes except landing)
+│       ├── VoiceSelector (voice preference UI)
 │       ├── Landing (mode === 'landing')
 │       ├── Architect (mode === 'architect')
 │       │   └── AntiPortfolio
@@ -55,14 +69,37 @@ Central state manager for The Prism system.
 - `currentMode`: 'landing' | 'architect' | 'author' | 'lab'
 - `previousMode`: For transition effects
 - `isTransitioning`: Animation coordination
+- `userIntent`: Original user input for context
 
 **Methods:**
 - `setMode(mode)`: Triggers mode transition with animation delay
+- `parseIntent(input)`: Keyword-based intent parsing (fallback)
 
 **Configuration:**
 - `MODE_CONFIG`: Visual/audio theme per mode
 - `KEYWORD_MAP`: Intent parsing dictionary
 - `parseIntent(input)`: Keyword → ViewMode mapping
+
+## AI-Powered Intent Detection
+
+**File:** `actions/detect-intent.ts`
+
+The system uses Anthropic Claude 3.5 Sonnet (primary) or Google Gemini 1.5 Flash (fallback) to analyze user input and route to the appropriate mode.
+
+**Features:**
+- Structured output with Zod validation
+- Returns: `{ targetMode, audioParams }`
+- Graceful fallback to keyword matching if API unavailable
+- No chat responses - pure routing data
+
+**Logic:**
+- Hiring/data/credentials → Architect
+- Reading/curiosity/philosophy → Author
+- Building/code/process → Lab
+
+**Environment Variables:**
+- `ANTHROPIC_API_KEY` (primary)
+- `AI_GATEWAY_API_KEY` (fallback)
 
 ## Audio Architecture
 
@@ -72,10 +109,15 @@ AudioManager (Singleton)
 │   ├── Noise Generator (pink noise)
 │   ├── Low-pass Filter (LFO modulated)
 │   └── Volume Control (breathing automation)
+│   └── Ducking Control (for voice playback)
 └── UI Sound System
-    ├── Click Synth (Architect mode)
-    ├── Warm Synth + Reverb (Author mode)
-    └── Glitch Synth (Lab mode)
+    ├── Musical Tones (Architect mode)
+    ├── Warm Tones + Reverb (Author mode)
+    └── Filtered Tones (Lab mode)
+└── Voice System
+    ├── ElevenLabs Integration
+    ├── Audio Ducking (-2dB)
+    └── IndexedDB Caching
 ```
 
 ### Audio Initialization Flow
@@ -85,6 +127,13 @@ AudioManager (Singleton)
 3. Synthesizers created and connected
 4. LFO automation begins
 5. Ambient drone fades in (2s attack)
+
+### Voice Playback
+
+- ElevenLabs text-to-speech for whispers
+- Subtle audio ducking (-2dB) during voice playback
+- IndexedDB caching for persistent audio storage
+- Sequential playback queue for natural pacing
 
 ## Data Flow
 
@@ -105,6 +154,14 @@ User Input → Validation → Supabase Insert → Moderation → Approval → Di
 - RLS policy allows public reads of `approved: true` only
 - Manual moderation required via Supabase dashboard
 
+### Whispers Chamber
+
+```
+AI Generation → Text Display → Voice Generation → Caching → Playback
+     ↓
+Curated Pool (fallback)
+```
+
 ## Animation Strategy
 
 ### Framer Motion Patterns
@@ -120,6 +177,7 @@ User Input → Validation → Supabase Insert → Moderation → Approval → Di
 - `layout` animations only when necessary
 - Staggered delays to distribute render cost
 - `AnimatePresence` to cleanup unmounted components
+- Code splitting for mode components
 
 ## Styling Architecture
 
@@ -139,6 +197,13 @@ fontFamily: {
   serif: '--font-eb-garamond', // Author mode
   mono: '--font-jetbrains-mono' // Lab mode
 }
+
+spacing: {
+  // 8px-based scale
+  '1': '0.25rem',  // 4px
+  '2': '0.5rem',   // 8px
+  // ... up to '128'
+}
 ```
 
 ### CSS Custom Properties
@@ -147,7 +212,7 @@ In `globals.css`:
 
 ```css
 :root {
-  --grain-opacity: 0.03;
+  --grain-opacity: 0.015;
   --transition-prism: 800ms cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 ```
@@ -159,12 +224,13 @@ Used for consistent animation timing across components.
 ### Separation of Concerns
 
 - **`/app`**: Next.js routing, layouts, global styles
+- **`/actions`**: Server Actions (AI, voice generation)
 - **`/components`**: Reusable UI components
-  - `/canvas`: Visual/interactive (EchoChamber)
+  - `/canvas`: Visual/interactive (EchoChamber, WhispersChamber)
   - `/modes`: The three view modes
-  - Root level: Shared (Landing, AntiPortfolio)
+  - Root level: Shared (Landing, AntiPortfolio, VoiceSelector)
 - **`/contexts`**: React Context providers (ViewMode)
-- **`/lib`**: Utilities, clients (audio, supabase)
+- **`/lib`**: Utilities, clients (audio, supabase, voice, whispers)
 
 ### Naming Conventions
 
@@ -228,18 +294,21 @@ try {
 - Modes use `AnimatePresence` with `mode="wait"` to prevent simultaneous renders
 - Echo Chamber entries use `position: absolute` to avoid layout thrashing
 - Grain overlay uses `pointer-events: none` to prevent interaction cost
+- Mode components are lazy-loaded with `dynamic` imports
 
 ### Audio
 
 - Synthesizers created once at initialization, reused for all sounds
 - No audio file loading (all synthesis), reducing network overhead
 - Ambient drone uses single noise source with efficient filtering
+- Voice audio cached in IndexedDB to reduce API calls
 
 ### Bundle Size
 
 - Next.js code splitting per route (automatic)
 - Framer Motion tree-shaking via named imports
 - Tone.js is large (~200KB gzipped) - consider lazy loading if needed
+- Mode components dynamically imported
 
 ## Security Considerations
 
@@ -253,7 +322,14 @@ try {
 
 - Echo text limited to 100 characters (enforced both client & DB)
 - XSS prevention via React's automatic escaping
+- Input sanitization for AI prompts
 - No user-uploaded files (eliminates entire class of vulnerabilities)
+
+### API Keys
+
+- All API keys stored in environment variables
+- Server-side only (except `NEXT_PUBLIC_*` which are safe to expose)
+- No hardcoded secrets in codebase
 
 ## Future Enhancements
 
@@ -265,6 +341,7 @@ try {
 4. **Custom mode themes**: User-selectable color schemes
 5. **Analytics**: Privacy-respecting usage tracking
 6. **A11y improvements**: Reduced motion support, better ARIA labels
+7. **Voice customization**: More voice options and parameters
 
 ---
 

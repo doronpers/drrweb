@@ -1,24 +1,81 @@
-# Supabase Setup Guide - Step by Step
+# Setup Guide
 
-This guide will walk you through setting up Supabase for the Echo Chamber feature. **Don't worry - it's optional!** Your site works fine without it (it just uses mock data).
+Complete setup instructions for the DRR Web interactive installation.
 
----
+## Prerequisites
 
-## 🎯 Quick Overview
+- Node.js 18+ and npm
+- Git (for cloning the repository)
 
-Supabase is a free database service. We're using it to store and display messages in the "Echo Chamber" feature. Here's what we need to do:
+## Quick Start
 
-1. Create a Supabase account and project
-2. Create a database table
-3. Set up security rules
-4. Get your API keys
-5. Add keys to your project
+### 1. Install Dependencies
 
-**Time needed:** ~10 minutes
+```bash
+npm install
+```
 
----
+**Note:** If you encounter npm registry issues (e.g., custom registry errors), you can use the setup script:
 
-## Step 1: Create Supabase Account & Project
+```bash
+./setup.sh
+```
+
+Or manually set the registry:
+
+```bash
+npm install --registry=https://registry.npmjs.org/
+```
+
+### 2. Configure Environment Variables
+
+Create a `.env.local` file in the project root:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Edit `.env.local` with your credentials:
+
+```env
+# Optional: For Echo Chamber (Supabase backend)
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key
+
+# Optional: For AI-powered intent detection (choose one):
+# Option 1: Anthropic Claude (recommended)
+ANTHROPIC_API_KEY=your_anthropic_api_key
+
+# Option 2: Vercel AI Gateway (fallback)
+AI_GATEWAY_API_KEY=your_vercel_ai_gateway_key
+
+# Optional: For voice generation (ElevenLabs)
+ELEVENLABS_API_KEY=your_elevenlabs_api_key
+```
+
+**Get API Keys:**
+- **Anthropic**: https://console.anthropic.com/ → API Keys
+- **Vercel AI Gateway**: Vercel Dashboard → AI Gateway section
+- **ElevenLabs**: https://elevenlabs.io → Profile → API Keys
+
+**Note:** 
+- Without an AI API key, the system falls back to keyword matching (still functional)
+- Without ElevenLabs API key, whispers will display as text only
+- Without Supabase, the Echo Chamber uses mock data
+
+### 3. Run Development Server
+
+```bash
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Supabase Setup (Optional)
+
+The Echo Chamber feature requires a Supabase backend. If you skip this, the site will work with mock data.
+
+### Step 1: Create Supabase Account & Project
 
 1. **Go to [supabase.com](https://supabase.com)**
 
@@ -37,9 +94,7 @@ Supabase is a free database service. We're using it to store and display message
 5. **Click "Create new project"**
    - ⏳ Wait 2-3 minutes for database to initialize
 
----
-
-## Step 2: Create the Database Table
+### Step 2: Create the Database Table
 
 Once your project is ready:
 
@@ -80,9 +135,7 @@ WITH CHECK (true);
 
 ✅ **Table created!**
 
----
-
-## Step 3: Get Your API Keys
+### Step 3: Get Your API Keys
 
 1. **Go to Project Settings** (gear icon in left sidebar)
 
@@ -97,13 +150,11 @@ WITH CHECK (true);
 
 4. **Copy both values** (keep them handy!)
 
----
+### Step 4: Add Keys to Your Project
 
-## Step 4: Add Keys to Your Project
+#### For Local Development
 
-### Option A: For Local Development
-
-1. **Create a file called `.env.local`** in your project root (same folder as `package.json`)
+1. **Edit `.env.local`** in your project root
 
 2. **Add these two lines** (replace with YOUR values):
 
@@ -128,7 +179,7 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_xxxxxxxxxxxxx
    npm run dev
    ```
 
-### Option B: For Production (Vercel/Netlify/etc.)
+#### For Production
 
 When you deploy, add these same environment variables in your hosting platform:
 
@@ -147,9 +198,7 @@ When you deploy, add these same environment variables in your hosting platform:
 1. Site settings → Environment variables
 2. Add both variables (same as above)
 
----
-
-## Step 5: Test It Out
+### Step 5: Test It Out
 
 1. **Start your dev server**:
    ```bash
@@ -168,9 +217,7 @@ When you deploy, add these same environment variables in your hosting platform:
    - Go to Table Editor → `echoes` table
    - You should see your message with `approved: false`
 
----
-
-## Step 6: Approve Messages (Moderation)
+### Step 6: Approve Messages (Moderation)
 
 Messages need to be approved before they show publicly:
 
@@ -186,9 +233,31 @@ Messages need to be approved before they show publicly:
 
 6. **Refresh your website** - the message should now appear!
 
----
+### Step 7: Verify Table Setup
 
-## 🐛 Troubleshooting
+If you encounter "requested path is invalid" errors:
+
+1. **Check if table exists**: Table Editor → Look for `echoes` table
+
+2. **Verify table settings**:
+   - Table name is exactly `echoes` (lowercase)
+   - Schema is `public`
+   - RLS is enabled (you'll see a shield icon)
+
+3. **Test connection**:
+   ```bash
+   # Restart dev server
+   npm run dev
+   ```
+   
+   Check browser console for detailed error messages.
+
+4. **Quick test query** (in Supabase SQL Editor):
+   ```sql
+   SELECT * FROM public.echoes WHERE approved = true;
+   ```
+
+## Troubleshooting
 
 ### "Supabase not configured" warning in console
 - ✅ This is normal if you haven't set up `.env.local` yet
@@ -202,7 +271,7 @@ Messages need to be approved before they show publicly:
 
 ### Environment variables not working
 - Make sure file is named `.env.local` (not `.env` or `.env.local.txt`)
-- Make sure variables start with `NEXT_PUBLIC_`
+- Make sure variables start with `NEXT_PUBLIC_` for client-side access
 - Restart your dev server after adding variables
 - No quotes around values
 - No spaces around `=`
@@ -218,9 +287,12 @@ Messages need to be approved before they show publicly:
 - The publishable key is safe to use in the browser (with RLS enabled)
 - Make sure you're in the right project
 
----
+### Table exists but still getting error
+- Make sure RLS is enabled and policies are created
+- Re-run the SQL from Step 2
+- Check that table name is exactly `echoes` (lowercase)
 
-## 📋 Quick Reference
+## Quick Reference
 
 **Where to find things in Supabase:**
 
@@ -238,36 +310,20 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your_publishable_key_here
 
 **Note:** Even though Supabase calls it a "publishable key" in the dashboard, the environment variable name is still `NEXT_PUBLIC_SUPABASE_ANON_KEY` (this is what the Supabase client library expects).
 
----
+## Setup Checklist
 
-## ✅ Checklist
-
-- [ ] Created Supabase account
-- [ ] Created new project
-- [ ] Created `echoes` table (via SQL)
-- [ ] Enabled RLS
-- [ ] Created read policy
-- [ ] Created insert policy
-- [ ] Got Project URL from Settings → API
-- [ ] Got publishable key from Settings → API
-- [ ] Created `.env.local` file
-- [ ] Added both environment variables
-- [ ] Restarted dev server
-- [ ] Tested submitting a message
-- [ ] Approved a message in Supabase
-- [ ] Saw message appear on site
-
----
-
-## 🆘 Still Stuck?
-
-1. **Check the browser console** for specific error messages
-2. **Check Supabase logs**: Dashboard → Logs
-3. **Verify your SQL ran successfully** (should say "Success")
-4. **Make sure `.env.local` is in the project root** (same folder as `package.json`)
-5. **Remember**: The site works WITHOUT Supabase - it's optional!
+- [ ] Node.js 18+ installed
+- [ ] Dependencies installed (`npm install`)
+- [ ] `.env.local` file created
+- [ ] API keys added (optional)
+- [ ] Supabase account created (optional)
+- [ ] Supabase project created (optional)
+- [ ] `echoes` table created (optional)
+- [ ] RLS enabled and policies created (optional)
+- [ ] Supabase API keys added to `.env.local` (optional)
+- [ ] Dev server running (`npm run dev`)
+- [ ] Site accessible at http://localhost:3000
 
 ---
 
 **Need more help?** Check the [Supabase docs](https://supabase.com/docs) or the comments in `lib/supabase.ts`.
-

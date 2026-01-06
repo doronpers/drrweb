@@ -13,7 +13,7 @@
 
 import { generateText } from 'ai';
 import { type ViewMode, type TimeOfDay, type WhisperMood } from '@/lib/whispers';
-import { getAIGateway, isAIGatewayAvailable } from '@/lib/ai-gateway';
+import { getModel, isAIGatewayAvailable } from '@/lib/ai-gateway';
 
 // ====================================
 // TYPE DEFINITIONS
@@ -80,12 +80,17 @@ const TIME_PROMPTS: Record<TimeOfDay, string> = {
  */
 /**
  * Sanitize user input to prevent prompt injection
+ * Removes potentially dangerous characters and limits length
  */
 function sanitizeInput(input: string): string {
   return input
-    .replace(/[<>{}[\]]/g, '') // Remove brackets
-    .replace(/\n/g, ' ') // Replace newlines with spaces
-    .slice(0, 200) // Limit length
+    .replace(/[<>{}[\]]/g, '') // Remove brackets that could be used for injection
+    // Remove control characters (Unicode escapes) - intentional for security
+    // eslint-disable-next-line no-control-regex
+    .replace(/[\u0000-\u001F\u007F-\u009F]/g, '')
+    .replace(/\n{2,}/g, '\n') // Limit consecutive newlines
+    .replace(/\n/g, ' ') // Replace remaining newlines with spaces
+    .slice(0, 200) // Limit length to prevent abuse
     .trim();
 }
 
@@ -102,19 +107,11 @@ export async function generateWhisper(
     .slice(0, 10) // Limit number
     .map(w => sanitizeInput(w));
 
-  // Check if gateway is available
+  // Check if AI provider is available
   if (!isAIGatewayAvailable()) {
     return {
       success: false,
-      error: 'AI generation not configured (AI_GATEWAY_API_KEY not set)',
-    };
-  }
-
-  const gateway = getAIGateway();
-  if (!gateway) {
-    return {
-      success: false,
-      error: 'AI Gateway not initialized',
+      error: 'AI generation not configured (ANTHROPIC_API_KEY or AI_GATEWAY_API_KEY not set)',
     };
   }
 
@@ -135,8 +132,9 @@ Generate ONE short whisper fragment. Just the text, no quotes, no explanation.`;
     const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 
     try {
+      const model = getModel('claude-3-5-sonnet-20241022');
       const { text } = await generateText({
-        model: gateway('google/gemini-1.5-flash'), // Same model as intent detection
+        model: model as any, // Type assertion needed for V2/V3 compatibility
         system: SYSTEM_PROMPT,
         prompt: contextPrompt + '\n\n(Keep response under 20 words)',
         temperature: 0.9, // Higher creativity for varied whispers

@@ -46,6 +46,8 @@ export default function Author() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8 }}
+      role="article"
+      aria-label="Editorial content and narrative"
     >
       {/* ====================================
           EDITORIAL LAYOUT
@@ -92,12 +94,9 @@ export default function Author() {
               me about <em>structure</em>—how meaning is built through pattern,
               repetition, and subversion. Entrepreneurship taught me about{' '}
               <em>systems</em>—how small decisions compound, how culture shapes
-              product, how trust is the ultimate currency.
-            </p>
-
-            <p>
-              These aren't separate practices. They're lenses that refract the same
-              questions: <em>How do we make sense? How do we communicate that sense?
+              product, how trust is the ultimate currency. These aren't separate
+              practices. They're lenses that refract the same questions:{' '}
+              <em>How do we make sense? How do we communicate that sense?
               How do we build structures that allow others to make their own?</em>
             </p>
           </section>
@@ -114,7 +113,7 @@ export default function Author() {
                 <strong>curation</strong>. Not the social media kind—the curatorial
                 kind. My students learn to ask: <em>What is the through-line? What
                 is the argument my work is making, even when I'm not speaking?</em>
-                Over multiple semesters, I've worked with students from diverse
+                Since 2010, I've worked with students from diverse
                 backgrounds—designers, developers, artists, writers—helping them
                 discover the patterns that connect their work and the stories that
                 make their portfolios compelling.
@@ -190,33 +189,6 @@ export default function Author() {
             </div>
           </motion.section>
 
-          {/* Essays Section */}
-          <section>
-            <h2 className="text-3xl font-light mb-8">Selected Writing</h2>
-            <div className="space-y-6">
-              <EssayLink
-                title="The Pedagogy of Curation"
-                date="2024"
-                summary="How teaching portfolio construction changed how I think about
-                  learning itself."
-                onMouseEnter={handleHover}
-              />
-              <EssayLink
-                title="Listening Forensically"
-                date="2023"
-                summary="What voice fraud detection taught me about trust, technology,
-                  and the limits of automation."
-                onMouseEnter={handleHover}
-              />
-              <EssayLink
-                title="The Texture of Time"
-                date="2023"
-                summary="Field recording as a practice of attention. On capturing what
-                  can't be photographed."
-                onMouseEnter={handleHover}
-              />
-            </div>
-          </section>
 
           {/* Background */}
           <motion.section
@@ -279,29 +251,3 @@ function MicroMotive({ title, text }: { title: string; text: string }) {
   );
 }
 
-function EssayLink({
-  title,
-  date,
-  summary,
-  onMouseEnter,
-}: {
-  title: string;
-  date: string;
-  summary: string;
-  onMouseEnter?: () => void;
-}) {
-  return (
-    <motion.a
-      href="#"
-      className="block border-l-2 border-author-accent/30 pl-6 py-3 hover:border-author-accent transition-colors"
-      whileHover={{ x: 8 }}
-      onMouseEnter={onMouseEnter}
-    >
-      <div className="flex justify-between items-baseline mb-2">
-        <h3 className="text-xl font-semibold">{title}</h3>
-        <span className="text-sm text-author-text/50 font-sans">{date}</span>
-      </div>
-      <p className="text-author-text/70 font-light">{summary}</p>
-    </motion.a>
-  );
-}

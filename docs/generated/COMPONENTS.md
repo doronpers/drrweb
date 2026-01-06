@@ -1,6 +1,6 @@
 # Component Index
 
-_Generated: 2025-11-28T23:05:28.572Z_
+_Generated: 2026-01-06T14:19:39.890Z_
 
 | Component | File | Client | Props Type |
 |-----------|------|--------|------------|
@@ -10,6 +10,8 @@ _Generated: 2025-11-28T23:05:28.572Z_
 | `AntiPortfolio` | `components/AntiPortfolio.tsx` | ✅ | `-` |
 | `FailuresLog` | `components/FailuresLog.tsx` | ✅ | `-` |
 | `Landing` | `components/Landing.tsx` | ✅ | `-` |
+| `OnboardingHint` | `components/OnboardingHint.tsx` | ✅ | `OnboardingHintProps` |
+| `VoiceSelector` | `components/VoiceSelector.tsx` | ✅ | `-` |
 | `EchoChamber` | `components/canvas/EchoChamber.tsx` | ✅ | `-` |
 | `EchoEntry` | `components/canvas/EchoEntry.tsx` | ✅ | `EchoEntryProps` |
 | `Whisper` | `components/canvas/Whisper.tsx` | ✅ | `-` |

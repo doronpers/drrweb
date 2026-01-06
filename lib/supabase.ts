@@ -169,9 +169,16 @@ export async function submitEcho(text: string): Promise<boolean> {
     return false;
   }
 
+  // Additional server-side validation (client-side validation already done)
+  const sanitized = text.trim();
+  if (!sanitized || sanitized.length > 100) {
+    console.error('Invalid echo text: length or content validation failed');
+    return false;
+  }
+
   try {
     const { error } = await supabase.from('echoes').insert({
-      text: text.trim(),
+      text: sanitized,
       approved: false, // Requires manual approval
     });
 

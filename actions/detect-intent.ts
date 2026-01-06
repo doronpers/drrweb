@@ -3,12 +3,12 @@
  * GHOST ROUTER - INTENT DETECTION SERVER ACTION
  * ====================================
  *
- * This Server Action uses Vercel AI Gateway with Google's Gemini 1.5 Flash model
- * to analyze user input and route to the appropriate view mode.
+ * This Server Action uses Anthropic Claude (or Vercel AI Gateway) to analyze
+ * user input and route to the appropriate view mode.
  *
  * Philosophy:
  * - Generate routing data, not chat responses
- * - Fast inference (Flash model)
+ * - Fast inference with Claude Sonnet
  * - Audio parameters derived from intent
  * - Fallback to keyword matching if AI unavailable
  *
@@ -21,7 +21,7 @@
 import { generateObject } from 'ai';
 import { z } from 'zod';
 import { ViewMode, parseIntent } from '@/contexts/ViewModeContext';
-import { getAIGateway, isAIGatewayAvailable } from '@/lib/ai-gateway';
+import { getModel, isAIGatewayAvailable } from '@/lib/ai-gateway';
 
 // ====================================
 // TYPE DEFINITIONS
@@ -114,10 +114,10 @@ export async function detectIntent(input: string): Promise<IntentResponse> {
     return result;
   }
 
-  // Multiple words: Use AI Gateway for natural language understanding
+  // Multiple words: Use AI for natural language understanding
   if (!isAIGatewayAvailable()) {
     if (process.env.NODE_ENV === 'development') {
-      console.warn('⚠️  AI_GATEWAY_API_KEY not set. Falling back to keyword matching.');
+      console.warn('⚠️  No AI API key set (ANTHROPIC_API_KEY or AI_GATEWAY_API_KEY). Falling back to keyword matching.');
     }
     const mode = parseIntent(trimmedInput); // returns ViewMode (may include "landing")
     const fallbackResult = createFallbackResponse(toNarrowMode(mode));
@@ -127,33 +127,21 @@ export async function detectIntent(input: string): Promise<IntentResponse> {
     return fallbackResult;
   }
 
-  const gateway = getAIGateway();
-  if (!gateway) {
-    if (process.env.NODE_ENV === 'development') {
-      console.warn('⚠️ AI Gateway not available, falling back to keyword matching.');
-    }
-    const mode = parseIntent(trimmedInput);
-    const fallbackResult = createFallbackResponse(toNarrowMode(mode));
-    if (process.env.NODE_ENV === 'development') {
-      console.log('📝 Keyword matching result:', fallbackResult.targetMode);
-    }
-    return fallbackResult;
-  }
-
   try {
-    // Call AI Gateway with Gemini model via structured output
+    // Use Anthropic Claude (or Gateway) for intent detection
     if (process.env.NODE_ENV === 'development') {
-      console.log('🤖 Multiple words detected, using Vercel AI Gateway for intent detection...');
+      console.log('🤖 Multiple words detected, using AI for intent detection...');
     }
+    const model = getModel('claude-3-5-sonnet-20241022');
     const { object } = await generateObject({
-      model: gateway('google/gemini-1.5-flash'),
+      model: model as any, // Type assertion needed for V2/V3 compatibility
       schema: IntentSchema,
       prompt: buildPrompt(trimmedInput),
       temperature: 0.3, // Lower temperature for more consistent routing
     });
 
     if (process.env.NODE_ENV === 'development') {
-      console.log('✅ AI Gateway intent detected:', object.targetMode);
+      console.log('✅ AI intent detected:', object.targetMode);
     }
     return object;
 

@@ -2,7 +2,7 @@
 
 > Interactive Installation - Personal Website with The Prism Architecture
 
-**Generated:** 2025-11-28T23:05:28.572Z
+**Generated:** 2026-01-06T14:19:39.890Z
 
 ---
 
@@ -19,10 +19,10 @@
 
 | Metric | Count |
 |--------|-------|
-| Total Modules | 20 |
-| React Components | 22 |
-| Functions | 14 |
-| Types/Interfaces | 9 |
+| Total Modules | 26 |
+| React Components | 24 |
+| Functions | 22 |
+| Types/Interfaces | 10 |
 
 ## Components
 
@@ -30,7 +30,7 @@
 
 `Default Export`  
 
-**File:** `app/layout.tsx` (line 79)
+**File:** `app/layout.tsx` (line 80)
 
 **Props Type:** `React`
 
@@ -39,7 +39,7 @@
 
 `Client` `Default Export`  
 
-**File:** `app/page.tsx` (line 31)
+**File:** `app/page.tsx` (line 43)
 
 **Hooks Used:** `useViewMode`
 
@@ -48,7 +48,7 @@
 
 `Client`  
 
-**File:** `app/page.tsx` (line 130)
+**File:** `app/page.tsx` (line 159)
 
 **Props Type:** `ModeButtonProps`
 
@@ -75,16 +75,36 @@
 
 `Client` `Default Export`  
 
-**File:** `components/Landing.tsx` (line 24)
+**File:** `components/Landing.tsx` (line 25)
 
 **Hooks Used:** `useViewMode`, `useState`, `useCallback`, `useEffect`
+
+
+### OnboardingHint
+
+`Client` `Default Export`  
+
+**File:** `components/OnboardingHint.tsx` (line 22)
+
+**Props Type:** `OnboardingHintProps`
+
+**Hooks Used:** `useState`, `useEffect`
+
+
+### VoiceSelector
+
+`Client` `Default Export`  
+
+**File:** `components/VoiceSelector.tsx` (line 31)
+
+**Hooks Used:** `useState`, `useEffect`, `useCallback`
 
 
 ### EchoChamber
 
 `Client` `Default Export`  
 
-**File:** `components/canvas/EchoChamber.tsx` (line 102)
+**File:** `components/canvas/EchoChamber.tsx` (line 114)
 
 **Hooks Used:** `useState`, `useEffect`, `useCallback`
 
@@ -93,7 +113,7 @@
 
 `Client`  
 
-**File:** `components/canvas/EchoEntry.tsx` (line 22)
+**File:** `components/canvas/EchoEntry.tsx` (line 60)
 
 **Props Type:** `EchoEntryProps`
 
@@ -104,7 +124,7 @@
 
 `Client`  
 
-**File:** `components/canvas/Whisper.tsx` (line 65)
+**File:** `components/canvas/Whisper.tsx` (line 127)
 
 **Hooks Used:** `useMemo`
 
@@ -113,7 +133,7 @@
 
 `Client` `Default Export`  
 
-**File:** `components/canvas/WhispersChamber.tsx` (line 66)
+**File:** `components/canvas/WhispersChamber.tsx` (line 67)
 
 **Props Type:** `WhispersChamberProps`
 
@@ -133,7 +153,7 @@
 
 `Client`  
 
-**File:** `components/modes/Architect.tsx` (line 294)
+**File:** `components/modes/Architect.tsx` (line 296)
 
 **Props Type:** `SectionProps`
 
@@ -142,7 +162,7 @@
 
 `Client`  
 
-**File:** `components/modes/Architect.tsx` (line 319)
+**File:** `components/modes/Architect.tsx` (line 321)
 
 **Props Type:** `PositionProps`
 
@@ -151,7 +171,7 @@
 
 `Client`  
 
-**File:** `components/modes/Architect.tsx` (line 365)
+**File:** `components/modes/Architect.tsx` (line 367)
 
 **Props Type:** `CompetencyCardProps`
 
@@ -160,7 +180,7 @@
 
 `Client`  
 
-**File:** `components/modes/Architect.tsx` (line 389)
+**File:** `components/modes/Architect.tsx` (line 391)
 
 **Props Type:** `React`
 
@@ -169,7 +189,7 @@
 
 `Client`  
 
-**File:** `components/modes/Architect.tsx` (line 407)
+**File:** `components/modes/Architect.tsx` (line 409)
 
 **Props Type:** `ContactItemProps`
 
@@ -178,7 +198,7 @@
 
 `Client`  
 
-**File:** `components/modes/Architect.tsx` (line 428)
+**File:** `components/modes/Architect.tsx` (line 430)
 
 **Props Type:** `MetricProps`
 
@@ -196,7 +216,7 @@
 
 `Client`  
 
-**File:** `components/modes/Author.tsx` (line 273)
+**File:** `components/modes/Author.tsx` (line 275)
 
 **Props Type:** `string`
 
@@ -214,7 +234,7 @@
 
 `Client`  
 
-**File:** `components/modes/Lab.tsx` (line 414)
+**File:** `components/modes/Lab.tsx` (line 389)
 
 **Props Type:** `string`
 
@@ -265,6 +285,79 @@ parseIntent(input: string): ViewMode
 **Returns:** `ViewMode`
 
 
+### getModel()
+
+`exported`  
+
+**File:** `lib/ai-gateway.ts` (line 91)
+
+```typescript
+getModel(
+  modelName: string = 'claude-3-5-sonnet-20241022'
+): ReturnType<NonNullable<typeof anthropicProvider>> | ReturnType<NonNullable<typeof gateway>>
+```
+
+#### Parameters
+
+| Name | Type | Optional | Default | Description |
+|------|------|----------|---------|-------------|
+| `modelName` | `string` | ✅ | `'claude-3-5-sonnet-20241022'` | - |
+
+**Returns:** `ReturnType<NonNullable<typeof anthropicProvider>> | ReturnType<NonNullable<typeof gateway>>`
+
+
+### getActiveProvider()
+
+`exported`  
+
+**File:** `lib/ai-gateway.ts` (line 111)
+
+```typescript
+getActiveProvider(): AIProvider
+```
+
+**Returns:** `AIProvider`
+
+
+### isAIGatewayAvailable()
+
+`exported`  
+
+**File:** `lib/ai-gateway.ts` (line 118)
+
+```typescript
+isAIGatewayAvailable(): boolean
+```
+
+**Returns:** `boolean`
+
+
+### getAnthropicProvider()
+
+`exported`  
+
+**File:** `lib/ai-gateway.ts` (line 125)
+
+```typescript
+getAnthropicProvider(): ReturnType<typeof createAnthropic> | null
+```
+
+**Returns:** `ReturnType<typeof createAnthropic> | null`
+
+
+### getAIGateway()
+
+`exported`  
+
+**File:** `lib/ai-gateway.ts` (line 132)
+
+```typescript
+getAIGateway(): ReturnType<typeof createGateway> | null
+```
+
+**Returns:** `ReturnType<typeof createGateway> | null`
+
+
 ### getTypography()
 
 `exported`  
@@ -284,6 +377,25 @@ getTypography(mode: ViewMode): TypographyConfig
 **Returns:** `TypographyConfig`
 
 
+### getFocusRing()
+
+`exported`  
+
+**File:** `lib/styles.ts` (line 99)
+
+```typescript
+getFocusRing(mode: ViewMode): string
+```
+
+#### Parameters
+
+| Name | Type | Optional | Default | Description |
+|------|------|----------|---------|-------------|
+| `mode` | `ViewMode` | ❌ | `-` | - |
+
+**Returns:** `string`
+
+
 ### fetchEchoes()
 
 `async` `exported`  
@@ -301,7 +413,7 @@ fetchEchoes(): Promise<Echo[]>
 
 `async` `exported`  
 
-**File:** `lib/supabase.ts` (line 159)
+**File:** `lib/supabase.ts` (line 162)
 
 ```typescript
 submitEcho(text: string): Promise<boolean>
@@ -358,7 +470,7 @@ getAudioParamsForMode(mode: ViewMode): SoundscapeParams | null
 
 `exported`  
 
-**File:** `lib/useSoundscape.ts` (line 175)
+**File:** `lib/useSoundscape.ts` (line 179)
 
 ```typescript
 validateAudioParams(params: SoundscapeParams): boolean
@@ -419,7 +531,7 @@ getContextualWhispers(
 
 `async` `exported`  
 
-**File:** `actions/detect-intent.ts` (line 105)
+**File:** `actions/detect-intent.ts` (line 85)
 
 ```typescript
 detectIntent(input: string): Promise<IntentResponse>
@@ -438,7 +550,7 @@ detectIntent(input: string): Promise<IntentResponse>
 
 `async` `exported`  
 
-**File:** `actions/detect-intent.ts` (line 238)
+**File:** `actions/detect-intent.ts` (line 224)
 
 ```typescript
 testIntentDetection(inputs: string[]): Promise<void>
@@ -453,11 +565,47 @@ testIntentDetection(inputs: string[]): Promise<void>
 **Returns:** `Promise<void>`
 
 
+### generateVoice()
+
+`async` `exported`  
+
+**File:** `actions/generate-voice.ts` (line 3)
+
+```typescript
+generateVoice(
+  text: string,
+  voiceId: string
+): Promise<GenerateVoiceResult>
+```
+
+#### Parameters
+
+| Name | Type | Optional | Default | Description |
+|------|------|----------|---------|-------------|
+| `text` | `string` | ❌ | `-` | - |
+| `voiceId` | `string` | ❌ | `-` | - |
+
+**Returns:** `Promise<GenerateVoiceResult>`
+
+
+### getAvailableVoices()
+
+`async` `exported`  
+
+**File:** `actions/generate-voice.ts` (line 170)
+
+```typescript
+getAvailableVoices(): Promise<
+```
+
+**Returns:** `Promise<`
+
+
 ### generateWhisper()
 
 `async` `exported`  
 
-**File:** `actions/generate-whisper.ts` (line 109)
+**File:** `actions/generate-whisper.ts` (line 97)
 
 ```typescript
 generateWhisper(
@@ -478,7 +626,7 @@ generateWhisper(
 
 `async` `exported`  
 
-**File:** `actions/generate-whisper.ts` (line 225)
+**File:** `actions/generate-whisper.ts` (line 207)
 
 ```typescript
 generateWhisperBatch(
@@ -614,12 +762,28 @@ type IntentResponse = z.infer<typeof IntentSchema>
 ```
 
 
+### GenerateVoiceResult
+
+`interface`
+
+**File:** `actions/generate-voice.ts` (line 43)
+
+#### Properties
+
+| Name | Type | Optional | Description |
+|------|------|----------|-------------|
+| `success` | `boolean` | ❌ | - |
+| `audioData` | `ArrayBuffer` | ✅ | - |
+| `audioUrl` | `string` | ✅ | - |
+| `error` | `string` | ✅ | - |
+
+
 
 ## Constants
 
 ### metadata
 
-**File:** `app/layout.tsx` (line 49)
+**File:** `app/layout.tsx` (line 50)
 
 **Type:** `Metadata`
 
@@ -662,7 +826,7 @@ const KEYWORD_MAP = {
 
 ### audioManager
 
-**File:** `lib/audio.ts` (line 542)
+**File:** `lib/audio.ts` (line 594)
 
 ```typescript
 const audioManager = new AudioManager()
@@ -684,14 +848,27 @@ const animations = {
 
 ### transitions
 
-**File:** `lib/styles.ts` (line 128)
+**File:** `lib/styles.ts` (line 144)
 
 ```typescript
 const transitions = {
-  // Smooth, theatrical
+  // Smooth, theatrical (for major transitions)
   smooth: {
     duration: 0.6,
-    ease: [0.645, 0.045, 0.355, 1], // Cust...
+    ease: [0.645, 0...
+```
+
+
+### spacing
+
+**File:** `lib/styles.ts` (line 186)
+
+```typescript
+const spacing = {
+  xs: 'space-y-2',      // 8px
+  sm: 'space-y-4',       // 16px
+  md: 'space-y-6',       // 24px
+ ...
 ```
 
 
@@ -704,6 +881,15 @@ const supabase = envVars
   ? createClient(envVars.url, envVars.key, {
       auth: {
         persistSession: false, //...
+```
+
+
+### voiceManager
+
+**File:** `lib/voice.ts` (line 352)
+
+```typescript
+const voiceManager = new VoiceManager()
 ```
 
 
@@ -776,6 +962,22 @@ Includes:
 **Exports:** `default`
 
 
+### ErrorBoundary
+
+`Client`
+
+**File:** `components/ErrorBoundary.tsx`
+
+| Category | Count |
+|----------|-------|
+| Components | 0 |
+| Functions | 0 |
+| Types | 2 |
+| Constants | 0 |
+
+**Exports:** `ErrorBoundary`
+
+
 ### FailuresLog
 
 `Client`
@@ -808,6 +1010,38 @@ Includes:
 **Exports:** `default`
 
 
+### OnboardingHint
+
+`Client`
+
+**File:** `components/OnboardingHint.tsx`
+
+| Category | Count |
+|----------|-------|
+| Components | 1 |
+| Functions | 2 |
+| Types | 1 |
+| Constants | 0 |
+
+**Exports:** `default`
+
+
+### VoiceSelector
+
+`Client`
+
+**File:** `components/VoiceSelector.tsx`
+
+| Category | Count |
+|----------|-------|
+| Components | 1 |
+| Functions | 2 |
+| Types | 1 |
+| Constants | 0 |
+
+**Exports:** `default`
+
+
 ### EchoChamber
 
 `Client`
@@ -833,8 +1067,8 @@ Includes:
 | Category | Count |
 |----------|-------|
 | Components | 1 |
-| Functions | 1 |
-| Types | 1 |
+| Functions | 2 |
+| Types | 2 |
 | Constants | 0 |
 
 **Exports:** `default`
@@ -849,7 +1083,7 @@ Includes:
 | Category | Count |
 |----------|-------|
 | Components | 1 |
-| Functions | 2 |
+| Functions | 3 |
 | Types | 1 |
 | Constants | 0 |
 
@@ -936,6 +1170,32 @@ Includes:
 **Exports:** `ViewMode`, `ViewModeProvider`, `useViewMode`, `MODE_CONFIG`, `KEYWORD_MAP`, `parseIntent`
 
 
+### ai-gateway
+
+====================================
+AI GATEWAY UTILITY - SHARED CONFIGURATION
+====================================
+
+Centralized configuration for AI providers.
+Supports both Anthropic (direct) and Vercel AI Gateway.
+Used by both intent detection and whisper generation.
+
+Priority:
+1. ANTHROPIC_API_KEY (direct Anthropic API)
+2. AI_GATEWAY_API_KEY (Vercel AI Gateway)
+
+**File:** `lib/ai-gateway.ts`
+
+| Category | Count |
+|----------|-------|
+| Components | 0 |
+| Functions | 6 |
+| Types | 1 |
+| Constants | 0 |
+
+**Exports:** `getModel`, `getActiveProvider`, `isAIGatewayAvailable`, `getAnthropicProvider`, `getAIGateway`
+
+
 ### audio
 
 ====================================
@@ -971,7 +1231,10 @@ TYPOGRAPHY & STYLE CONFIGURATION
 ====================================
 
 Centralized typography and style configuration for all view modes.
-Makes it easy to adjust hierarchy and maintain consistency.
+Following Dieter Rams principles: systematic, timeless, clear hierarchy.
+
+Typography scale uses Major Third ratio (1.25) for consistency.
+Spacing follows 8px base unit system.
 
 Usage:
   import { getTypography } from '@/lib/styles';
@@ -983,11 +1246,11 @@ Usage:
 | Category | Count |
 |----------|-------|
 | Components | 0 |
-| Functions | 1 |
+| Functions | 2 |
 | Types | 2 |
-| Constants | 2 |
+| Constants | 3 |
 
-**Exports:** `ViewMode`, `getTypography`, `animations`, `transitions`
+**Exports:** `ViewMode`, `getTypography`, `animations`, `transitions`, `getFocusRing`, `spacing`
 
 
 ### supabase
@@ -1077,6 +1340,32 @@ Usage:
 **Exports:** `useSoundscape`, `getAudioParamsForMode`, `validateAudioParams`
 
 
+### voice
+
+`Client`
+
+====================================
+VOICE MANAGER - ELEVENLABS PLAYBACK
+====================================
+
+Manages voice playback for whispers with:
+- Subtle audio ducking integration
+- IndexedDB caching for persistent storage
+- Sequential playback queue
+- Error handling and graceful degradation
+
+**File:** `lib/voice.ts`
+
+| Category | Count |
+|----------|-------|
+| Components | 0 |
+| Functions | 4 |
+| Types | 2 |
+| Constants | 1 |
+
+**Exports:** `voiceManager`
+
+
 ### whispers
 
 ====================================
@@ -1112,12 +1401,12 @@ Features:
 GHOST ROUTER - INTENT DETECTION SERVER ACTION
 ====================================
 
-This Server Action uses Vercel AI Gateway with Google's Gemini 1.5 Flash model
-to analyze user input and route to the appropriate view mode.
+This Server Action uses Anthropic Claude (or Vercel AI Gateway) to analyze
+user input and route to the appropriate view mode.
 
 Philosophy:
 - Generate routing data, not chat responses
-- Fast inference (Flash model)
+- Fast inference with Claude Sonnet
 - Audio parameters derived from intent
 - Fallback to keyword matching if AI unavailable
 
@@ -1134,6 +1423,22 @@ Output: { targetMode, audioParams }
 | Constants | 0 |
 
 **Exports:** `IntentResponse`
+
+
+### generate-voice
+
+`Server`
+
+**File:** `actions/generate-voice.ts`
+
+| Category | Count |
+|----------|-------|
+| Components | 0 |
+| Functions | 2 |
+| Types | 1 |
+| Constants | 0 |
+
+**Exports:** `GenerateVoiceResult`
 
 
 ### generate-whisper

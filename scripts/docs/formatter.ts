@@ -7,7 +7,6 @@
  */
 
 import type {
-  DocComment,
   TypeDefinition,
   FunctionDefinition,
   ComponentDefinition,

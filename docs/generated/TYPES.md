@@ -1,6 +1,6 @@
 # Type Index
 
-_Generated: 2025-11-28T23:05:28.572Z_
+_Generated: 2026-01-06T14:19:39.890Z_
 
 | Type | Kind | File |
 |------|------|------|
@@ -13,3 +13,4 @@ _Generated: 2025-11-28T23:05:28.572Z_
 | `Whisper` | `interface` | `lib/whispers.ts` |
 | `WhisperContext` | `interface` | `lib/whispers.ts` |
 | `IntentResponse` | `type` | `actions/detect-intent.ts` |
+| `GenerateVoiceResult` | `interface` | `actions/generate-voice.ts` |

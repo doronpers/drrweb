@@ -50,6 +50,8 @@ export default function Architect() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={transitions.smooth}
+      role="article"
+      aria-label="Professional profile and experience"
     >
       {/* ====================================
           GRID STRUCTURE WITH LAYOUT ANIMATIONS
@@ -68,7 +70,7 @@ export default function Architect() {
           </motion.h1>
           <motion.p
             layout="position"
-            className={`${styles.p} text-black/60 mt-2`}
+            className={`${styles.p} text-black/60 mt-4`}
           >
             Systems Architect • Sound Designer • Educator
           </motion.p>
@@ -89,17 +91,17 @@ export default function Architect() {
             <Section title="EXECUTIVE SUMMARY" onHover={handleHover}>
               <motion.div
                 layout="position"
-                className="space-y-4 leading-relaxed"
+                className="space-y-6 leading-relaxed"
                 variants={animations.staggerItem}
               >
-                <p className={`${styles.p} font-medium`}>
+                <p className={`${styles.h4} font-medium`}>
                   I improve <span className="font-bold">systems</span>,{' '}
                   <span className="font-bold">stories</span>, and the{' '}
                   <span className="font-bold">people</span> that tell them.
                 </p>
                 <p className={styles.p}>
                   Multi-domain expertise spanning sound design, technical writing,
-                  and entrepreneurship. Currently serving as acting president and
+                  and entrepreneurship. Currently serving as president and
                   chief technologist at Sonotheia.ai (voice fraud detection), while
                   teaching portfolio development at the university level.
                 </p>
@@ -110,9 +112,9 @@ export default function Architect() {
             <Section title="CURRENT POSITION" onHover={handleHover}>
               <motion.div layout className="space-y-6">
                 <Position
-                  title="Acting President & Chief Technology Officer"
+                  title="President & Chief Technology Officer"
                   company="Sonotheia.ai"
-                  description="Leading technical infrastructure and product development for voice fraud detection platform. Architecting ML-powered systems that analyze vocal biometrics to detect synthetic and manipulated audio. Responsible for full-stack development, system architecture, team leadership, and strategic direction. Building scalable solutions that balance security, performance, and user experience."
+                  description="Leading technical infrastructure and product development for voice fraud detection platform. Architecting ML-powered systems that analyze vocal biometrics to detect synthetic and manipulated audio. Responsible for full-stack development, system architecture, team leadership, and strategic direction. Finalizing operational infrastructure for full launch."
                   tags={['Voice AI', 'Machine Learning', 'Security', 'Full-Stack Development', 'Product Strategy']}
                   highlight
                   onHover={handleHover}
@@ -121,7 +123,7 @@ export default function Architect() {
                 <Position
                   title="Adjunct Instructor"
                   company="Portfolio Development Course"
-                  description="Teaching undergraduate and graduate students the art of professional portfolio construction. Curriculum focuses on narrative synthesis, strategic curation, and compelling presentation of creative and technical work. Students learn to identify through-lines, construct coherent arguments through project selection, and communicate their unique value proposition."
+                  description="Teaching undergraduate students the art of professional portfolio construction since 2010. Curriculum focuses on narrative synthesis, strategic curation, and compelling presentation of creative and technical work. Students learn to identify through-lines, construct coherent arguments through project selection, and communicate their unique value proposition."
                   tags={['Pedagogy', 'Narrative Design', 'Professional Development', 'Curriculum Design']}
                   onHover={handleHover}
                 />
@@ -148,10 +150,10 @@ export default function Architect() {
                   title="Sound Design & Audio"
                   items={[
                     'Field Recording & Location Sound',
-                    'Synthesis & Audio Processing',
+                    'Synthesis & Audio Processing (Tone.js, Max/MSP)',
                     'Spatial Audio & Ambisonics',
                     'Music Production & Composition',
-                    'Audio Post-Production',
+                    'Audio Post-Production (Reaper, Ableton Live)',
                   ]}
                   onHover={handleHover}
                 />
@@ -169,11 +171,11 @@ export default function Architect() {
                 <CompetencyCard
                   title="Software Development"
                   items={[
-                    'Full-Stack Web Development',
-                    'Machine Learning & AI',
-                    'Voice & Audio Processing',
+                    'Full-Stack Web Development (React, Next.js, TypeScript)',
+                    'Machine Learning & AI (TensorFlow, scikit-learn)',
+                    'Voice & Audio Processing (Web Audio API, Librosa)',
                     'API Design & Integration',
-                    'Database Architecture',
+                    'Database Architecture (PostgreSQL, Supabase)',
                   ]}
                   onHover={handleHover}
                 />
@@ -191,25 +193,6 @@ export default function Architect() {
               </motion.div>
             </Section>
 
-            {/* Education */}
-            <Section title="EDUCATION" onHover={handleHover}>
-              <motion.div layout className="space-y-4">
-                <motion.div
-                  layout
-                  className="border-l-4 border-black/20 pl-6 py-2"
-                >
-                  <motion.h3 layout="position" className={styles.h3}>
-                    Literature & Creative Writing
-                  </motion.h3>
-                  <motion.p
-                    layout="position"
-                    className={`${styles.p} text-black/70 font-medium mt-1`}
-                  >
-                    Focus on narrative structure, critical theory, and experimental forms
-                  </motion.p>
-                </motion.div>
-              </motion.div>
-            </Section>
           </motion.div>
 
           {/* Right Column - Contact & Quick Actions */}
@@ -233,32 +216,16 @@ export default function Architect() {
                   onMouseEnter={handleHover}
                 />
                 <ContactItem
-                  href="mailto:contact@example.com"
-                  label="Email"
-                  onMouseEnter={handleHover}
-                />
-                <ContactItem
                   href="https://www.linkedin.com/in/doronreizes"
                   label="LinkedIn"
                   onMouseEnter={handleHover}
                 />
                 <ContactItem
-                  href="https://github.com"
+                  href="https://github.com/doronpers"
                   label="GitHub"
                   onMouseEnter={handleHover}
                 />
               </motion.div>
-
-              {/* CTA */}
-              <motion.button
-                layout="position"
-                className="w-full mt-6 py-3 bg-white text-black font-bold tracking-wide transition-all duration-300"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onMouseEnter={handleHover}
-              >
-                DOWNLOAD CV
-              </motion.button>
             </motion.div>
 
             {/* Key Metrics */}
@@ -268,11 +235,14 @@ export default function Architect() {
             >
               <h3 className="text-xl font-bold mb-4">BY THE NUMBERS</h3>
               <motion.div layout className="space-y-4">
-                <Metric value="10+" label="Years Experience" />
+                <Metric value="20+" label="Years Experience" />
                 <Metric value="3" label="Domains Mastered" />
-                <Metric value="150+" label="Students Taught" />
+                <Metric value="40" label="Current Students" />
                 <Metric value="1" label="Startup Founded" />
               </motion.div>
+              <p className="text-xs text-black/40 mt-4 italic">
+                20+ years in audio (since 2005) • Teaching since 2010 • 3 domains mastered
+              </p>
             </motion.div>
           </motion.aside>
         </div>

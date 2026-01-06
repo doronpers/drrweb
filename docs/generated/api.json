@@ -1,13 +1,13 @@
 {
   "meta": {
-    "generatedAt": "2025-11-28T23:05:28.572Z",
+    "generatedAt": "2026-01-06T14:19:39.890Z",
     "projectName": "DRR Web",
     "projectDescription": "Interactive Installation - Personal Website with The Prism Architecture",
     "version": "1.0.0",
-    "totalModules": 20,
-    "totalComponents": 22,
-    "totalFunctions": 14,
-    "totalTypes": 9
+    "totalModules": 26,
+    "totalComponents": 24,
+    "totalFunctions": 22,
+    "totalTypes": 10
   },
   "modules": [
     {
@@ -42,6 +42,12 @@
           "names": [
             "ViewModeProvider"
           ]
+        },
+        {
+          "from": "@/components/ErrorBoundary",
+          "names": [
+            "ErrorBoundary"
+          ]
         }
       ],
       "exports": [
@@ -56,7 +62,7 @@
           "async": false,
           "exported": false,
           "filePath": "app/layout.tsx",
-          "lineNumber": 79,
+          "lineNumber": 80,
           "signature": "RootLayout({\n  children,\n}: {\n  children: React.ReactNode;\n})",
           "parameters": [
             {
@@ -75,13 +81,14 @@
           "isServer": false,
           "isDefault": true,
           "filePath": "app/layout.tsx",
-          "lineNumber": 79,
+          "lineNumber": 80,
           "propsType": "React",
           "hooks": [],
           "dependencies": [
             "next",
             "next/font/google",
-            "@/contexts/ViewModeContext"
+            "@/contexts/ViewModeContext",
+            "@/components/ErrorBoundary"
           ]
         }
       ],
@@ -90,7 +97,7 @@
           "name": "metadata",
           "exported": true,
           "filePath": "app/layout.tsx",
-          "lineNumber": 49,
+          "lineNumber": 50,
           "type": "Metadata",
           "value": "{\n  title: 'Doron Reizes - Interactive Installation',\n  description:\n    'Systems architect, sound d..."
         }
@@ -110,6 +117,11 @@
           ]
         },
         {
+          "from": "next/dynamic",
+          "names": [],
+          "default": "dynamic"
+        },
+        {
           "from": "@/contexts/ViewModeContext",
           "names": [
             "useViewMode"
@@ -119,21 +131,6 @@
           "from": "@/components/Landing",
           "names": [],
           "default": "Landing"
-        },
-        {
-          "from": "@/components/modes/Architect",
-          "names": [],
-          "default": "Architect"
-        },
-        {
-          "from": "@/components/modes/Author",
-          "names": [],
-          "default": "Author"
-        },
-        {
-          "from": "@/components/modes/Lab",
-          "names": [],
-          "default": "Lab"
         },
         {
           "from": "@/components/canvas/EchoChamber",
@@ -149,6 +146,11 @@
           "from": "@/components/AntiPortfolio",
           "names": [],
           "default": "AntiPortfolio"
+        },
+        {
+          "from": "@/components/VoiceSelector",
+          "names": [],
+          "default": "VoiceSelector"
         }
       ],
       "exports": [
@@ -159,9 +161,9 @@
           "name": "ModeButtonProps",
           "kind": "interface",
           "filePath": "app/page.tsx",
-          "lineNumber": 122,
+          "lineNumber": 150,
           "exported": false,
-          "definition": "interface ModeButtonProps {\n  mode: 'architect' | 'author' | 'lab';\n  currentMode: string;\n  onClick: () => void;\n  label: string;\n  title: string;\n}",
+          "definition": "interface ModeButtonProps {\n  mode: 'architect' | 'author' | 'lab';\n  currentMode: string;\n  onClick: () => void;\n  label: string;\n  title: string;\n  description?: string;\n}",
           "properties": [
             {
               "name": "mode",
@@ -187,6 +189,11 @@
               "name": "title",
               "type": "string",
               "optional": false
+            },
+            {
+              "name": "description",
+              "type": "string",
+              "optional": true
             }
           ]
         }
@@ -198,7 +205,7 @@
           "async": false,
           "exported": false,
           "filePath": "app/page.tsx",
-          "lineNumber": 31,
+          "lineNumber": 43,
           "signature": "Home()",
           "parameters": []
         },
@@ -208,8 +215,8 @@
           "async": false,
           "exported": false,
           "filePath": "app/page.tsx",
-          "lineNumber": 130,
-          "signature": "ModeButton({\n  mode,\n  currentMode,\n  onClick,\n  label,\n  title,\n}: ModeButtonProps)",
+          "lineNumber": 159,
+          "signature": "ModeButton({\n  mode,\n  currentMode,\n  onClick,\n  label,\n  title,\n  description,\n}: ModeButtonProps)",
           "parameters": [
             {
               "name": "props",
@@ -227,20 +234,19 @@
           "isServer": false,
           "isDefault": true,
           "filePath": "app/page.tsx",
-          "lineNumber": 31,
+          "lineNumber": 43,
           "hooks": [
             "useViewMode"
           ],
           "dependencies": [
             "framer-motion",
+            "next/dynamic",
             "@/contexts/ViewModeContext",
             "@/components/Landing",
-            "@/components/modes/Architect",
-            "@/components/modes/Author",
-            "@/components/modes/Lab",
             "@/components/canvas/EchoChamber",
             "@/components/canvas/WhispersChamber",
-            "@/components/AntiPortfolio"
+            "@/components/AntiPortfolio",
+            "@/components/VoiceSelector"
           ]
         },
         {
@@ -250,19 +256,18 @@
           "isServer": false,
           "isDefault": false,
           "filePath": "app/page.tsx",
-          "lineNumber": 130,
+          "lineNumber": 159,
           "propsType": "ModeButtonProps",
           "hooks": [],
           "dependencies": [
             "framer-motion",
+            "next/dynamic",
             "@/contexts/ViewModeContext",
             "@/components/Landing",
-            "@/components/modes/Architect",
-            "@/components/modes/Author",
-            "@/components/modes/Lab",
             "@/components/canvas/EchoChamber",
             "@/components/canvas/WhispersChamber",
-            "@/components/AntiPortfolio"
+            "@/components/AntiPortfolio",
+            "@/components/VoiceSelector"
           ]
         }
       ],
@@ -352,6 +357,71 @@
           ]
         }
       ],
+      "constants": []
+    },
+    {
+      "filePath": "components/ErrorBoundary.tsx",
+      "moduleName": "ErrorBoundary",
+      "isClient": true,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "react",
+          "names": [
+            "Component",
+            "ErrorInfo",
+            "ReactNode"
+          ],
+          "default": "React"
+        }
+      ],
+      "exports": [
+        "ErrorBoundary"
+      ],
+      "types": [
+        {
+          "name": "Props",
+          "kind": "interface",
+          "filePath": "components/ErrorBoundary.tsx",
+          "lineNumber": 16,
+          "exported": false,
+          "definition": "interface Props {\n  children: ReactNode;\n  fallback?: ReactNode;\n}",
+          "properties": [
+            {
+              "name": "children",
+              "type": "ReactNode",
+              "optional": false
+            },
+            {
+              "name": "fallback",
+              "type": "ReactNode",
+              "optional": true
+            }
+          ]
+        },
+        {
+          "name": "State",
+          "kind": "interface",
+          "filePath": "components/ErrorBoundary.tsx",
+          "lineNumber": 21,
+          "exported": false,
+          "definition": "interface State {\n  hasError: boolean;\n  error: Error | null;\n}",
+          "properties": [
+            {
+              "name": "hasError",
+              "type": "boolean",
+              "optional": false
+            },
+            {
+              "name": "error",
+              "type": "Error | null",
+              "optional": false
+            }
+          ]
+        }
+      ],
+      "functions": [],
+      "components": [],
       "constants": []
     },
     {
@@ -480,6 +550,11 @@
           "names": [
             "detectIntent"
           ]
+        },
+        {
+          "from": "@/components/OnboardingHint",
+          "names": [],
+          "default": "OnboardingHint"
         }
       ],
       "exports": [
@@ -493,7 +568,7 @@
           "async": false,
           "exported": false,
           "filePath": "components/Landing.tsx",
-          "lineNumber": 24,
+          "lineNumber": 25,
           "signature": "Landing()",
           "parameters": []
         }
@@ -506,7 +581,7 @@
           "isServer": false,
           "isDefault": true,
           "filePath": "components/Landing.tsx",
-          "lineNumber": 24,
+          "lineNumber": 25,
           "hooks": [
             "useViewMode",
             "useState",
@@ -517,7 +592,224 @@
             "react",
             "framer-motion",
             "@/contexts/ViewModeContext",
-            "@/actions/detect-intent"
+            "@/actions/detect-intent",
+            "@/components/OnboardingHint"
+          ]
+        }
+      ],
+      "constants": []
+    },
+    {
+      "filePath": "components/OnboardingHint.tsx",
+      "moduleName": "OnboardingHint",
+      "isClient": true,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "react",
+          "names": [
+            "useState",
+            "useEffect"
+          ]
+        },
+        {
+          "from": "framer-motion",
+          "names": [
+            "motion",
+            "AnimatePresence"
+          ]
+        }
+      ],
+      "exports": [
+        "default"
+      ],
+      "types": [
+        {
+          "name": "OnboardingHintProps",
+          "kind": "interface",
+          "filePath": "components/OnboardingHint.tsx",
+          "lineNumber": 15,
+          "exported": false,
+          "definition": "interface OnboardingHintProps {\n  id: string;\n  message: string;\n  position?: 'top' | 'bottom' | 'left' | 'right';\n  delay?: number;\n}",
+          "properties": [
+            {
+              "name": "id",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "message",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "position",
+              "type": "'top' | 'bottom' | 'left' | 'right'",
+              "optional": true
+            },
+            {
+              "name": "delay",
+              "type": "number",
+              "optional": true
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "OnboardingHint",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/OnboardingHint.tsx",
+          "lineNumber": 22,
+          "signature": "OnboardingHint({\n  id,\n  message,\n  position = 'bottom',\n  delay = 3000,\n}: OnboardingHintProps)",
+          "parameters": [
+            {
+              "name": "props",
+              "type": "OnboardingHintProps",
+              "optional": false
+            }
+          ]
+        },
+        {
+          "name": "handleDismiss",
+          "kind": "arrow",
+          "async": false,
+          "exported": false,
+          "filePath": "components/OnboardingHint.tsx",
+          "lineNumber": 58,
+          "signature": "handleDismiss",
+          "parameters": []
+        }
+      ],
+      "components": [
+        {
+          "name": "OnboardingHint",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": true,
+          "filePath": "components/OnboardingHint.tsx",
+          "lineNumber": 22,
+          "propsType": "OnboardingHintProps",
+          "hooks": [
+            "useState",
+            "useEffect"
+          ],
+          "dependencies": [
+            "react",
+            "framer-motion"
+          ]
+        }
+      ],
+      "constants": []
+    },
+    {
+      "filePath": "components/VoiceSelector.tsx",
+      "moduleName": "VoiceSelector",
+      "isClient": true,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "react",
+          "names": [
+            "useState",
+            "useEffect",
+            "useCallback"
+          ]
+        },
+        {
+          "from": "framer-motion",
+          "names": [
+            "motion",
+            "AnimatePresence"
+          ]
+        },
+        {
+          "from": "@/actions/generate-voice",
+          "names": [
+            "getAvailableVoices"
+          ]
+        },
+        {
+          "from": "@/lib/voice",
+          "names": [
+            "voiceManager"
+          ]
+        }
+      ],
+      "exports": [
+        "default"
+      ],
+      "types": [
+        {
+          "name": "Voice",
+          "kind": "interface",
+          "filePath": "components/VoiceSelector.tsx",
+          "lineNumber": 21,
+          "exported": false,
+          "definition": "interface Voice {\n  voice_id: string;\n  name: string;\n  category?: string;\n}",
+          "properties": [
+            {
+              "name": "voice_id",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "name",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "category",
+              "type": "string",
+              "optional": true
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "VoiceSelector",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/VoiceSelector.tsx",
+          "lineNumber": 31,
+          "signature": "VoiceSelector()",
+          "parameters": []
+        },
+        {
+          "name": "loadVoices",
+          "kind": "function",
+          "async": true,
+          "exported": false,
+          "filePath": "components/VoiceSelector.tsx",
+          "lineNumber": 41,
+          "signature": "loadVoices()",
+          "parameters": []
+        }
+      ],
+      "components": [
+        {
+          "name": "VoiceSelector",
+          "type": "function",
+          "isClient": true,
+          "isServer": false,
+          "isDefault": true,
+          "filePath": "components/VoiceSelector.tsx",
+          "lineNumber": 31,
+          "hooks": [
+            "useState",
+            "useEffect",
+            "useCallback"
+          ],
+          "dependencies": [
+            "react",
+            "framer-motion",
+            "@/actions/generate-voice",
+            "@/lib/voice"
           ]
         }
       ],
@@ -645,7 +937,7 @@
           "async": false,
           "exported": false,
           "filePath": "components/canvas/EchoChamber.tsx",
-          "lineNumber": 79,
+          "lineNumber": 81,
           "signature": "validateInput(input: string): ",
           "parameters": [
             {
@@ -662,7 +954,7 @@
           "async": false,
           "exported": false,
           "filePath": "components/canvas/EchoChamber.tsx",
-          "lineNumber": 102,
+          "lineNumber": 114,
           "signature": "EchoChamber()",
           "parameters": []
         },
@@ -672,7 +964,7 @@
           "async": true,
           "exported": false,
           "filePath": "components/canvas/EchoChamber.tsx",
-          "lineNumber": 113,
+          "lineNumber": 125,
           "signature": "loadEchoes()",
           "parameters": []
         }
@@ -685,7 +977,7 @@
           "isServer": false,
           "isDefault": true,
           "filePath": "components/canvas/EchoChamber.tsx",
-          "lineNumber": 102,
+          "lineNumber": 114,
           "hooks": [
             "useState",
             "useEffect",
@@ -754,17 +1046,73 @@
               "optional": false
             }
           ]
+        },
+        {
+          "name": "FloatParams",
+          "kind": "interface",
+          "filePath": "components/canvas/EchoEntry.tsx",
+          "lineNumber": 22,
+          "exported": false,
+          "definition": "interface FloatParams {\n  startX: number;\n  startY: number;\n  driftX: number;\n  driftY: number;\n  duration: number;\n  opacity: number;\n  rotation: number;\n}",
+          "properties": [
+            {
+              "name": "startX",
+              "type": "number",
+              "optional": false
+            },
+            {
+              "name": "startY",
+              "type": "number",
+              "optional": false
+            },
+            {
+              "name": "driftX",
+              "type": "number",
+              "optional": false
+            },
+            {
+              "name": "driftY",
+              "type": "number",
+              "optional": false
+            },
+            {
+              "name": "duration",
+              "type": "number",
+              "optional": false
+            },
+            {
+              "name": "opacity",
+              "type": "number",
+              "optional": false
+            },
+            {
+              "name": "rotation",
+              "type": "number",
+              "optional": false
+            }
+          ]
         }
       ],
       "functions": [
+        {
+          "name": "generateFloatParams",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/canvas/EchoEntry.tsx",
+          "lineNumber": 3,
+          "signature": "generateFloatParams(): FloatParams",
+          "parameters": [],
+          "returnType": "FloatParams"
+        },
         {
           "name": "EchoEntry",
           "kind": "function",
           "async": false,
           "exported": false,
           "filePath": "components/canvas/EchoEntry.tsx",
-          "lineNumber": 22,
-          "signature": "EchoEntry({ id, text, timestamp, index }: EchoEntryProps)",
+          "lineNumber": 60,
+          "signature": "EchoEntry({ id, text, timestamp: _timestamp, index }: EchoEntryProps)",
           "parameters": [
             {
               "name": "props",
@@ -782,7 +1130,7 @@
           "isServer": false,
           "isDefault": false,
           "filePath": "components/canvas/EchoEntry.tsx",
-          "lineNumber": 22,
+          "lineNumber": 60,
           "propsType": "EchoEntryProps",
           "hooks": [
             "useMemo"
@@ -881,12 +1229,34 @@
           "returnType": ""
         },
         {
+          "name": "generateWhisperFloatParams",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "components/canvas/Whisper.tsx",
+          "lineNumber": 66,
+          "signature": "generateWhisperFloatParams(index: number, totalCount: number): ",
+          "parameters": [
+            {
+              "name": "index",
+              "optional": false,
+              "type": "number"
+            },
+            {
+              "name": "totalCount",
+              "optional": false,
+              "type": "number"
+            }
+          ],
+          "returnType": ""
+        },
+        {
           "name": "Whisper",
           "kind": "function",
           "async": false,
           "exported": false,
           "filePath": "components/canvas/Whisper.tsx",
-          "lineNumber": 65,
+          "lineNumber": 127,
           "signature": "Whisper(\n  { id, text, mood, index, totalCount },\n  ref\n)",
           "parameters": [
             {
@@ -909,7 +1279,7 @@
           "isServer": false,
           "isDefault": false,
           "filePath": "components/canvas/Whisper.tsx",
-          "lineNumber": 65,
+          "lineNumber": 127,
           "hooks": [
             "useMemo"
           ],
@@ -963,6 +1333,12 @@
           "names": [
             "generateWhisper"
           ]
+        },
+        {
+          "from": "@/lib/voice",
+          "names": [
+            "voiceManager"
+          ]
         }
       ],
       "exports": [
@@ -973,7 +1349,7 @@
           "name": "WhispersChamberProps",
           "kind": "interface",
           "filePath": "components/canvas/WhispersChamber.tsx",
-          "lineNumber": 30,
+          "lineNumber": 31,
           "exported": false,
           "definition": "interface WhispersChamberProps {\n  mode: ViewMode;\n  userIntent?: string;\n  /** Number of whispers to display (default: 8) */\n  density?: number;\n  /** Whether the chamber is active (default: true) */\n  active?: boolean;\n}",
           "properties": [
@@ -1009,7 +1385,7 @@
           "async": false,
           "exported": false,
           "filePath": "components/canvas/WhispersChamber.tsx",
-          "lineNumber": 66,
+          "lineNumber": 67,
           "signature": "WhispersChamber({\n  mode,\n  userIntent,\n  density = 8,\n  active = true,\n}: WhispersChamberProps)",
           "parameters": [
             {
@@ -1025,7 +1401,7 @@
           "async": false,
           "exported": false,
           "filePath": "components/canvas/WhispersChamber.tsx",
-          "lineNumber": 259,
+          "lineNumber": 300,
           "signature": "updateTime",
           "parameters": []
         }
@@ -1038,7 +1414,7 @@
           "isServer": false,
           "isDefault": true,
           "filePath": "components/canvas/WhispersChamber.tsx",
-          "lineNumber": 66,
+          "lineNumber": 67,
           "propsType": "WhispersChamberProps",
           "hooks": [
             "useState",
@@ -1050,7 +1426,8 @@
             "framer-motion",
             "./Whisper",
             "@/lib/whispers",
-            "@/actions/generate-whisper"
+            "@/actions/generate-whisper",
+            "@/lib/voice"
           ]
         }
       ],
@@ -1097,7 +1474,7 @@
           "name": "SectionProps",
           "kind": "interface",
           "filePath": "components/modes/Architect.tsx",
-          "lineNumber": 288,
+          "lineNumber": 290,
           "exported": false,
           "definition": "interface SectionProps {\n  title: string;\n  children: React.ReactNode;\n  onHover?: () => void;\n}",
           "properties": [
@@ -1122,7 +1499,7 @@
           "name": "PositionProps",
           "kind": "interface",
           "filePath": "components/modes/Architect.tsx",
-          "lineNumber": 310,
+          "lineNumber": 312,
           "exported": false,
           "definition": "interface PositionProps {\n  title: string;\n  company: string;\n  description: string;\n  tags: string[];\n  highlight?: boolean;\n  onHover?: () => void;\n}",
           "properties": [
@@ -1162,7 +1539,7 @@
           "name": "CompetencyCardProps",
           "kind": "interface",
           "filePath": "components/modes/Architect.tsx",
-          "lineNumber": 359,
+          "lineNumber": 361,
           "exported": false,
           "definition": "interface CompetencyCardProps {\n  title: string;\n  items: string[];\n  onHover?: () => void;\n}",
           "properties": [
@@ -1187,7 +1564,7 @@
           "name": "ContactItemProps",
           "kind": "interface",
           "filePath": "components/modes/Architect.tsx",
-          "lineNumber": 401,
+          "lineNumber": 403,
           "exported": false,
           "definition": "interface ContactItemProps {\n  href: string;\n  label: string;\n  onMouseEnter?: () => void;\n}",
           "properties": [
@@ -1212,7 +1589,7 @@
           "name": "MetricProps",
           "kind": "interface",
           "filePath": "components/modes/Architect.tsx",
-          "lineNumber": 423,
+          "lineNumber": 425,
           "exported": false,
           "definition": "interface MetricProps {\n  value: string;\n  label: string;\n}",
           "properties": [
@@ -1246,7 +1623,7 @@
           "async": false,
           "exported": false,
           "filePath": "components/modes/Architect.tsx",
-          "lineNumber": 294,
+          "lineNumber": 296,
           "signature": "Section({ title, children, onHover }: SectionProps)",
           "parameters": [
             {
@@ -1262,7 +1639,7 @@
           "async": false,
           "exported": false,
           "filePath": "components/modes/Architect.tsx",
-          "lineNumber": 319,
+          "lineNumber": 321,
           "signature": "Position({\n  title,\n  company,\n  description,\n  tags,\n  highlight,\n  onHover,\n}: PositionProps)",
           "parameters": [
             {
@@ -1278,7 +1655,7 @@
           "async": false,
           "exported": false,
           "filePath": "components/modes/Architect.tsx",
-          "lineNumber": 365,
+          "lineNumber": 367,
           "signature": "CompetencyCard({ title, items, onHover }: CompetencyCardProps)",
           "parameters": [
             {
@@ -1294,7 +1671,7 @@
           "async": false,
           "exported": false,
           "filePath": "components/modes/Architect.tsx",
-          "lineNumber": 389,
+          "lineNumber": 391,
           "signature": "Pill({ children }: { children: React.ReactNode })",
           "parameters": [
             {
@@ -1310,7 +1687,7 @@
           "async": false,
           "exported": false,
           "filePath": "components/modes/Architect.tsx",
-          "lineNumber": 407,
+          "lineNumber": 409,
           "signature": "ContactItem({ href, label, onMouseEnter }: ContactItemProps)",
           "parameters": [
             {
@@ -1326,7 +1703,7 @@
           "async": false,
           "exported": false,
           "filePath": "components/modes/Architect.tsx",
-          "lineNumber": 428,
+          "lineNumber": 430,
           "signature": "Metric({ value, label }: MetricProps)",
           "parameters": [
             {
@@ -1373,7 +1750,7 @@
           "isServer": false,
           "isDefault": false,
           "filePath": "components/modes/Architect.tsx",
-          "lineNumber": 294,
+          "lineNumber": 296,
           "propsType": "SectionProps",
           "hooks": [],
           "dependencies": [
@@ -1390,7 +1767,7 @@
           "isServer": false,
           "isDefault": false,
           "filePath": "components/modes/Architect.tsx",
-          "lineNumber": 319,
+          "lineNumber": 321,
           "propsType": "PositionProps",
           "hooks": [],
           "dependencies": [
@@ -1407,7 +1784,7 @@
           "isServer": false,
           "isDefault": false,
           "filePath": "components/modes/Architect.tsx",
-          "lineNumber": 365,
+          "lineNumber": 367,
           "propsType": "CompetencyCardProps",
           "hooks": [],
           "dependencies": [
@@ -1424,7 +1801,7 @@
           "isServer": false,
           "isDefault": false,
           "filePath": "components/modes/Architect.tsx",
-          "lineNumber": 389,
+          "lineNumber": 391,
           "propsType": "React",
           "hooks": [],
           "dependencies": [
@@ -1441,7 +1818,7 @@
           "isServer": false,
           "isDefault": false,
           "filePath": "components/modes/Architect.tsx",
-          "lineNumber": 407,
+          "lineNumber": 409,
           "propsType": "ContactItemProps",
           "hooks": [],
           "dependencies": [
@@ -1458,7 +1835,7 @@
           "isServer": false,
           "isDefault": false,
           "filePath": "components/modes/Architect.tsx",
-          "lineNumber": 428,
+          "lineNumber": 430,
           "propsType": "MetricProps",
           "hooks": [],
           "dependencies": [
@@ -1517,7 +1894,7 @@
           "async": false,
           "exported": false,
           "filePath": "components/modes/Author.tsx",
-          "lineNumber": 273,
+          "lineNumber": 275,
           "signature": "MicroMotive({ title, text }: { title: string; text: string })",
           "parameters": [
             {
@@ -1563,7 +1940,7 @@
           "isServer": false,
           "isDefault": false,
           "filePath": "components/modes/Author.tsx",
-          "lineNumber": 273,
+          "lineNumber": 275,
           "propsType": "string",
           "hooks": [],
           "dependencies": [
@@ -1622,7 +1999,7 @@
           "async": false,
           "exported": false,
           "filePath": "components/modes/Lab.tsx",
-          "lineNumber": 414,
+          "lineNumber": 389,
           "signature": "StackItem({ category, items }: { category: string; items: string[] })",
           "parameters": [
             {
@@ -1669,7 +2046,7 @@
           "isServer": false,
           "isDefault": false,
           "filePath": "components/modes/Lab.tsx",
-          "lineNumber": 414,
+          "lineNumber": 389,
           "propsType": "string",
           "hooks": [],
           "dependencies": [
@@ -1838,6 +2215,132 @@
       ]
     },
     {
+      "filePath": "lib/ai-gateway.ts",
+      "moduleName": "ai-gateway",
+      "moduleDoc": {
+        "description": "====================================\nAI GATEWAY UTILITY - SHARED CONFIGURATION\n====================================\n\nCentralized configuration for AI providers.\nSupports both Anthropic (direct) and Vercel AI Gateway.\nUsed by both intent detection and whisper generation.\n\nPriority:\n1. ANTHROPIC_API_KEY (direct Anthropic API)\n2. AI_GATEWAY_API_KEY (Vercel AI Gateway)",
+        "params": [],
+        "examples": [],
+        "tags": []
+      },
+      "isClient": false,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "@ai-sdk/gateway",
+          "names": [
+            "createGateway"
+          ]
+        },
+        {
+          "from": "@ai-sdk/anthropic",
+          "names": [
+            "createAnthropic"
+          ]
+        }
+      ],
+      "exports": [
+        "getModel",
+        "getActiveProvider",
+        "isAIGatewayAvailable",
+        "getAnthropicProvider",
+        "getAIGateway"
+      ],
+      "types": [
+        {
+          "name": "AIProvider",
+          "kind": "type",
+          "filePath": "lib/ai-gateway.ts",
+          "lineNumber": 22,
+          "exported": false,
+          "definition": "'anthropic' | 'gateway' | null"
+        }
+      ],
+      "functions": [
+        {
+          "name": "getModelIdentifier",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "lib/ai-gateway.ts",
+          "lineNumber": 1,
+          "signature": "getModelIdentifier(modelName: string): string",
+          "parameters": [
+            {
+              "name": "modelName",
+              "optional": false,
+              "type": "string"
+            }
+          ],
+          "returnType": "string"
+        },
+        {
+          "name": "getModel",
+          "kind": "function",
+          "async": false,
+          "exported": true,
+          "filePath": "lib/ai-gateway.ts",
+          "lineNumber": 91,
+          "signature": "getModel(\n  modelName: string = 'claude-3-5-sonnet-20241022'\n): ReturnType<NonNullable<typeof anthropicProvider>> | ReturnType<NonNullable<typeof gateway>>",
+          "parameters": [
+            {
+              "name": "modelName",
+              "optional": true,
+              "type": "string",
+              "defaultValue": "'claude-3-5-sonnet-20241022'"
+            }
+          ],
+          "returnType": "ReturnType<NonNullable<typeof anthropicProvider>> | ReturnType<NonNullable<typeof gateway>>"
+        },
+        {
+          "name": "getActiveProvider",
+          "kind": "function",
+          "async": false,
+          "exported": true,
+          "filePath": "lib/ai-gateway.ts",
+          "lineNumber": 111,
+          "signature": "getActiveProvider(): AIProvider",
+          "parameters": [],
+          "returnType": "AIProvider"
+        },
+        {
+          "name": "isAIGatewayAvailable",
+          "kind": "function",
+          "async": false,
+          "exported": true,
+          "filePath": "lib/ai-gateway.ts",
+          "lineNumber": 118,
+          "signature": "isAIGatewayAvailable(): boolean",
+          "parameters": [],
+          "returnType": "boolean"
+        },
+        {
+          "name": "getAnthropicProvider",
+          "kind": "function",
+          "async": false,
+          "exported": true,
+          "filePath": "lib/ai-gateway.ts",
+          "lineNumber": 125,
+          "signature": "getAnthropicProvider(): ReturnType<typeof createAnthropic> | null",
+          "parameters": [],
+          "returnType": "ReturnType<typeof createAnthropic> | null"
+        },
+        {
+          "name": "getAIGateway",
+          "kind": "function",
+          "async": false,
+          "exported": true,
+          "filePath": "lib/ai-gateway.ts",
+          "lineNumber": 132,
+          "signature": "getAIGateway(): ReturnType<typeof createGateway> | null",
+          "parameters": [],
+          "returnType": "ReturnType<typeof createGateway> | null"
+        }
+      ],
+      "components": [],
+      "constants": []
+    },
+    {
       "filePath": "lib/audio.ts",
       "moduleName": "audio",
       "moduleDoc": {
@@ -1910,7 +2413,7 @@
           "name": "audioManager",
           "exported": true,
           "filePath": "lib/audio.ts",
-          "lineNumber": 542,
+          "lineNumber": 594,
           "value": "new AudioManager()"
         }
       ]
@@ -1919,7 +2422,7 @@
       "filePath": "lib/styles.ts",
       "moduleName": "styles",
       "moduleDoc": {
-        "description": "====================================\nTYPOGRAPHY & STYLE CONFIGURATION\n====================================\n\nCentralized typography and style configuration for all view modes.\nMakes it easy to adjust hierarchy and maintain consistency.\n\nUsage:\n  import { getTypography } from '@/lib/styles';\n  const styles = getTypography('architect');\n  <h1 className={styles.h1}>Title</h1>",
+        "description": "====================================\nTYPOGRAPHY & STYLE CONFIGURATION\n====================================\n\nCentralized typography and style configuration for all view modes.\nFollowing Dieter Rams principles: systematic, timeless, clear hierarchy.\n\nTypography scale uses Major Third ratio (1.25) for consistency.\nSpacing follows 8px base unit system.\n\nUsage:\n  import { getTypography } from '@/lib/styles';\n  const styles = getTypography('architect');\n  <h1 className={styles.h1}>Title</h1>",
         "params": [],
         "examples": [],
         "tags": []
@@ -1938,7 +2441,9 @@
         "ViewMode",
         "getTypography",
         "animations",
-        "transitions"
+        "transitions",
+        "getFocusRing",
+        "spacing"
       ],
       "types": [
         {
@@ -1953,9 +2458,9 @@
           "name": "TypographyConfig",
           "kind": "interface",
           "filePath": "lib/styles.ts",
-          "lineNumber": 17,
+          "lineNumber": 20,
           "exported": false,
-          "definition": "interface TypographyConfig {\n  container: string;\n  h1: string;\n  h2: string;\n  h3: string;\n  p: string;\n  small: string;\n  label: string;\n  link: string;\n}",
+          "definition": "interface TypographyConfig {\n  container: string;\n  h1: string;\n  h2: string;\n  h3: string;\n  h4: string;\n  p: string;\n  small: string;\n  label: string;\n  link: string;\n  // Focus state utilities\n  focus: string;\n}",
           "properties": [
             {
               "name": "container",
@@ -1978,6 +2483,11 @@
               "optional": false
             },
             {
+              "name": "h4",
+              "type": "string",
+              "optional": false
+            },
+            {
               "name": "p",
               "type": "string",
               "optional": false
@@ -1994,6 +2504,11 @@
             },
             {
               "name": "link",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "focus",
               "type": "string",
               "optional": false
             }
@@ -2017,6 +2532,23 @@
             }
           ],
           "returnType": "TypographyConfig"
+        },
+        {
+          "name": "getFocusRing",
+          "kind": "function",
+          "async": false,
+          "exported": true,
+          "filePath": "lib/styles.ts",
+          "lineNumber": 99,
+          "signature": "getFocusRing(mode: ViewMode): string",
+          "parameters": [
+            {
+              "name": "mode",
+              "optional": false,
+              "type": "ViewMode"
+            }
+          ],
+          "returnType": "string"
         }
       ],
       "components": [],
@@ -2032,8 +2564,15 @@
           "name": "transitions",
           "exported": true,
           "filePath": "lib/styles.ts",
-          "lineNumber": 128,
-          "value": "{\n  // Smooth, theatrical\n  smooth: {\n    duration: 0.6,\n    ease: [0.645, 0.045, 0.355, 1], // Cust..."
+          "lineNumber": 144,
+          "value": "{\n  // Smooth, theatrical (for major transitions)\n  smooth: {\n    duration: 0.6,\n    ease: [0.645, 0..."
+        },
+        {
+          "name": "spacing",
+          "exported": true,
+          "filePath": "lib/styles.ts",
+          "lineNumber": 186,
+          "value": "{\n  xs: 'space-y-2',      // 8px\n  sm: 'space-y-4',       // 16px\n  md: 'space-y-6',       // 24px\n ..."
         }
       ]
     },
@@ -2110,7 +2649,7 @@
           "async": true,
           "exported": true,
           "filePath": "lib/supabase.ts",
-          "lineNumber": 159,
+          "lineNumber": 162,
           "signature": "submitEcho(text: string): Promise<boolean>",
           "parameters": [
             {
@@ -2265,7 +2804,7 @@
           "async": false,
           "exported": true,
           "filePath": "lib/useSoundscape.ts",
-          "lineNumber": 175,
+          "lineNumber": 179,
           "signature": "validateAudioParams(params: SoundscapeParams): boolean",
           "parameters": [
             {
@@ -2279,6 +2818,184 @@
       ],
       "components": [],
       "constants": []
+    },
+    {
+      "filePath": "lib/voice.ts",
+      "moduleName": "voice",
+      "moduleDoc": {
+        "description": "====================================\nVOICE MANAGER - ELEVENLABS PLAYBACK\n====================================\n\nManages voice playback for whispers with:\n- Subtle audio ducking integration\n- IndexedDB caching for persistent storage\n- Sequential playback queue\n- Error handling and graceful degradation",
+        "params": [],
+        "examples": [],
+        "tags": []
+      },
+      "isClient": true,
+      "isServer": false,
+      "imports": [
+        {
+          "from": "idb",
+          "names": [
+            "openDB",
+            "DBSchema",
+            "IDBPDatabase"
+          ]
+        },
+        {
+          "from": "./audio",
+          "names": [
+            "audioManager"
+          ]
+        },
+        {
+          "from": "@/actions/generate-voice",
+          "names": [
+            "generateVoice"
+          ]
+        }
+      ],
+      "exports": [
+        "voiceManager"
+      ],
+      "types": [
+        {
+          "name": "VoiceCacheSchema",
+          "kind": "interface",
+          "filePath": "lib/voice.ts",
+          "lineNumber": 23,
+          "exported": false,
+          "definition": "interface VoiceCacheSchema extends DBSchema {\n  voices: {\n    key: string; // Cache key: whisper-${text}",
+          "properties": [
+            {
+              "name": "voices",
+              "type": "{\n    key: string",
+              "optional": false
+            },
+            {
+              "name": "key",
+              "type": "whisper-${text",
+              "optional": false
+            }
+          ]
+        },
+        {
+          "name": "PlaybackQueueItem",
+          "kind": "interface",
+          "filePath": "lib/voice.ts",
+          "lineNumber": 154,
+          "exported": false,
+          "definition": "interface PlaybackQueueItem {\n  text: string;\n  voiceId?: string;\n  priority?: number;\n}",
+          "properties": [
+            {
+              "name": "text",
+              "type": "string",
+              "optional": false
+            },
+            {
+              "name": "voiceId",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "priority",
+              "type": "number",
+              "optional": true
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "initCache",
+          "kind": "function",
+          "async": true,
+          "exported": false,
+          "filePath": "lib/voice.ts",
+          "lineNumber": 1,
+          "signature": "initCache(): Promise<IDBPDatabase<VoiceCacheSchema> | null>",
+          "parameters": [],
+          "returnType": "Promise<IDBPDatabase<VoiceCacheSchema> | null>"
+        },
+        {
+          "name": "getCacheKey",
+          "kind": "function",
+          "async": false,
+          "exported": false,
+          "filePath": "lib/voice.ts",
+          "lineNumber": 73,
+          "signature": "getCacheKey(text: string, voiceId: string): string",
+          "parameters": [
+            {
+              "name": "text",
+              "optional": false,
+              "type": "string"
+            },
+            {
+              "name": "voiceId",
+              "optional": false,
+              "type": "string"
+            }
+          ],
+          "returnType": "string"
+        },
+        {
+          "name": "getCachedAudio",
+          "kind": "function",
+          "async": true,
+          "exported": false,
+          "filePath": "lib/voice.ts",
+          "lineNumber": 82,
+          "signature": "getCachedAudio(\n  text: string,\n  voiceId: string\n): Promise<ArrayBuffer | null>",
+          "parameters": [
+            {
+              "name": "text",
+              "optional": false,
+              "type": "string"
+            },
+            {
+              "name": "voiceId",
+              "optional": false,
+              "type": "string"
+            }
+          ],
+          "returnType": "Promise<ArrayBuffer | null>"
+        },
+        {
+          "name": "cacheAudio",
+          "kind": "function",
+          "async": true,
+          "exported": false,
+          "filePath": "lib/voice.ts",
+          "lineNumber": 113,
+          "signature": "cacheAudio(\n  text: string,\n  voiceId: string,\n  audioData: ArrayBuffer\n): Promise<void>",
+          "parameters": [
+            {
+              "name": "text",
+              "optional": false,
+              "type": "string"
+            },
+            {
+              "name": "voiceId",
+              "optional": false,
+              "type": "string"
+            },
+            {
+              "name": "audioData",
+              "optional": false,
+              "type": "ArrayBuffer"
+            }
+          ],
+          "returnType": "Promise<void>"
+        }
+      ],
+      "components": [],
+      "constants": [
+        {
+          "name": "voiceManager",
+          "exported": true,
+          "filePath": "lib/voice.ts",
+          "lineNumber": 352,
+          "value": "new VoiceManager()"
+        }
+      ]
     },
     {
       "filePath": "lib/whispers.ts",
@@ -2447,7 +3164,7 @@
       "filePath": "actions/detect-intent.ts",
       "moduleName": "detect-intent",
       "moduleDoc": {
-        "description": "====================================\nGHOST ROUTER - INTENT DETECTION SERVER ACTION\n====================================\n\nThis Server Action uses Vercel AI Gateway with Google's Gemini 1.5 Flash model\nto analyze user input and route to the appropriate view mode.\n\nPhilosophy:\n- Generate routing data, not chat responses\n- Fast inference (Flash model)\n- Audio parameters derived from intent\n- Fallback to keyword matching if AI unavailable\n\nInput: User string from Landing Page\nOutput: { targetMode, audioParams }",
+        "description": "====================================\nGHOST ROUTER - INTENT DETECTION SERVER ACTION\n====================================\n\nThis Server Action uses Anthropic Claude (or Vercel AI Gateway) to analyze\nuser input and route to the appropriate view mode.\n\nPhilosophy:\n- Generate routing data, not chat responses\n- Fast inference with Claude Sonnet\n- Audio parameters derived from intent\n- Fallback to keyword matching if AI unavailable\n\nInput: User string from Landing Page\nOutput: { targetMode, audioParams }",
         "params": [],
         "examples": [],
         "tags": []
@@ -2455,12 +3172,6 @@
       "isClient": false,
       "isServer": true,
       "imports": [
-        {
-          "from": "@ai-sdk/gateway",
-          "names": [
-            "createGateway"
-          ]
-        },
         {
           "from": "ai",
           "names": [
@@ -2478,6 +3189,13 @@
           "names": [
             "ViewMode",
             "parseIntent"
+          ]
+        },
+        {
+          "from": "@/lib/ai-gateway",
+          "names": [
+            "getModel",
+            "isAIGatewayAvailable"
           ]
         }
       ],
@@ -2526,7 +3244,7 @@
           "async": true,
           "exported": true,
           "filePath": "actions/detect-intent.ts",
-          "lineNumber": 105,
+          "lineNumber": 85,
           "signature": "detectIntent(input: string): Promise<IntentResponse>",
           "parameters": [
             {
@@ -2543,7 +3261,7 @@
           "async": false,
           "exported": false,
           "filePath": "actions/detect-intent.ts",
-          "lineNumber": 181,
+          "lineNumber": 167,
           "signature": "buildPrompt(input: string): string",
           "parameters": [
             {
@@ -2560,7 +3278,7 @@
           "async": false,
           "exported": false,
           "filePath": "actions/detect-intent.ts",
-          "lineNumber": 216,
+          "lineNumber": 202,
           "signature": "createFallbackResponse(mode: NarrowMode): IntentResponse",
           "parameters": [
             {
@@ -2577,7 +3295,7 @@
           "async": true,
           "exported": true,
           "filePath": "actions/detect-intent.ts",
-          "lineNumber": 238,
+          "lineNumber": 224,
           "signature": "testIntentDetection(inputs: string[]): Promise<void>",
           "parameters": [
             {
@@ -2593,17 +3311,97 @@
       "constants": []
     },
     {
+      "filePath": "actions/generate-voice.ts",
+      "moduleName": "generate-voice",
+      "isClient": false,
+      "isServer": true,
+      "imports": [
+        {
+          "from": "@elevenlabs/elevenlabs-js",
+          "names": [
+            "ElevenLabsClient"
+          ]
+        }
+      ],
+      "exports": [
+        "GenerateVoiceResult"
+      ],
+      "types": [
+        {
+          "name": "GenerateVoiceResult",
+          "kind": "interface",
+          "filePath": "actions/generate-voice.ts",
+          "lineNumber": 43,
+          "exported": true,
+          "definition": "export interface GenerateVoiceResult {\n  success: boolean;\n  audioData?: ArrayBuffer;\n  audioUrl?: string;\n  error?: string;\n}",
+          "properties": [
+            {
+              "name": "success",
+              "type": "boolean",
+              "optional": false
+            },
+            {
+              "name": "audioData",
+              "type": "ArrayBuffer",
+              "optional": true
+            },
+            {
+              "name": "audioUrl",
+              "type": "string",
+              "optional": true
+            },
+            {
+              "name": "error",
+              "type": "string",
+              "optional": true
+            }
+          ]
+        }
+      ],
+      "functions": [
+        {
+          "name": "generateVoice",
+          "kind": "function",
+          "async": true,
+          "exported": true,
+          "filePath": "actions/generate-voice.ts",
+          "lineNumber": 3,
+          "signature": "generateVoice(\n  text: string,\n  voiceId: string\n): Promise<GenerateVoiceResult>",
+          "parameters": [
+            {
+              "name": "text",
+              "optional": false,
+              "type": "string"
+            },
+            {
+              "name": "voiceId",
+              "optional": false,
+              "type": "string"
+            }
+          ],
+          "returnType": "Promise<GenerateVoiceResult>"
+        },
+        {
+          "name": "getAvailableVoices",
+          "kind": "function",
+          "async": true,
+          "exported": true,
+          "filePath": "actions/generate-voice.ts",
+          "lineNumber": 170,
+          "signature": "getAvailableVoices(): Promise<",
+          "parameters": [],
+          "returnType": "Promise<"
+        }
+      ],
+      "components": [],
+      "constants": []
+    },
+    {
       "filePath": "actions/generate-whisper.ts",
       "moduleName": "generate-whisper",
       "isClient": false,
       "isServer": true,
       "imports": [
-        {
-          "from": "@ai-sdk/gateway",
-          "names": [
-            "createGateway"
-          ]
-        },
         {
           "from": "ai",
           "names": [
@@ -2616,6 +3414,13 @@
             "type ViewMode",
             "type TimeOfDay",
             "type WhisperMood"
+          ]
+        },
+        {
+          "from": "@/lib/ai-gateway",
+          "names": [
+            "getModel",
+            "isAIGatewayAvailable"
           ]
         }
       ],
@@ -2711,7 +3516,7 @@
           "async": true,
           "exported": true,
           "filePath": "actions/generate-whisper.ts",
-          "lineNumber": 109,
+          "lineNumber": 97,
           "signature": "generateWhisper(\n  params: GenerateWhisperParams\n): Promise<GenerateWhisperResult>",
           "parameters": [
             {
@@ -2728,7 +3533,7 @@
           "async": true,
           "exported": true,
           "filePath": "actions/generate-whisper.ts",
-          "lineNumber": 225,
+          "lineNumber": 207,
           "signature": "generateWhisperBatch(\n  params: GenerateWhisperParams,\n  count: number = 3\n): Promise<GenerateWhisperResult[]>",
           "parameters": [
             {
@@ -2751,7 +3556,7 @@
           "async": false,
           "exported": false,
           "filePath": "actions/generate-whisper.ts",
-          "lineNumber": 262,
+          "lineNumber": 244,
           "signature": "inferMood(text: string, mode: ViewMode): WhisperMood",
           "parameters": [
             {
@@ -2803,6 +3608,17 @@
     {
       "name": "Landing",
       "filePath": "components/Landing.tsx",
+      "isClient": true
+    },
+    {
+      "name": "OnboardingHint",
+      "filePath": "components/OnboardingHint.tsx",
+      "isClient": true,
+      "propsType": "OnboardingHintProps"
+    },
+    {
+      "name": "VoiceSelector",
+      "filePath": "components/VoiceSelector.tsx",
       "isClient": true
     },
     {
@@ -2909,9 +3725,39 @@
       "signature": "parseIntent(input: string): ViewMode"
     },
     {
+      "name": "getModel",
+      "filePath": "lib/ai-gateway.ts",
+      "signature": "getModel(\n  modelName: string = 'claude-3-5-sonnet-20241022'\n): ReturnType<NonNullable<typeof anthropicProvider>> | ReturnType<NonNullable<typeof gateway>>"
+    },
+    {
+      "name": "getActiveProvider",
+      "filePath": "lib/ai-gateway.ts",
+      "signature": "getActiveProvider(): AIProvider"
+    },
+    {
+      "name": "isAIGatewayAvailable",
+      "filePath": "lib/ai-gateway.ts",
+      "signature": "isAIGatewayAvailable(): boolean"
+    },
+    {
+      "name": "getAnthropicProvider",
+      "filePath": "lib/ai-gateway.ts",
+      "signature": "getAnthropicProvider(): ReturnType<typeof createAnthropic> | null"
+    },
+    {
+      "name": "getAIGateway",
+      "filePath": "lib/ai-gateway.ts",
+      "signature": "getAIGateway(): ReturnType<typeof createGateway> | null"
+    },
+    {
       "name": "getTypography",
       "filePath": "lib/styles.ts",
       "signature": "getTypography(mode: ViewMode): TypographyConfig"
+    },
+    {
+      "name": "getFocusRing",
+      "filePath": "lib/styles.ts",
+      "signature": "getFocusRing(mode: ViewMode): string"
     },
     {
       "name": "fetchEchoes",
@@ -2957,6 +3803,16 @@
       "name": "testIntentDetection",
       "filePath": "actions/detect-intent.ts",
       "signature": "testIntentDetection(inputs: string[]): Promise<void>"
+    },
+    {
+      "name": "generateVoice",
+      "filePath": "actions/generate-voice.ts",
+      "signature": "generateVoice(\n  text: string,\n  voiceId: string\n): Promise<GenerateVoiceResult>"
+    },
+    {
+      "name": "getAvailableVoices",
+      "filePath": "actions/generate-voice.ts",
+      "signature": "getAvailableVoices(): Promise<"
     },
     {
       "name": "generateWhisper",
@@ -3014,6 +3870,11 @@
       "name": "IntentResponse",
       "kind": "type",
       "filePath": "actions/detect-intent.ts"
+    },
+    {
+      "name": "GenerateVoiceResult",
+      "kind": "interface",
+      "filePath": "actions/generate-voice.ts"
     }
   ]
 }

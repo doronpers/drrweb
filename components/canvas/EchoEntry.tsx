@@ -19,20 +19,49 @@ interface EchoEntryProps {
   index: number;
 }
 
-function EchoEntry({ id, text, timestamp, index }: EchoEntryProps) {
+interface FloatParams {
+  startX: number;
+  startY: number;
+  driftX: number;
+  driftY: number;
+  duration: number;
+  opacity: number;
+  rotation: number;
+}
+
+/**
+ * Generate random float parameters for echo animation
+ * Extracted to function for clarity and reusability
+ * 
+ * Note: Math.random() is intentionally used here to create unique visual
+ * positioning. The values are memoized per component instance to ensure
+ * stability across re-renders.
+ */
+function generateFloatParams(): FloatParams {
+  const r1 = Math.random();
+  const r2 = Math.random();
+  const r3 = Math.random();
+  const r4 = Math.random();
+  const r5 = Math.random();
+  const r6 = Math.random();
+  const r7 = Math.random();
+  
+  return {
+    startX: r1 * 80 + 10, // 10-90% of width
+    startY: r2 * 80 + 10, // 10-90% of height
+    driftX: (r3 - 0.5) * 100, // Random drift direction
+    driftY: (r4 - 0.5) * 100,
+    duration: r5 * 30 + 40, // 40-70 seconds
+    opacity: r6 * 0.15 + 0.1, // 0.1-0.25 opacity for "distance"
+    rotation: r7 * 10 - 5, // -5 to 5 degrees
+  };
+}
+
+function EchoEntry({ id, text, timestamp: _timestamp, index }: EchoEntryProps) {
   // Random starting position and movement parameters
-  // Memoized to prevent recalculation on re-renders
-  // Empty dependency array - these are random values that should be stable per component instance
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const floatParams = useMemo(() => ({
-    startX: Math.random() * 80 + 10, // 10-90% of width
-    startY: Math.random() * 80 + 10, // 10-90% of height
-    driftX: (Math.random() - 0.5) * 100, // Random drift direction
-    driftY: (Math.random() - 0.5) * 100,
-    duration: Math.random() * 30 + 40, // 40-70 seconds
-    opacity: Math.random() * 0.3 + 0.2, // 0.2-0.5 opacity for "distance"
-    rotation: Math.random() * 10 - 5, // -5 to 5 degrees
-  }), []); // Empty array - values are random but should be stable per instance
+  // Using useMemo to ensure stable values per component instance
+  // Empty dependency array is intentional - values should be stable per instance
+  const floatParams = useMemo(() => generateFloatParams(), []);
 
   return (
     <motion.div
@@ -69,8 +98,8 @@ function EchoEntry({ id, text, timestamp, index }: EchoEntryProps) {
         willChange: 'transform, opacity',
       }}
     >
-      <div className="bg-black/5 backdrop-blur-sm px-4 py-2 rounded-full border border-black/10 max-w-xs">
-        <p className="text-sm font-light text-black/60 truncate">{text}</p>
+      <div className="bg-black/3 backdrop-blur-sm px-4 py-2 rounded-full border border-black/5 max-w-xs">
+        <p className="text-sm font-light text-black/50 truncate">{text}</p>
       </div>
     </motion.div>
   );
