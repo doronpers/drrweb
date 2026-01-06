@@ -130,13 +130,21 @@ class AudioManager {
   private clickSynth: Tone.Synth | null = null;
   private warmSynth: Tone.Synth | null = null;
   private glitchSynth: Tone.Synth | null = null; // Changed from NoiseSynth to Synth
+  private landingSynth: Tone.Synth | null = null; // Special synth for landing page with reverb and delay
 
   // Effects
   private reverb: Tone.Reverb | null = null;
   private warmReverb: Tone.Reverb | null = null; // Store warm reverb as class property
   private labReverb: Tone.Reverb | null = null; // Store lab reverb as class property
   private architectReverb: Tone.Reverb | null = null; // Store architect reverb as class property
+  private landingReverb: Tone.Reverb | null = null; // Short reverb for landing page
+  private landingDelay: Tone.FeedbackDelay | null = null; // Light delay for landing page
   private uiVolume: Tone.Volume | null = null;
+  
+  // Button click chord synths (for layered notes)
+  private buttonSynth1: Tone.Synth | null = null;
+  private buttonSynth2: Tone.Synth | null = null;
+  private buttonSynth3: Tone.Synth | null = null;
 
   /**
    * Initialize the audio context and create all synthesizers.
@@ -332,6 +340,76 @@ class AudioManager {
       labFilter.connect(this.labReverb);
       this.labReverb.connect(this.uiVolume);
 
+      // ====================================
+      // LANDING PAGE SYNTH (with reverb and delay)
+      // ====================================
+      this.landingReverb = new Tone.Reverb({
+        decay: 0.8,  // Short reverb
+        wet: 0.4,     // Light reverb (40% wet)
+      });
+      await this.landingReverb.generate();
+      
+      this.landingDelay = new Tone.FeedbackDelay({
+        delayTime: 0.15,  // Light delay (150ms)
+        feedback: 0.2,    // Subtle feedback
+        wet: 0.3,         // 30% wet signal
+      });
+      
+      this.landingSynth = new Tone.Synth({
+        oscillator: { 
+          type: this.currentTone,
+        },
+        envelope: {
+          attack: 0.01,
+          decay: 0.15,
+          sustain: 0.1,
+          release: 0.3,
+        },
+      });
+      // Route: Synth → Delay → Reverb → Volume
+      this.landingSynth.connect(this.landingDelay);
+      this.landingDelay.connect(this.landingReverb);
+      this.landingReverb.connect(this.uiVolume);
+
+      // ====================================
+      // BUTTON CLICK CHORD SYNTHS (layered notes)
+      // ====================================
+      // Three synths for playing root + root-6 semitones + root+6 semitones
+      this.buttonSynth1 = new Tone.Synth({
+        oscillator: { type: this.currentTone },
+        envelope: {
+          attack: 0.01,
+          decay: 0.2,
+          sustain: 0.2,
+          release: 0.4,
+        },
+      });
+      
+      this.buttonSynth2 = new Tone.Synth({
+        oscillator: { type: this.currentTone },
+        envelope: {
+          attack: 0.01,
+          decay: 0.2,
+          sustain: 0.2,
+          release: 0.4,
+        },
+      });
+      
+      this.buttonSynth3 = new Tone.Synth({
+        oscillator: { type: this.currentTone },
+        envelope: {
+          attack: 0.01,
+          decay: 0.2,
+          sustain: 0.2,
+          release: 0.4,
+        },
+      });
+      
+      // Connect all button synths to volume (with slight reverb for cohesion)
+      this.buttonSynth1.connect(this.architectReverb);
+      this.buttonSynth2.connect(this.architectReverb);
+      this.buttonSynth3.connect(this.architectReverb);
+
       this.initialized = true;
       console.log('✅ Audio system initialized');
     } catch (error) {
@@ -391,10 +469,12 @@ class AudioManager {
   /**
    * Play a UI interaction sound based on the current mode.
    * Uses pentatonic scale for musical cohesion.
+   * For landing page, uses special synth with reverb and delay.
    *
    * @param type - The type of UI sound to play
+   * @param isLandingPage - Whether this is on the landing page
    */
-  playUISound(type: UISoundType): void {
+  playUISound(type: UISoundType, isLandingPage: boolean = false): void {
     if (!this.initialized) {
       console.warn('⚠️ Audio not initialized yet');
       return;
@@ -415,6 +495,18 @@ class AudioManager {
     try {
       switch (type) {
         case 'click-dry': {
+          // Use landing page synth if on landing page
+          if (isLandingPage && this.landingSynth && this.harmonicNotes) {
+            const architectNotes = this.harmonicNotes.architect;
+            const archNoteIndex = this.interactionCount % architectNotes.length;
+            const architectNote = architectNotes[archNoteIndex];
+            const archDetune = getRandomDetune(DETUNE_PRESETS.architect);
+            this.landingSynth.detune.value = archDetune;
+            console.log(`🎵 Playing landing page tone: ${architectNote.toFixed(2)}Hz (with reverb & delay) - Note ${archNoteIndex + 1}/${architectNotes.length}`);
+            this.landingSynth.triggerAttackRelease(architectNote, '0.6', now);
+            break;
+          }
+          
           if (!this.clickSynth || !this.harmonicNotes) {
             console.error('❌ clickSynth not initialized');
             return;
@@ -559,6 +651,50 @@ class AudioManager {
   }
 
   /**
+   * Play a layered chord for button clicks (root + root-6 semitones + root+6 semitones)
+   * Creates a rich, harmonically interesting sound
+   */
+  playButtonClickSound(): void {
+    if (!this.initialized) {
+      console.warn('⚠️ Audio not initialized yet');
+      return;
+    }
+    
+    if (this.muted) {
+      console.log('🔇 Audio is muted, skipping sound');
+      return;
+    }
+
+    if (!this.harmonicNotes || !this.buttonSynth1 || !this.buttonSynth2 || !this.buttonSynth3) {
+      console.error('❌ Button synths not initialized');
+      return;
+    }
+
+    // Get a root note from the current key (use architect notes for consistency)
+    const architectNotes = this.harmonicNotes.architect;
+    const noteIndex = this.interactionCount % architectNotes.length;
+    const rootFreq = architectNotes[noteIndex];
+    
+    // Calculate frequencies: root, root-6 semitones, root+6 semitones
+    // 6 semitones = tritone interval (diminished fifth/augmented fourth)
+    const semitoneRatio = Math.pow(2, 1 / 12);
+    const lowerFreq = rootFreq / Math.pow(semitoneRatio, 6); // 6 semitones down
+    const upperFreq = rootFreq * Math.pow(semitoneRatio, 6); // 6 semitones up
+    
+    // Ensure each sound has a unique timestamp
+    const now = Math.max(Tone.now(), this.lastSoundTime + 0.01);
+    this.lastSoundTime = now;
+    this.interactionCount++;
+    
+    // Play all three notes simultaneously
+    this.buttonSynth1.triggerAttackRelease(rootFreq, '0.5', now);
+    this.buttonSynth2.triggerAttackRelease(lowerFreq, '0.5', now);
+    this.buttonSynth3.triggerAttackRelease(upperFreq, '0.5', now);
+    
+    console.log(`🎵 Playing button click chord: ${rootFreq.toFixed(2)}Hz + ${lowerFreq.toFixed(2)}Hz + ${upperFreq.toFixed(2)}Hz`);
+  }
+
+  /**
    * Update audio settings (key, mode, tone, velocity)
    */
   updateSettings(settings: Partial<AudioSettings>): void {
@@ -586,6 +722,18 @@ class AudioManager {
       }
       if (this.glitchSynth) {
         this.glitchSynth.oscillator.type = settings.tone;
+      }
+      if (this.landingSynth) {
+        this.landingSynth.oscillator.type = settings.tone;
+      }
+      if (this.buttonSynth1) {
+        this.buttonSynth1.oscillator.type = settings.tone;
+      }
+      if (this.buttonSynth2) {
+        this.buttonSynth2.oscillator.type = settings.tone;
+      }
+      if (this.buttonSynth3) {
+        this.buttonSynth3.oscillator.type = settings.tone;
       }
     }
 
@@ -668,10 +816,16 @@ class AudioManager {
     this.clickSynth?.dispose();
     this.warmSynth?.dispose();
     this.glitchSynth?.dispose();
+    this.landingSynth?.dispose();
+    this.buttonSynth1?.dispose();
+    this.buttonSynth2?.dispose();
+    this.buttonSynth3?.dispose();
     this.reverb?.dispose();
     this.warmReverb?.dispose();
     this.labReverb?.dispose();
     this.architectReverb?.dispose();
+    this.landingReverb?.dispose();
+    this.landingDelay?.dispose();
     this.uiVolume?.dispose();
 
     this.initialized = false;

@@ -19,6 +19,7 @@ import { useState, FormEvent, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import EchoEntry from './EchoEntry';
 import { fetchEchoes, submitEcho, type Echo as SupabaseEcho } from '@/lib/supabase';
+import { audioManager } from '@/lib/audio';
 
 // ====================================
 // TYPE DEFINITIONS
@@ -258,7 +259,10 @@ export default function EchoChamber() {
         className="fixed bottom-8 right-8 pointer-events-auto z-50 p-4 bg-black/5 hover:bg-black/10 backdrop-blur-sm rounded-full border border-black/10 transition-colors focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
-        onClick={() => setShowInput(!showInput)}
+        onClick={() => {
+          audioManager.playButtonClickSound();
+          setShowInput(!showInput);
+        }}
         aria-label="Add echo"
         aria-expanded={showInput}
       >
@@ -311,9 +315,13 @@ export default function EchoChamber() {
                 <div className="flex gap-2">
                   <button
                     type="button"
-                    onClick={() => setShowInput(false)}
+                    onClick={() => {
+                      audioManager.playButtonClickSound();
+                      setShowInput(false);
+                    }}
                     onKeyDown={(e) => {
                       if (e.key === 'Escape') {
+                        audioManager.playButtonClickSound();
                         setShowInput(false);
                       }
                     }}
@@ -325,6 +333,11 @@ export default function EchoChamber() {
                   <button
                     type="submit"
                     disabled={!input.trim() || isSubmitting}
+                    onClick={() => {
+                      if (!isSubmitting && input.trim()) {
+                        audioManager.playButtonClickSound();
+                      }
+                    }}
                     className="flex-1 px-4 py-2 text-sm bg-black text-white rounded-lg hover:bg-black/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2"
                     aria-label="Send echo"
                     aria-disabled={!input.trim() || isSubmitting}

@@ -178,30 +178,43 @@ class VoiceManager {
   async playVoice(text: string, voiceId?: string): Promise<boolean> {
     const selectedVoiceId = voiceId || this.getVoiceId();
     
-    // Respect mute state
-    if (audioManager.isMuted()) {
-      return false;
+    // Note: We don't check audioManager.isMuted() here because whispers should play
+    // even when UI sounds are muted. Whispers are ambient content, not interaction feedback.
+    // If users want to mute whispers, they can mute their system audio or we can add
+    // a separate whisper mute setting in the future.
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🎤 Attempting to play voice for: "${text.slice(0, 30)}..." (voice: ${selectedVoiceId})`);
     }
 
     // Check cache first
     let audioData: ArrayBuffer | null = await getCachedAudio(text, selectedVoiceId);
 
-    // If not cached, generate
-    if (!audioData) {
+    if (audioData) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('✅ Using cached audio');
+      }
+    } else {
+      // If not cached, generate
+      if (process.env.NODE_ENV === 'development') {
+        console.log('🔄 Generating new voice audio...');
+      }
       try {
         const result = await generateVoice(text, selectedVoiceId);
         if (!result.success || !result.audioData) {
-          if (process.env.NODE_ENV === 'development') {
-            console.warn('Voice generation failed:', result.error);
-          }
+          console.error('❌ Voice generation failed:', result.error);
           return false;
         }
         audioData = result.audioData;
         
+        if (process.env.NODE_ENV === 'development') {
+          console.log('✅ Voice audio generated successfully');
+        }
+        
         // Cache for future use
         await cacheAudio(text, selectedVoiceId, audioData);
       } catch (error) {
-        console.error('Voice generation error:', error);
+        console.error('❌ Voice generation error:', error);
         return false;
       }
     }
@@ -219,6 +232,17 @@ class VoiceManager {
   ): Promise<boolean> {
     return new Promise((resolve) => {
       try {
+        // Validate audio data
+        if (!audioData || audioData.byteLength === 0) {
+          console.error('❌ Invalid audio data: empty or null');
+          resolve(false);
+          return;
+        }
+
+        if (process.env.NODE_ENV === 'development') {
+          console.log(`🎵 Creating audio playback (${audioData.byteLength} bytes)`);
+        }
+
         // Create blob URL from audio data
         const blob = new Blob([audioData], { type: 'audio/mpeg' });
         const url = URL.createObjectURL(blob);
@@ -227,12 +251,34 @@ class VoiceManager {
         const audio = new Audio(url);
         this.currentAudio = audio;
 
-        // Duck ambient on playback start
-        audioManager.duckAmbient(DUCK_AMOUNT, DUCK_RAMP_TIME);
+        // Set volume (ensure it's audible)
+        audio.volume = 1.0;
+
+        // Duck ambient on playback start (if audio manager is initialized)
+        // This is optional - whispers can play even if audio manager isn't ready
+        try {
+          if (audioManager && typeof audioManager.duckAmbient === 'function') {
+            audioManager.duckAmbient(DUCK_AMOUNT, DUCK_RAMP_TIME);
+          }
+        } catch (error) {
+          // Non-fatal - continue playback even if ducking fails
+          if (process.env.NODE_ENV === 'development') {
+            console.warn('Could not duck ambient audio:', error);
+          }
+        }
 
         // Restore ambient on playback end
         audio.addEventListener('ended', () => {
-          audioManager.restoreAmbient(DUCK_RAMP_TIME);
+          if (process.env.NODE_ENV === 'development') {
+            console.log('✅ Voice playback completed');
+          }
+          try {
+            if (audioManager && typeof audioManager.restoreAmbient === 'function') {
+              audioManager.restoreAmbient(DUCK_RAMP_TIME);
+            }
+          } catch (error) {
+            // Non-fatal
+          }
           URL.revokeObjectURL(url);
           this.currentAudio = null;
           this.isPlaying = false;
@@ -244,8 +290,21 @@ class VoiceManager {
 
         // Handle errors
         audio.addEventListener('error', (error) => {
-          console.error('Audio playback error:', error);
-          audioManager.restoreAmbient(DUCK_RAMP_TIME);
+          console.error('❌ Audio playback error:', error);
+          console.error('Audio element error details:', {
+            error: audio.error,
+            code: audio.error?.code,
+            message: audio.error?.message,
+            networkState: audio.networkState,
+            readyState: audio.readyState,
+          });
+          try {
+            if (audioManager && typeof audioManager.restoreAmbient === 'function') {
+              audioManager.restoreAmbient(DUCK_RAMP_TIME);
+            }
+          } catch (error) {
+            // Non-fatal
+          }
           URL.revokeObjectURL(url);
           this.currentAudio = null;
           this.isPlaying = false;
@@ -253,23 +312,60 @@ class VoiceManager {
           resolve(false);
         });
 
+        // Handle load events for debugging
+        audio.addEventListener('loadeddata', () => {
+          if (process.env.NODE_ENV === 'development') {
+            console.log('📦 Audio data loaded, duration:', audio.duration, 'seconds');
+          }
+        });
+
+        audio.addEventListener('canplay', () => {
+          if (process.env.NODE_ENV === 'development') {
+            console.log('▶️ Audio ready to play');
+          }
+        });
+
         // Start playback
-        audio.play().then(() => {
+        const playPromise = audio.play();
+        
+        if (playPromise !== undefined) {
+          playPromise
+            .then(() => {
+              this.isPlaying = true;
+              if (process.env.NODE_ENV === 'development') {
+                console.log(`🔊 Playing voice: "${text.slice(0, 30)}..." (duration: ${audio.duration.toFixed(2)}s)`);
+              }
+            })
+            .catch((error) => {
+              console.error('❌ Failed to play audio:', error);
+              console.error('Play error details:', {
+                name: error.name,
+                message: error.message,
+                networkState: audio.networkState,
+                readyState: audio.readyState,
+              });
+              try {
+            if (audioManager && typeof audioManager.restoreAmbient === 'function') {
+              audioManager.restoreAmbient(DUCK_RAMP_TIME);
+            }
+          } catch (error) {
+            // Non-fatal
+          }
+              URL.revokeObjectURL(url);
+              this.currentAudio = null;
+              this.isPlaying = false;
+              this.processQueue();
+              resolve(false);
+            });
+        } else {
+          // Fallback for older browsers
           this.isPlaying = true;
           if (process.env.NODE_ENV === 'development') {
-            console.log(`🔊 Playing voice: "${text.slice(0, 30)}..."`);
+            console.log(`🔊 Playing voice (legacy): "${text.slice(0, 30)}..."`);
           }
-        }).catch((error) => {
-          console.error('Failed to play audio:', error);
-          audioManager.restoreAmbient(DUCK_RAMP_TIME);
-          URL.revokeObjectURL(url);
-          this.currentAudio = null;
-          this.isPlaying = false;
-          this.processQueue();
-          resolve(false);
-        });
+        }
       } catch (error) {
-        console.error('Failed to create audio playback:', error);
+        console.error('❌ Failed to create audio playback:', error);
         resolve(false);
       }
     });
@@ -279,10 +375,19 @@ class VoiceManager {
    * Add whisper to playback queue
    */
   queueWhisper(text: string, voiceId?: string, priority: number = 0): void {
+    if (!text || text.trim().length === 0) {
+      console.warn('⚠️ Cannot queue empty whisper text');
+      return;
+    }
+
     this.playbackQueue.push({ text, voiceId, priority });
     
     // Sort by priority (higher first)
     this.playbackQueue.sort((a, b) => (b.priority || 0) - (a.priority || 0));
+    
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`📥 Queued whisper: "${text.slice(0, 30)}..." (queue size: ${this.playbackQueue.length}, playing: ${this.isPlaying})`);
+    }
     
     // Process queue if not currently playing
     if (!this.isPlaying) {
@@ -294,10 +399,26 @@ class VoiceManager {
    * Process playback queue
    */
   private async processQueue(): Promise<void> {
-    if (this.isPlaying || this.playbackQueue.length === 0) return;
+    if (this.isPlaying) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('⏸️ Already playing, queue will process after current playback');
+      }
+      return;
+    }
+    
+    if (this.playbackQueue.length === 0) {
+      if (process.env.NODE_ENV === 'development') {
+        console.log('📭 Queue is empty');
+      }
+      return;
+    }
 
     const item = this.playbackQueue.shift();
     if (!item) return;
+
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🎵 Processing queue item: "${item.text.slice(0, 30)}..." (${this.playbackQueue.length} remaining)`);
+    }
 
     // Small delay between whispers for natural pacing
     await new Promise(resolve => setTimeout(resolve, 500));

@@ -13,6 +13,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { getAvailableVoices } from '@/actions/generate-voice';
 import { voiceManager } from '@/lib/voice';
+import { audioManager } from '@/lib/audio';
 
 // ====================================
 // TYPE DEFINITIONS
@@ -73,6 +74,7 @@ export default function VoiceSelector() {
    * Handle voice selection
    */
   const handleVoiceChange = useCallback((voiceId: string) => {
+    audioManager.playButtonClickSound();
     setSelectedVoiceId(voiceId);
     voiceManager.setDefaultVoice(voiceId);
     setIsOpen(false);
@@ -99,7 +101,10 @@ export default function VoiceSelector() {
         className="relative"
       >
         <button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => {
+            audioManager.playButtonClickSound();
+            setIsOpen(!isOpen);
+          }}
           className="px-3 py-2 bg-black/5 hover:bg-black/10 backdrop-blur-sm rounded-full border border-black/10 transition-colors text-xs font-medium text-black/60 hover:text-black/80 focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2"
           aria-label="Select voice for whisper narration"
           aria-expanded={isOpen}

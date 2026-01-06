@@ -53,6 +53,13 @@ const TONE_TYPES: Array<{ value: 'sine' | 'triangle' | 'sawtooth' | 'square'; la
 
 export default function AudioControls() {
   const [isOpen, setIsOpen] = useState(false);
+  const [isMuted, setIsMuted] = useState(() => {
+    // Initialize from audio manager if available
+    if (typeof window !== 'undefined') {
+      return audioManager.isMuted();
+    }
+    return true; // Default to muted
+  });
   const [settings, setSettings] = useState<AudioSettings>(() => {
     const keyConfig = loadKeyConfig();
     const stored = typeof window !== 'undefined' 
@@ -110,6 +117,33 @@ export default function AudioControls() {
   }, [settings]);
 
   /**
+   * Sync mute state with audio manager
+   */
+  useEffect(() => {
+    // Check mute state periodically to keep in sync
+    const checkMuteState = () => {
+      setIsMuted(audioManager.isMuted());
+    };
+    
+    // Check immediately
+    checkMuteState();
+    
+    // Check every second to stay in sync (in case mute is changed elsewhere)
+    const interval = setInterval(checkMuteState, 1000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
+  /**
+   * Handle mute toggle
+   */
+  const handleMuteToggle = useCallback(() => {
+    audioManager.toggleMute();
+    setIsMuted(audioManager.isMuted());
+    // Don't play button click sound when toggling mute (would be ironic)
+  }, []);
+
+  /**
    * Load settings on mount
    */
   useEffect(() => {
@@ -150,26 +184,46 @@ export default function AudioControls() {
         className="relative"
       >
         <button
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => {
+            audioManager.playButtonClickSound();
+            setIsOpen(!isOpen);
+          }}
           className="px-3 py-2 bg-black/5 hover:bg-black/10 backdrop-blur-sm rounded-full border border-black/10 transition-colors text-xs font-medium text-black/60 hover:text-black/80 focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2"
           aria-label="Audio controls"
           aria-expanded={isOpen}
           title="Adjust audio settings"
         >
           <span className="flex items-center gap-2">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <circle cx="12" cy="12" r="3" />
-              <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24" />
-            </svg>
+            {isMuted ? (
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                <line x1="23" y1="9" x2="17" y2="15" />
+                <line x1="17" y1="9" x2="23" y2="15" />
+              </svg>
+            ) : (
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="3" />
+                <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24" />
+              </svg>
+            )}
             {settings.key} {settings.mode}
           </span>
         </button>
@@ -184,6 +238,61 @@ export default function AudioControls() {
               className="absolute bottom-full left-0 mb-2 w-80 bg-white/90 backdrop-blur-md rounded-lg border border-black/10 shadow-2xl overflow-hidden"
             >
               <div className="p-4 space-y-4 max-h-96 overflow-y-auto">
+                {/* Mute/Unmute Toggle */}
+                <div>
+                  <label className="block text-xs font-medium text-black/60 mb-2">
+                    Audio
+                  </label>
+                  <button
+                    onClick={handleMuteToggle}
+                    className={`w-full px-3 py-2 text-xs rounded transition-colors focus:outline-none focus:ring-2 focus:ring-black/20 flex items-center justify-center gap-2 ${
+                      isMuted
+                        ? 'bg-black/10 text-black/70 hover:bg-black/15'
+                        : 'bg-black text-white hover:bg-black/80'
+                    }`}
+                    aria-label={isMuted ? 'Unmute audio' : 'Mute audio'}
+                    aria-pressed={!isMuted}
+                  >
+                    {isMuted ? (
+                      <>
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                          <line x1="23" y1="9" x2="17" y2="15" />
+                          <line x1="17" y1="9" x2="23" y2="15" />
+                        </svg>
+                        <span>Muted</span>
+                      </>
+                    ) : (
+                      <>
+                        <svg
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5" />
+                          <path d="M15.54 8.46a5 5 0 0 1 0 7.07" />
+                          <path d="M19.07 4.93a10 10 0 0 1 0 14.14" />
+                        </svg>
+                        <span>Unmuted</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+
                 {/* Key Selection */}
                 <div>
                   <label className="block text-xs font-medium text-black/60 mb-2">
@@ -193,7 +302,10 @@ export default function AudioControls() {
                     {MUSICAL_KEYS.map((key) => (
                       <button
                         key={key}
-                        onClick={() => updateSettings({ key })}
+                        onClick={() => {
+                          audioManager.playButtonClickSound();
+                          updateSettings({ key });
+                        }}
                         className={`px-3 py-1.5 text-xs rounded transition-colors focus:outline-none focus:ring-2 focus:ring-black/20 ${
                           settings.key === key
                             ? 'bg-black text-white'
@@ -215,7 +327,10 @@ export default function AudioControls() {
                     {KEY_MODES.map((mode) => (
                       <button
                         key={mode}
-                        onClick={() => updateSettings({ mode })}
+                        onClick={() => {
+                          audioManager.playButtonClickSound();
+                          updateSettings({ mode });
+                        }}
                         className={`flex-1 px-3 py-2 text-xs rounded transition-colors focus:outline-none focus:ring-2 focus:ring-black/20 capitalize ${
                           settings.mode === mode
                             ? 'bg-black text-white'
@@ -237,7 +352,10 @@ export default function AudioControls() {
                     {TONE_TYPES.map(({ value, label }) => (
                       <button
                         key={value}
-                        onClick={() => updateSettings({ tone: value })}
+                        onClick={() => {
+                          audioManager.playButtonClickSound();
+                          updateSettings({ tone: value });
+                        }}
                         className={`px-3 py-2 text-xs rounded transition-colors focus:outline-none focus:ring-2 focus:ring-black/20 ${
                           settings.tone === value
                             ? 'bg-black text-white'

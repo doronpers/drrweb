@@ -80,10 +80,10 @@ export default function Landing() {
       // Initialize audio if not already done
       await initializeAudio();
 
-      // Play UI sound on submit
+      // Play UI sound on submit (with landing page flag for reverb/delay)
       const audioManager = audioManagerRef.current;
       if (audioManager) {
-        audioManager.playUISound('click-dry');
+        audioManager.playUISound('click-dry', true); // true = isLandingPage
       }
 
       try {
