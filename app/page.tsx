@@ -27,6 +27,7 @@ import WhispersChamber from '@/components/canvas/WhispersChamber';
 import AntiPortfolio from '@/components/AntiPortfolio';
 import VoiceSelector from '@/components/VoiceSelector';
 import AudioControls from '@/components/AudioControls';
+import { audioManager } from '@/lib/audio';
 
 // Code splitting: Lazy load mode components for better performance
 const Architect = dynamic(() => import('@/components/modes/Architect'), {
@@ -100,7 +101,10 @@ export default function Home() {
         >
           {/* Back to Landing */}
           <motion.button
-            onClick={() => setMode('landing')}
+            onClick={() => {
+              audioManager.playButtonClickSound();
+              setMode('landing');
+            }}
             className="px-4 py-2 bg-black/5 hover:bg-black/10 backdrop-blur-sm rounded-full border border-black/10 transition-all duration-normal text-sm font-medium focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -172,7 +176,10 @@ function ModeButton({
 
   return (
     <motion.button
-      onClick={onClick}
+      onClick={() => {
+        audioManager.playButtonClickSound();
+        onClick();
+      }}
       role="tab"
       aria-selected={isActive}
       aria-controls={`${mode}-panel`}
