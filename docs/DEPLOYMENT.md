@@ -1,6 +1,6 @@
 # Deployment Guide
 
-This guide will help you deploy your website to a live web address.
+Complete deployment instructions for various hosting platforms.
 
 ## 🚀 Recommended: Vercel (Easiest for Next.js)
 
@@ -24,11 +24,14 @@ Vercel is made by the creators of Next.js and offers the best integration.
    - Import your GitHub repository
    - Vercel will auto-detect Next.js settings
 
-4. **Configure environment variables** (if using Supabase):
+4. **Configure environment variables**:
    - In project settings → Environment Variables
-   - Add:
-     - `NEXT_PUBLIC_SUPABASE_URL` = your Supabase project URL
-     - `NEXT_PUBLIC_SUPABASE_ANON_KEY` = your Supabase anon key
+   - Add all variables from your `.env.local`:
+     - `NEXT_PUBLIC_SUPABASE_URL` (if using Supabase)
+     - `NEXT_PUBLIC_SUPABASE_ANON_KEY` (if using Supabase)
+     - `ANTHROPIC_API_KEY` (if using Anthropic)
+     - `AI_GATEWAY_API_KEY` (if using Vercel AI Gateway)
+     - `ELEVENLABS_API_KEY` (if using voice generation)
    - Click "Redeploy" after adding variables
 
 5. **Deploy**:
@@ -38,8 +41,8 @@ Vercel is made by the creators of Next.js and offers the best integration.
 
 6. **Custom domain** (optional):
    - Go to Project Settings → Domains
-   - Add your domain (e.g., `doronreizes.com`)
-   - Follow DNS instructions
+   - Add your domain (e.g., `yourdomain.com`)
+   - Follow DNS instructions (see DNS Setup section below)
 
 ### Option 2: Deploy via Vercel CLI
 
@@ -65,7 +68,36 @@ vercel
 vercel --prod
 ```
 
----
+### Vercel DNS Setup
+
+After deploying to Vercel and adding your custom domain:
+
+1. **Go to Vercel Dashboard** → Your Project → **Settings** → **Domains**
+2. **Add your domain**: `yourdomain.com` and `www.yourdomain.com`
+3. **Vercel will show you the DNS records needed**
+
+#### For Root Domain (yourdomain.com)
+
+**Option A: Using A Records**
+- **Type**: `A`
+- **Name**: `@` (or leave blank - represents root domain)
+- **Value**: `76.76.21.21` (Vercel's IP - verify current IPs in Vercel dashboard)
+- **TTL**: `3600` (or default)
+
+**Option B: Using CNAME (if your DNS provider supports it)**
+- **Type**: `CNAME` (or `ALIAS` if supported)
+- **Name**: `@` (or leave blank)
+- **Value**: `cname.vercel-dns.com`
+- **TTL**: `3600`
+
+#### For WWW Subdomain (www.yourdomain.com)
+
+- **Type**: `CNAME`
+- **Name**: `www`
+- **Value**: `cname.vercel-dns.com`
+- **TTL**: `3600`
+
+**Note:** Vercel IPs can change. Always verify current IPs in the Vercel dashboard or documentation.
 
 ## 🌐 Alternative: Netlify
 
@@ -79,16 +111,13 @@ vercel --prod
 
 4. **Build settings** (auto-detected, but verify):
    - Build command: `npm run build`
-   - Publish directory: `.next`
-   - Actually, use: `out` (if using static export) OR `.next` (if using server)
+   - Publish directory: `.next` (or `out` if using static export)
 
-5. **Environment variables** (if using Supabase):
+5. **Environment variables**:
    - Site settings → Environment variables
-   - Add your Supabase credentials
+   - Add all variables from your `.env.local`
 
 6. **Deploy**
-
----
 
 ## 🐳 Alternative: Railway
 
@@ -98,13 +127,11 @@ vercel --prod
 
 3. **Select your repository**
 
-4. **Add environment variables** (if using Supabase)
+4. **Add environment variables** (if using Supabase/AI)
 
 5. **Deploy** - Railway auto-detects Next.js
 
----
-
-## 📦 Alternative: Self-Hosted (VPS/Docker)
+## 📦 Self-Hosted (VPS/Docker)
 
 ### Using Docker:
 
@@ -157,7 +184,71 @@ docker build -t drrweb .
 docker run -p 3000:3000 drrweb
 ```
 
----
+### Using VPS (Ionos, DigitalOcean, etc.)
+
+1. **Connect to your VPS via SSH**
+
+2. **Install Node.js** (if not already installed):
+   ```bash
+   # For Ubuntu/Debian
+   curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+   sudo apt-get install -y nodejs
+   ```
+
+3. **Upload your project**:
+   ```bash
+   # On VPS
+   cd /var/www
+   git clone your-repository-url drrweb
+   cd drrweb
+   ```
+
+4. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+5. **Set environment variables**:
+   ```bash
+   # Create .env.local
+   nano .env.local
+   # Add your environment variables
+   ```
+
+6. **Build the project**:
+   ```bash
+   npm run build
+   ```
+
+7. **Run with PM2** (process manager):
+   ```bash
+   # Install PM2
+   npm install -g pm2
+   
+   # Start the app
+   pm2 start npm --name "drrweb" -- start
+   
+   # Save PM2 configuration
+   pm2 save
+   pm2 startup
+   ```
+
+8. **Set up reverse proxy** (Nginx):
+   ```nginx
+   server {
+       listen 80;
+       server_name yourdomain.com;
+       
+       location / {
+           proxy_pass http://localhost:3000;
+           proxy_http_version 1.1;
+           proxy_set_header Upgrade $http_upgrade;
+           proxy_set_header Connection 'upgrade';
+           proxy_set_header Host $host;
+           proxy_cache_bypass $http_upgrade;
+       }
+   }
+   ```
 
 ## ✅ Pre-Deployment Checklist
 
@@ -167,10 +258,9 @@ Before deploying, make sure:
 - [ ] **Fix any build errors**
 - [ ] **Set up Supabase** (optional, but recommended for Echo Chamber)
 - [ ] **Update contact links** (email, LinkedIn, etc.)
-- [ ] **Check environment variables** (if using Supabase)
+- [ ] **Check environment variables** (if using Supabase/AI)
 - [ ] **Review security headers** (already configured in `next.config.mjs`)
-
----
+- [ ] **Verify repository URL** in `package.json`
 
 ## 🔧 Environment Variables Setup
 
@@ -183,25 +273,7 @@ Before deploying, make sure:
 
 2. **Set up database**:
    - Go to SQL Editor
-   - Run this SQL:
-   ```sql
-   CREATE TABLE echoes (
-     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-     text TEXT NOT NULL CHECK (char_length(text) <= 100),
-     created_at TIMESTAMP WITH TIME ZONE DEFAULT now(),
-     approved BOOLEAN DEFAULT false
-   );
-
-   ALTER TABLE echoes ENABLE ROW LEVEL SECURITY;
-
-   CREATE POLICY "Public can read approved echoes"
-   ON echoes FOR SELECT
-   USING (approved = true);
-
-   CREATE POLICY "Anyone can insert echoes for moderation"
-   ON echoes FOR INSERT
-   WITH CHECK (true);
-   ```
+   - Run the SQL from [SETUP.md](./SETUP.md)
 
 3. **Get credentials**:
    - Project Settings → API
@@ -212,8 +284,13 @@ Before deploying, make sure:
    - Vercel: Project Settings → Environment Variables
    - Netlify: Site Settings → Environment Variables
    - Railway: Variables tab
+   - VPS: Add to `.env.local` file
 
----
+### For AI Services:
+
+- **Anthropic**: `ANTHROPIC_API_KEY` (from console.anthropic.com)
+- **Vercel AI Gateway**: `AI_GATEWAY_API_KEY` (from Vercel dashboard)
+- **ElevenLabs**: `ELEVENLABS_API_KEY` (from elevenlabs.io)
 
 ## 🎯 Quick Start (Vercel - Fastest)
 
@@ -232,8 +309,6 @@ vercel --prod
 # Done! Your site is live.
 ```
 
----
-
 ## 📝 Post-Deployment
 
 After deployment:
@@ -243,8 +318,6 @@ After deployment:
 3. **Set up custom domain** (optional)
 4. **Enable HTTPS** (automatic on Vercel/Netlify)
 5. **Set up analytics** (optional - Vercel Analytics, Plausible, etc.)
-
----
 
 ## 🆘 Troubleshooting
 
@@ -269,7 +342,11 @@ After deployment:
 - Some browsers block autoplay (expected behavior)
 - User interaction required to start audio (by design)
 
----
+### DNS not propagating:
+- Usually takes 5 minutes to 48 hours
+- Average: 1-2 hours
+- Check status: Use `dig yourdomain.com` or online DNS checker
+- Verify records are correct in your DNS provider
 
 ## 💰 Cost Estimates
 
@@ -277,10 +354,10 @@ After deployment:
 - **Netlify**: Free tier available, $19/mo for pro
 - **Railway**: Pay-as-you-go, ~$5-10/mo for small sites
 - **Supabase**: Free tier available, $25/mo for pro
+- **VPS**: Varies by provider, typically $5-20/mo
 
 **Recommended**: Start with Vercel free tier + Supabase free tier = $0/month
 
 ---
 
 **Need help?** Check the [Next.js deployment docs](https://nextjs.org/docs/deployment) or platform-specific documentation.
-

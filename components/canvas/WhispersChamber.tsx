@@ -26,6 +26,7 @@ import {
   getInitialWhispers,
 } from '@/lib/whispers';
 import { generateWhisper } from '@/actions/generate-whisper';
+import { voiceManager } from '@/lib/voice';
 
 interface WhispersChamberProps {
   mode: ViewMode;
@@ -74,6 +75,7 @@ export default function WhispersChamber({
   const refreshTimerRef = useRef<NodeJS.Timeout | null>(null);
   const whisperTimestamps = useRef<Map<string, number>>(new Map());
   const lastAiAttempt = useRef<number>(0);
+  const voicedWhispers = useRef<Set<string>>(new Set()); // Track which whispers have been voiced
   // Ref to track current whispers for use in callbacks (avoids stale closures)
   const whispersRef = useRef<WhisperType[]>([]);
 
@@ -105,6 +107,16 @@ export default function WhispersChamber({
 
     setIsInitialized(true);
 
+    // Voice initial whispers (with delay for natural pacing)
+    initial.forEach((whisper, index) => {
+      setTimeout(() => {
+        if (!voicedWhispers.current.has(whisper.id)) {
+          voiceManager.queueWhisper(whisper.text);
+          voicedWhispers.current.add(whisper.id);
+        }
+      }, 2000 + index * 3000); // Stagger: first at 2s, then every 3s
+    });
+
     return () => {
       whisperEngine.reset();
     };
@@ -132,7 +144,19 @@ export default function WhispersChamber({
     setWhispers(prev => {
       // Keep some old whispers, add new contextual ones
       const toKeep = prev.slice(0, Math.max(CONFIG.minWhispers - 3, 2));
-      return [...toKeep, ...newWhispers].slice(0, CONFIG.maxWhispers);
+      const updated = [...toKeep, ...newWhispers].slice(0, CONFIG.maxWhispers);
+      
+      // Voice new whispers (use default voice from voiceManager)
+      newWhispers.forEach((whisper, index) => {
+        if (!voicedWhispers.current.has(whisper.id)) {
+          setTimeout(() => {
+            voiceManager.queueWhisper(whisper.text); // Uses default voice from localStorage
+            voicedWhispers.current.add(whisper.id);
+          }, 1000 + index * 2000); // Stagger new whispers
+        }
+      });
+      
+      return updated;
     });
   }, [mode, userIntent, isInitialized]);
 
@@ -197,6 +221,14 @@ export default function WhispersChamber({
         whisperTimestamps.current.set(newWhisper.id, now);
         updated.push(newWhisper);
         aiWhisper = null; // Mark as used
+        
+        // Voice the new whisper (with delay for natural appearance)
+        if (!voicedWhispers.current.has(newWhisper.id)) {
+          setTimeout(() => {
+            voiceManager.queueWhisper(newWhisper.text);
+            voicedWhispers.current.add(newWhisper.id);
+          }, 1500); // Small delay after whisper appears
+        }
       }
 
       // Maybe cycle out an old whisper
@@ -217,11 +249,20 @@ export default function WhispersChamber({
           // Remove oldest and add a fresh one
           updated = updated.filter(w => w.id !== oldestId);
           whisperTimestamps.current.delete(oldestId);
+          voicedWhispers.current.delete(oldestId); // Remove from voiced set
 
           // Use AI whisper if available, otherwise curated
           const newWhisper = aiWhisper || whisperEngine.selectWhisper();
           whisperTimestamps.current.set(newWhisper.id, now);
           updated.push(newWhisper);
+          
+          // Voice the new whisper
+          if (!voicedWhispers.current.has(newWhisper.id)) {
+            setTimeout(() => {
+              voiceManager.queueWhisper(newWhisper.text);
+              voicedWhispers.current.add(newWhisper.id);
+            }, 1500);
+          }
         }
       }
 

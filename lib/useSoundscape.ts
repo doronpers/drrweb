@@ -115,14 +115,15 @@ export function useSoundscape(mode: ViewMode): UseSoundscapeReturn {
     const params = MODE_AUDIO_PARAMS[mode as Exclude<ViewMode, 'landing'>];
     if (!params) return;
 
-    // Log transition in development mode
+    // Transition audio parameters
+    // Note: The actual parameter ramping would be implemented in audioManager
+    // For now, we log the target parameters (development only)
     if (process.env.NODE_ENV === 'development') {
       console.log(`🎵 Soundscape transitioning to ${mode}:`, params);
     }
 
-    // Note: Audio parameter ramping could be implemented in audioManager
-    // For example: audioManager.rampParams(params.reverb, params.filter, 2.0);
-    // Current implementation works well without dynamic ramping.
+    // TODO: Implement smooth parameter ramping in audioManager
+    // audioManager.rampParams(params.reverb, params.filter, 2.0);
 
   }, [mode, isReady]);
 
@@ -147,8 +148,8 @@ export function useSoundscape(mode: ViewMode): UseSoundscapeReturn {
       console.log('🎚️  Setting custom audio params:', params);
     }
     
-    // Note: Parameter ramping could be implemented in audioManager
-    // For example: audioManager.rampParams(params.reverb, params.filter, 2.0);
+    // TODO: Implement in audioManager
+    // audioManager.rampParams(params.reverb, params.filter, 2.0);
   }, [isReady]);
 
   return {

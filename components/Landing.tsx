@@ -13,6 +13,7 @@ import { useState, useEffect, useCallback, FormEvent, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useViewMode, parseIntent } from '@/contexts/ViewModeContext';
 import { detectIntent } from '@/actions/detect-intent';
+import OnboardingHint from '@/components/OnboardingHint';
 
 // Lazy load audio module to reduce initial bundle size
 // Using regular dynamic import instead of Next.js dynamic() since we're importing a module, not a component
@@ -31,6 +32,9 @@ export default function Landing() {
   
   // Cache audio manager once loaded
   const audioManagerRef = useRef<typeof import('@/lib/audio').audioManager | null>(null);
+  
+  // Form ref for programmatic submission
+  const formRef = useRef<HTMLFormElement>(null);
 
   /**
    * Initialize audio on first user interaction.
@@ -87,6 +91,11 @@ export default function Landing() {
         const intentResult = await detectIntent(input);
         const targetMode = intentResult.targetMode;
         
+        // Log audio params for future use (Phase 4) - only in development
+        if (process.env.NODE_ENV === 'development') {
+          console.log('🎵 Suggested audio params:', intentResult.audioParams);
+        }
+        
         // Slight delay for dramatic effect
         // Pass the user's input as intent for whispers personalization
         setTimeout(() => {
@@ -95,11 +104,19 @@ export default function Landing() {
       } catch (error) {
         console.error('Intent detection failed, using fallback:', error);
         
-        // Fallback to client-side parsing
-        const targetMode = parseIntent(input);
-        setTimeout(() => {
-          setMode(targetMode, input);
-        }, 300);
+        // Fallback to client-side parsing with error handling
+        try {
+          const targetMode = parseIntent(input);
+          setTimeout(() => {
+            setMode(targetMode, input);
+          }, 300);
+        } catch (fallbackError) {
+          console.error('Fallback parsing also failed:', fallbackError);
+          // Graceful degradation: default to architect mode
+          setTimeout(() => {
+            setMode('architect', input);
+          }, 300);
+        }
       } finally {
         // Reset submitting state after transition
         setTimeout(() => {
@@ -152,7 +169,7 @@ export default function Landing() {
   }, [audioInitialized]);
 
   return (
-    <div className="relative min-h-screen flex flex-col items-center justify-center bg-white overflow-hidden">
+    <div className="relative min-h-screen flex items-center justify-center bg-white overflow-hidden">
       {/* ====================================
           BREATHING BACKGROUND GRADIENT
           ==================================== */}
@@ -177,11 +194,11 @@ export default function Landing() {
           ==================================== */}
       <motion.button
         onClick={handleMuteToggle}
-        className="fixed top-6 right-6 md:top-8 md:right-8 z-50 p-3 md:p-3.5 text-black/40 hover:text-black/70 transition-colors rounded-full hover:bg-black/5"
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.92 }}
+        className="fixed top-8 right-8 z-50 p-3 text-black/30 hover:text-black/60 transition-colors focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2 rounded-full"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
         aria-label={isMuted ? 'Unmute audio' : 'Mute audio'}
-        title={isMuted ? 'Unmute audio' : 'Mute audio'}
+        aria-pressed={!isMuted}
       >
         <AnimatePresence mode="wait">
           {isMuted ? (
@@ -190,9 +207,8 @@ export default function Landing() {
               initial={{ opacity: 0, rotate: -90 }}
               animate={{ opacity: 1, rotate: 0 }}
               exit={{ opacity: 0, rotate: 90 }}
-              width="22"
-              height="22"
-              className="md:w-7 md:h-7"
+              width="24"
+              height="24"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -210,9 +226,8 @@ export default function Landing() {
               initial={{ opacity: 0, rotate: -90 }}
               animate={{ opacity: 1, rotate: 0 }}
               exit={{ opacity: 0, rotate: 90 }}
-              width="22"
-              height="22"
-              className="md:w-7 md:h-7"
+              width="24"
+              height="24"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -229,40 +244,31 @@ export default function Landing() {
       </motion.button>
 
       {/* ====================================
-          INTERACTIVE CONTENT - THE HANDSHAKE
+          MAIN CONTENT - THE HANDSHAKE
           ==================================== */}
       <motion.div
         className="relative z-10 w-full max-w-2xl px-8"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1, ease: 'easeOut', delay: 0.3 }}
+        transition={{ duration: 1, ease: 'easeOut' }}
       >
         {/* Centered prompt text */}
         <motion.h1
-          className="text-center mb-4 text-black/60 tracking-wide font-light"
+          className="text-center mb-12 text-black/40 tracking-wide"
           style={{
             fontSize: 'clamp(1rem, 2vw, 1.25rem)',
+            fontWeight: 300,
             letterSpacing: '0.15em',
           }}
           initial={{ opacity: 0 }}
-          animate={{ opacity: isFocused ? 0.8 : 0.6 }}
+          animate={{ opacity: isFocused ? 0.6 : 0.4 }}
           transition={{ duration: 0.6 }}
         >
-          How may I inform your journey?
+          What do you seek?
         </motion.h1>
-        
-        {/* Context hint - appears before interaction */}
-        <motion.p
-          className="text-center mb-10 text-black/40 text-xs md:text-sm tracking-wide font-light"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: isFocused ? 0 : 0.5 }}
-          transition={{ duration: 0.4 }}
-        >
-          Explore work, writing, or process
-        </motion.p>
 
         {/* Input form */}
-        <form onSubmit={handleSubmit}>
+        <form ref={formRef} onSubmit={handleSubmit}>
           <motion.div
             className="relative"
             animate={{
@@ -276,29 +282,45 @@ export default function Landing() {
               onChange={(e) => setInput(e.target.value)}
               onFocus={handleFocus}
               onBlur={() => setIsFocused(false)}
-              placeholder="Type to explore..."
+              onKeyDown={(e) => {
+                // Explicitly handle Enter/Return key for form submission
+                if (e.key === 'Enter' && input.trim() && !isSubmitting) {
+                  e.preventDefault();
+                  // Use requestSubmit to properly trigger form's onSubmit handler
+                  formRef.current?.requestSubmit();
+                }
+              }}
+              placeholder="What brings you here?"
               disabled={isSubmitting}
               className={`
-                w-full px-6 py-4 text-center
-                bg-transparent border-b-2 border-black/15
-                text-black text-base md:text-lg tracking-wide
-                placeholder:text-black/30 placeholder:tracking-wide
-                focus:border-black/40 focus:outline-none
-                transition-all duration-300
+                w-full px-6 py-5 text-center
+                bg-transparent border-b-2 border-black/10
+                text-black text-lg tracking-wide
+                placeholder:text-black/20
+                focus:border-black/30 focus:outline-none focus:ring-2 focus:ring-black/10 focus:ring-offset-2
+                transition-all duration-normal
                 disabled:opacity-50 disabled:cursor-not-allowed
-                font-light
               `}
+              style={{
+                fontWeight: isFocused ? 400 : 300,
+              }}
               autoFocus
+              aria-label="Enter your intent or question"
             />
 
             {/* Animated underline */}
             <motion.div
-              className="absolute bottom-0 left-0 h-0.5 bg-black/70"
+              className="absolute bottom-0 left-0 h-0.5 bg-black"
               initial={{ width: '0%' }}
               animate={{ width: isFocused ? '100%' : '0%' }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
             />
           </motion.div>
+
+          {/* Hidden submit button for form submission via Enter key */}
+          <button type="submit" className="sr-only" aria-hidden="true">
+            Submit
+          </button>
 
           {/* Submit hint */}
           <AnimatePresence>
@@ -307,99 +329,159 @@ export default function Landing() {
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -10 }}
-                className="text-center mt-6 text-black/40 text-sm tracking-wide"
+                className="text-center mt-6 text-black/30 text-sm tracking-wider"
               >
-                Press <kbd className="px-2 py-1 bg-black/8 rounded text-black/50 font-mono text-xs">↵</kbd> to continue
+                Press <kbd className="px-2 py-1 bg-black/5 rounded text-xs">Enter</kbd> to proceed
               </motion.p>
             )}
           </AnimatePresence>
 
-          {/* Submitting state */}
+          {/* Submitting state with skeleton loader */}
           <AnimatePresence>
             {isSubmitting && (
               <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="text-center mt-6 text-black/40 text-sm tracking-wide"
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                className="text-center mt-6 space-y-3"
+                aria-live="polite"
+                aria-busy="true"
               >
-                <motion.span
-                  animate={{ opacity: [0.4, 1, 0.4] }}
+                {/* Loading indicator */}
+                <div className="flex items-center justify-center gap-2">
+                  <motion.div
+                    className="w-1.5 h-1.5 bg-black/30 rounded-full"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      delay: 0,
+                    }}
+                  />
+                  <motion.div
+                    className="w-1.5 h-1.5 bg-black/30 rounded-full"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      delay: 0.2,
+                    }}
+                  />
+                  <motion.div
+                    className="w-1.5 h-1.5 bg-black/30 rounded-full"
+                    animate={{
+                      scale: [1, 1.2, 1],
+                      opacity: [0.5, 1, 0.5],
+                    }}
+                    transition={{
+                      duration: 1,
+                      repeat: Infinity,
+                      delay: 0.4,
+                    }}
+                  />
+                </div>
+                <motion.p
+                  className="text-black/30 text-sm tracking-wider"
+                  animate={{ opacity: [0.3, 1, 0.3] }}
                   transition={{ duration: 1.5, repeat: Infinity }}
                 >
-                  Navigating...
-                </motion.span>
+                  Analyzing intent...
+                </motion.p>
               </motion.div>
             )}
           </AnimatePresence>
         </form>
+
+        {/* Mode previews */}
+        <motion.div
+          className="mt-24 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.8, duration: 0.8 }}
+          aria-label="Mode descriptions"
+        >
+          <ModePreview
+            letter="A"
+            title="Architect"
+            description="Business & professional"
+            keywords={['hire', 'resume', 'experience']}
+          />
+          <ModePreview
+            letter="B"
+            title="Author"
+            description="Editorial & narrative"
+            keywords={['story', 'philosophy', 'teaching']}
+          />
+          <ModePreview
+            letter="C"
+            title="Lab"
+            description="Process & technical"
+            keywords={['code', 'process', 'build']}
+          />
+        </motion.div>
       </motion.div>
 
-      {/* ====================================
-          STATIC INTRO SECTION
-          Added for accessibility and fast skimming; interactive experience remains above.
-          ==================================== */}
-      <section
-        id="intro"
-        className="intro-section relative z-10 w-full max-w-3xl px-8 pt-12 pb-16"
-      >
-        <div className="intro-content text-center">
-          <p className="intro-text text-black/75 text-base md:text-lg leading-relaxed mb-4 font-light max-w-2xl mx-auto">
-            Audio engineer and educator focused on audio authenticity under adversarial conditions. 
-            I build and test short-slice evaluation tooling (10–15s) and review workflows that surface 
-            uncertainty rather than hide it.
-          </p>
-          <p className="intro-subtext text-black/60 text-sm md:text-base leading-relaxed mb-8 font-light max-w-2xl mx-auto">
-            Current work: stress-testing synthetic speech, calibrated deferral signals, and audit-grade evidence records.
-          </p>
-          
-          <nav aria-label="Primary" className="intro-nav">
-            <ul className="flex justify-center gap-6 md:gap-8 text-sm md:text-base">
-              <li>
-                <a 
-                  href="https://github.com/doronpers" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="intro-link text-black/65 hover:text-black/95 transition-colors underline underline-offset-4 decoration-black/30 hover:decoration-black/60 focus:outline-none focus:ring-2 focus:ring-black/30 focus:ring-offset-2 rounded-sm px-1"
-                >
-                  GitHub
-                </a>
-              </li>
-              <li aria-hidden="true" className="text-black/30">·</li>
-              <li>
-                <a 
-                  href="/about"
-                  className="intro-link text-black/65 hover:text-black/95 transition-colors underline underline-offset-4 decoration-black/30 hover:decoration-black/60 focus:outline-none focus:ring-2 focus:ring-black/30 focus:ring-offset-2 rounded-sm px-1"
-                >
-                  About
-                </a>
-              </li>
-              <li aria-hidden="true" className="text-black/30">·</li>
-              <li>
-                <a 
-                  href="/contact"
-                  className="intro-link text-black/65 hover:text-black/95 transition-colors underline underline-offset-4 decoration-black/30 hover:decoration-black/60 focus:outline-none focus:ring-2 focus:ring-black/30 focus:ring-offset-2 rounded-sm px-1"
-                >
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </section>
+      {/* Onboarding hint for first-time visitors */}
+      <OnboardingHint
+        id="landing-intent"
+        message="Type what you're looking for. The site will guide you to the right view."
+        position="bottom"
+        delay={3000}
+      />
 
       {/* ====================================
           CORNER SIGNATURE
           ==================================== */}
       <motion.div
-        className="fixed bottom-6 left-6 md:bottom-8 md:left-8 text-black/30 tracking-wide"
+        className="fixed bottom-8 right-8 text-black/20 text-xs tracking-widest"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
       >
-        <p className="text-[10px] md:text-[11px] font-light uppercase">An Interactive Installation</p>
-        <p className="mt-1 text-[10px] md:text-[11px] font-light">©2025</p>
+        <p>AN INTERACTIVE INSTALLATION</p>
+        <p className="mt-2 font-light">©2025</p>
       </motion.div>
     </div>
+  );
+}
+
+// ====================================
+// MODE PREVIEW COMPONENT
+// ====================================
+
+interface ModePreviewProps {
+  letter: string;
+  title: string;
+  description: string;
+  keywords: string[];
+}
+
+function ModePreview({ letter, title, description, keywords }: ModePreviewProps) {
+  return (
+    <motion.div
+      className="text-center p-6 border border-black/5 rounded-lg hover:border-black/10 transition-colors"
+      whileHover={{ y: -2 }}
+      transition={{ duration: 0.2 }}
+    >
+      <div className="text-2xl font-bold mb-2 text-black/40">{letter}</div>
+      <h3 className="text-sm font-semibold mb-1 text-black/70">{title}</h3>
+      <p className="text-xs text-black/50 mb-3">{description}</p>
+      <div className="flex flex-wrap justify-center gap-2">
+        {keywords.map((keyword) => (
+          <span
+            key={keyword}
+            className="text-xs px-2 py-1 bg-black/5 rounded text-black/40"
+          >
+            {keyword}
+          </span>
+        ))}
+      </div>
+    </motion.div>
   );
 }

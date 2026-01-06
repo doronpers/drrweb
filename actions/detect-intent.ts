@@ -3,12 +3,12 @@
  * GHOST ROUTER - INTENT DETECTION SERVER ACTION
  * ====================================
  *
- * This Server Action uses Vercel AI Gateway with Google's Gemini 1.5 Flash model
- * to analyze user input and route to the appropriate view mode.
+ * This Server Action uses Anthropic Claude (or Vercel AI Gateway) to analyze
+ * user input and route to the appropriate view mode.
  *
  * Philosophy:
  * - Generate routing data, not chat responses
- * - Fast inference (Flash model)
+ * - Fast inference with Claude Sonnet
  * - Audio parameters derived from intent
  * - Fallback to keyword matching if AI unavailable
  *
@@ -18,10 +18,10 @@
 
 'use server';
 
-import { createGateway } from '@ai-sdk/gateway';
 import { generateObject } from 'ai';
 import { z } from 'zod';
 import { ViewMode, parseIntent } from '@/contexts/ViewModeContext';
+import { getModel, isAIGatewayAvailable } from '@/lib/ai-gateway';
 
 // ====================================
 // TYPE DEFINITIONS
@@ -55,14 +55,7 @@ export type IntentResponse = z.infer<typeof IntentSchema>;
 // ====================================
 // GATEWAY CONFIGURATION
 // ====================================
-
-/**
- * Creates the Vercel AI Gateway instance.
- * Uses AI_GATEWAY_API_KEY environment variable.
- */
-const gateway = createGateway({
-  apiKey: process.env.AI_GATEWAY_API_KEY,
-});
+// Gateway is now initialized in lib/ai-gateway.ts and shared across server actions
 
 // ====================================
 // MAPPER FUNCTION
@@ -91,7 +84,9 @@ function toNarrowMode(mode: ViewMode): NarrowMode {
 
 /**
  * Analyzes user input and returns routing information.
- * Uses Vercel AI Gateway with Gemini 1.5 Flash for intent classification.
+ * Uses hybrid approach:
+ * - Single word: Fast keyword matching (free, instant)
+ * - Multiple words: AI Gateway for natural language understanding (uses credits)
  *
  * @param input - The user's search query
  * @returns Promise<IntentResponse> - Target mode and audio parameters
@@ -102,34 +97,66 @@ export async function detectIntent(input: string): Promise<IntentResponse> {
     return createFallbackResponse('architect');
   }
 
-  // Check for API key
-  const apiKey = process.env.AI_GATEWAY_API_KEY;
-  
-  if (!apiKey) {
-    console.warn('⚠️  AI_GATEWAY_API_KEY not set. Falling back to keyword matching.');
-    const mode = parseIntent(input); // returns ViewMode (may include "landing")
-    return createFallbackResponse(toNarrowMode(mode)); // narrowed to valid union
+  const trimmedInput = input.trim();
+  const words = trimmedInput.split(/\s+/).filter(word => word.length > 0);
+  const isSingleWord = words.length === 1;
+
+  // Single word: Use fast keyword matching
+  if (isSingleWord) {
+    if (process.env.NODE_ENV === 'development') {
+      console.log('⚡ Single word detected, using keyword matching...');
+    }
+    const mode = parseIntent(trimmedInput); // returns ViewMode (may include "landing")
+    const result = createFallbackResponse(toNarrowMode(mode));
+    if (process.env.NODE_ENV === 'development') {
+      console.log('📝 Keyword matching result:', result.targetMode);
+    }
+    return result;
+  }
+
+  // Multiple words: Use AI for natural language understanding
+  if (!isAIGatewayAvailable()) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('⚠️  No AI API key set (ANTHROPIC_API_KEY or AI_GATEWAY_API_KEY). Falling back to keyword matching.');
+    }
+    const mode = parseIntent(trimmedInput); // returns ViewMode (may include "landing")
+    const fallbackResult = createFallbackResponse(toNarrowMode(mode));
+    if (process.env.NODE_ENV === 'development') {
+      console.log('📝 Keyword matching result:', fallbackResult.targetMode);
+    }
+    return fallbackResult;
   }
 
   try {
-    // Call AI Gateway with Gemini model via structured output
+    // Use Anthropic Claude (or Gateway) for intent detection
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🤖 Multiple words detected, using AI for intent detection...');
+    }
+    const model = getModel('claude-3-5-sonnet-20241022');
     const { object } = await generateObject({
-      model: gateway('google/gemini-1.5-flash'),
+      model: model as any, // Type assertion needed for V2/V3 compatibility
       schema: IntentSchema,
-      prompt: buildPrompt(input),
+      prompt: buildPrompt(trimmedInput),
       temperature: 0.3, // Lower temperature for more consistent routing
     });
 
     if (process.env.NODE_ENV === 'development') {
-      console.log('✅ Intent detected:', object.targetMode);
+      console.log('✅ AI intent detected:', object.targetMode);
     }
     return object;
 
   } catch (error) {
-    console.error('❌ Intent detection failed:', error);
+    console.error('❌ AI Gateway request failed:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('⚠️  Falling back to keyword matching...');
+    }
     // Fallback to keyword matching on error
-    const mode = parseIntent(input); // returns ViewMode (may include "landing")
-    return createFallbackResponse(toNarrowMode(mode)); // narrowed to valid union
+    const mode = parseIntent(trimmedInput); // returns ViewMode (may include "landing")
+    const fallbackResult = createFallbackResponse(toNarrowMode(mode));
+    if (process.env.NODE_ENV === 'development') {
+      console.log('📝 Keyword matching result:', fallbackResult.targetMode);
+    }
+    return fallbackResult;
   }
 }
 

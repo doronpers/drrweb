@@ -12,59 +12,56 @@
 import { motion } from 'framer-motion';
 import { memo, useMemo } from 'react';
 
-/**
- * Props for EchoEntry component
- */
 interface EchoEntryProps {
-  /** Unique identifier for the echo entry */
   id: string;
-  /** The message text to display */
   text: string;
-  /** When the echo was created */
   timestamp: Date;
-  /** Position in the list for staggered animation */
   index: number;
 }
 
+interface FloatParams {
+  startX: number;
+  startY: number;
+  driftX: number;
+  driftY: number;
+  duration: number;
+  opacity: number;
+  rotation: number;
+}
+
 /**
- * EchoEntry component - renders a single floating message in the Echo Chamber
+ * Generate random float parameters for echo animation
+ * Extracted to function for clarity and reusability
  * 
- * Displays a user-submitted message that floats organically across the screen
- * with physics-based motion. Each entry has randomized starting position,
- * drift direction, duration, opacity (to simulate depth), and rotation.
- * 
- * @param props - Component props
- * @returns A memoized motion.div with animated floating message
+ * Note: Math.random() is intentionally used here to create unique visual
+ * positioning. The values are memoized per component instance to ensure
+ * stability across re-renders.
  */
-function EchoEntry({ id, text, index }: EchoEntryProps) {
-  // Generate deterministic pseudo-random values based on the id
-  // This ensures stable values per component instance while appearing random
-  // Using a simple hash of the id for deterministic randomness
-  const floatParams = useMemo(() => {
-    // Simple hash function to convert id to a number
-    const hash = id.split('').reduce((acc, char) => {
-      return char.charCodeAt(0) + ((acc << 5) - acc);
-    }, 0);
-    
-    // Use hash to generate pseudo-random values in deterministic way
-    const rand1 = Math.abs(Math.sin(hash * 1.0)) * 80 + 10;
-    const rand2 = Math.abs(Math.sin(hash * 2.0)) * 80 + 10;
-    const rand3 = (Math.sin(hash * 3.0)) * 100;
-    const rand4 = (Math.sin(hash * 4.0)) * 100;
-    const rand5 = Math.abs(Math.sin(hash * 5.0)) * 30 + 40;
-    const rand6 = Math.abs(Math.sin(hash * 6.0)) * 0.3 + 0.2;
-    const rand7 = (Math.sin(hash * 7.0)) * 10 - 5;
-    
-    return {
-      startX: rand1, // 10-90% of width
-      startY: rand2, // 10-90% of height
-      driftX: rand3, // Random drift direction
-      driftY: rand4,
-      duration: rand5, // 40-70 seconds
-      opacity: rand6, // 0.2-0.5 opacity for "distance"
-      rotation: rand7, // -5 to 5 degrees
-    };
-  }, [id]); // Depend on id for deterministic stability
+function generateFloatParams(): FloatParams {
+  const r1 = Math.random();
+  const r2 = Math.random();
+  const r3 = Math.random();
+  const r4 = Math.random();
+  const r5 = Math.random();
+  const r6 = Math.random();
+  const r7 = Math.random();
+  
+  return {
+    startX: r1 * 80 + 10, // 10-90% of width
+    startY: r2 * 80 + 10, // 10-90% of height
+    driftX: (r3 - 0.5) * 100, // Random drift direction
+    driftY: (r4 - 0.5) * 100,
+    duration: r5 * 30 + 40, // 40-70 seconds
+    opacity: r6 * 0.15 + 0.1, // 0.1-0.25 opacity for "distance"
+    rotation: r7 * 10 - 5, // -5 to 5 degrees
+  };
+}
+
+function EchoEntry({ id, text, timestamp: _timestamp, index }: EchoEntryProps) {
+  // Random starting position and movement parameters
+  // Using useMemo to ensure stable values per component instance
+  // Empty dependency array is intentional - values should be stable per instance
+  const floatParams = useMemo(() => generateFloatParams(), []);
 
   return (
     <motion.div
@@ -101,8 +98,8 @@ function EchoEntry({ id, text, index }: EchoEntryProps) {
         willChange: 'transform, opacity',
       }}
     >
-      <div className="bg-black/5 backdrop-blur-sm px-4 py-2 rounded-full border border-black/10 max-w-xs">
-        <p className="text-sm font-light text-black/60 truncate">{text}</p>
+      <div className="bg-black/3 backdrop-blur-sm px-4 py-2 rounded-full border border-black/5 max-w-xs">
+        <p className="text-sm font-light text-black/50 truncate">{text}</p>
       </div>
     </motion.div>
   );

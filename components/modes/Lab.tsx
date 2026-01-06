@@ -38,15 +38,23 @@ export default function Lab() {
   };
 
   useEffect(() => {
-    // Random glitch effects on mount
+    // Play a musical tone on mode entry
+    const timer = setTimeout(() => {
+      audioManager.playUISound('glitch');
+    }, 500);
+    
+    // Random glitch effects on mount (reduced frequency for subtlety)
     const interval = setInterval(() => {
-      if (Math.random() > 0.95) {
+      if (Math.random() > 0.995) { // Reduced from 0.98 - less frequent, more subtle
         setGlitchActive(true);
         setTimeout(() => setGlitchActive(false), 50);
       }
-    }, 2000);
+    }, 5000); // Less frequent - increased from 3000ms
 
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(timer);
+      clearInterval(interval);
+    };
   }, []);
 
   return (
@@ -58,6 +66,8 @@ export default function Lab() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.4 }}
+      role="article"
+      aria-label="Technical projects and process documentation"
     >
       {/* Grid Overlay */}
       <div className="fixed inset-0 pointer-events-none opacity-10 z-0">
@@ -74,7 +84,7 @@ export default function Lab() {
       </div>
 
       {/* Scan Lines Effect */}
-      <div className="fixed inset-0 pointer-events-none z-10 opacity-5">
+      <div className="fixed inset-0 pointer-events-none z-50 opacity-5">
         <motion.div
           className="w-full h-1 bg-lab-text"
           animate={{
@@ -125,22 +135,22 @@ export default function Lab() {
               <div className="space-y-4">
                 <Project
                   name="sonotheia.ai"
-                  status="IN_DEVELOPMENT"
-                  description="voice fraud prevention and audio authentication consultancy. developing vendor-agnostic detection methodologies combining physics-based anomaly testing with human-in-the-loop verification. serving finance, legal, media, and real estate sectors. co-founded with Alexander Forostenko (CEO)."
-                  tech={['Python', 'Physics-Based Analysis', 'Signal Processing', 'Governance Frameworks']}
+                  status="PRE_LAUNCH"
+                  description="voice fraud detection platform using ML-powered vocal biometric analysis. website complete. finalizing operational infrastructure (insurance, compliance) for full launch. core systems: authentication layer, waveform visualization, real-time processing pipeline. capabilities: drift detection, synthetic voice identification, audio manipulation detection."
+                  tech={['Next.js', 'TypeScript', 'TensorFlow', 'Web Audio API', 'Supabase', 'Python']}
                   onMouseEnter={handleHover}
                 />
                 <Project
-                  name="full_sail_portfolio_course"
+                  name="portfolio_pedagogy"
                   status="ACTIVE"
-                  description="course director for sound for film portfolio at full sail university. directing capstone portfolio development for recording arts students. mentoring demo reel creation, professional presence strategy, personal branding. 18 years of curriculum development."
-                  tech={['Pro Tools', 'iZotope RX', 'Curriculum Design', 'Portfolio Development']}
+                  description="university course on professional portfolio construction. teaching narrative synthesis, strategic curation, presentation design. since 2010. current semester: 40 students across design, development, and creative fields."
+                  tech={['Figma', 'Notion', 'Peer Review Systems', 'Curriculum Design']}
                   onMouseEnter={handleHover}
                 />
                 <Project
                   name="field_recordings_archive"
                   status="ONGOING"
-                  description="cataloging 10+ years of location sound recordings. building searchable metadata system with spectral analysis, location tagging, temporal indexing. exploring ML-based sound classification."
+                  description="cataloging 20+ years of location sound recordings (since 2005). building searchable metadata system with spectral analysis, location tagging, temporal indexing. exploring ML-based sound classification."
                   tech={['Python', 'SQLite', 'Librosa', 'Reaper', 'PostgreSQL']}
                   onMouseEnter={handleHover}
                 />
@@ -157,6 +167,9 @@ export default function Lab() {
             {/* Raw Code / Sketches */}
             <TerminalBlock title="RECENT_COMMITS" onMouseEnter={handleHover}>
               <div className="space-y-2 text-sm">
+                <div className="text-xs opacity-50 mb-2 italic">
+                  representative activity
+                </div>
                 <CommitLine
                   hash="a3f8c2e"
                   message="refactor: audio engine modular architecture"
@@ -186,32 +199,7 @@ export default function Lab() {
 
             {/* Sketches / Notes */}
             <TerminalBlock title="NOTES.TXT" onMouseEnter={handleHover}>
-              <div className="space-y-4 text-sm opacity-80">
-                <p>
-                  [2025-01-25] what if portfolio course was less about "showing
-                  your best work" and more about "showing your thinking"? students
-                  respond better when they understand curation as argument, not
-                  display.
-                </p>
-                <p>
-                  [2025-01-22] voice prints are like fingerprints but they drift
-                  over time. age, health, context, emotional state. building for
-                  drift, not stasis. need adaptive models.
-                </p>
-                <p>
-                  [2025-01-18] students confuse curation with censorship. need
-                  better metaphor. prism? lens? filter? settled on "prism" for this
-                  site—same source, different refractions.
-                </p>
-                <p>
-                  [2025-01-15] field recording session in abandoned warehouse.
-                  captured 3 hours of ambience, mechanical sounds, water drips.
-                  thinking about how space shapes sound, how sound shapes memory.
-                </p>
-                <p className="text-lab-accent">
-                  [2025-01-03] THIS WEBSITE IS A PRISM NOT A MIRROR
-                </p>
-              </div>
+              <LabNotes />
             </TerminalBlock>
           </motion.div>
 
@@ -226,32 +214,30 @@ export default function Lab() {
             <TerminalBlock title="STACK" onMouseEnter={handleHover}>
               <div className="space-y-3 text-xs">
                 <StackItem category="FRONTEND" items={['React', 'Next.js', 'Framer Motion', 'Tailwind']} />
-                <StackItem category="AUDIO" items={['Pro Tools', 'iZotope RX Suite', 'FabFilter', 'SoundMorph', 'Dolby Atmos']} />
+                <StackItem category="AUDIO" items={['Tone.js', 'Ableton Live', 'Reaper', 'Max/MSP']} />
                 <StackItem category="BACKEND" items={['Node.js', 'Python', 'PostgreSQL', 'Supabase']} />
-                <StackItem category="ML/AI" items={['Python', 'Claude/Claude Code', 'OpenAI', 'MidJourney', 'RunwayML']} />
+                <StackItem category="ML/AI" items={['TensorFlow', 'scikit-learn', 'Librosa']} />
               </div>
             </TerminalBlock>
 
             {/* Links */}
             <TerminalBlock title="EXTERNAL_LINKS" onMouseEnter={handleHover}>
               <div className="space-y-2 text-sm">
-                <ExtLink href="https://github.com/doronreizes" label="github/doronreizes" onMouseEnter={handleHover} />
+                <ExtLink href="https://github.com/doronpers" label="github/doronpers" onMouseEnter={handleHover} />
                 <ExtLink href="https://www.linkedin.com/in/doronreizes" label="linkedin.com/in/doronreizes" onMouseEnter={handleHover} />
                 <ExtLink href="https://sonotheia.ai" label="sonotheia.ai" onMouseEnter={handleHover} />
-                <ExtLink href="#" label="soundcloud/fieldwork" onMouseEnter={handleHover} />
-                <ExtLink href="#" label="are.na/research" onMouseEnter={handleHover} />
               </div>
             </TerminalBlock>
 
             {/* System Info */}
             <TerminalBlock title="SYS_INFO" onMouseEnter={handleHover}>
               <div className="space-y-1 text-xs opacity-70">
-                <p>UPTIME: {'>'}20 years</p>
-                <p>DOMAINS: sound, education, entrepreneurship</p>
-                <p>CURRENT_ROLE: president_cofounder</p>
-                <p>COMPANY: sonotheia_inc</p>
-                <p>TEACHING: course_director_full_sail</p>
-                <p>LOCATION: Winter Park, FL</p>
+                <p>CAREER_SPAN: 20+ years (audio since 2005, teaching since 2010)</p>
+                <p>DOMAINS: 3 (sound, text, code)</p>
+                <p>CURRENT_ROLE: president_cto</p>
+                <p>COMPANY: sonotheia.ai</p>
+                <p>TEACHING: active (adjunct, 40 students)</p>
+                <p>LOCATION: remote</p>
                 <p>STATUS: building</p>
               </div>
             </TerminalBlock>
@@ -259,6 +245,9 @@ export default function Lab() {
             {/* Unfinished / Ideas */}
             <TerminalBlock title="TODO.MD" onMouseEnter={handleHover}>
               <div className="space-y-1 text-xs opacity-60">
+                <div className="text-xs opacity-50 mb-2 italic">
+                  active considerations
+                </div>
                 <p>[ ] finish waveform viz component</p>
                 <p>[ ] write essay on listening forensically</p>
                 <p>[ ] refactor student feedback workflow</p>
@@ -285,6 +274,7 @@ export default function Lab() {
           </div>
         </motion.div>
       </div>
+
     </motion.div>
   );
 }
@@ -404,5 +394,43 @@ function ExtLink({
     >
       → {label}
     </motion.a>
+  );
+}
+
+function LabNotes() {
+  const now = new Date();
+  const today = now.toISOString().split('T')[0];
+  const threeDaysAgo = new Date(now.getTime() - 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  const weekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  const tenDaysAgo = new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  const threeWeeksAgo = new Date(now.getTime() - 22 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+
+  return (
+    <div className="space-y-4 text-sm opacity-80">
+      <p>
+        [{today}] what if portfolio course was less about "showing
+        your best work" and more about "showing your thinking"? students
+        respond better when they understand curation as argument, not
+        display.
+      </p>
+      <p>
+        [{threeDaysAgo}] voice prints are like fingerprints but they drift
+        over time. age, health, context, emotional state. building for
+        drift, not stasis. need adaptive models.
+      </p>
+      <p>
+        [{weekAgo}] students confuse curation with censorship. need
+        better metaphor. prism? lens? filter? settled on "prism" for this
+        site—same source, different refractions.
+      </p>
+      <p>
+        [{tenDaysAgo}] field recording session in abandoned warehouse.
+        captured 3 hours of ambience, mechanical sounds, water drips.
+        thinking about how space shapes sound, how sound shapes memory.
+      </p>
+      <p className="text-lab-accent">
+        [{threeWeeksAgo}] THIS WEBSITE IS A PRISM NOT A MIRROR
+      </p>
+    </div>
   );
 }

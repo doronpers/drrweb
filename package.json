@@ -8,19 +8,23 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "docs:generate": "node scripts/doc-automation/generate-all-docs.cjs",
-    "docs:validate": "node scripts/doc-automation/validate-docs.cjs .",
-    "docs:components": "node scripts/doc-automation/extract-component-docs.cjs",
-    "docs:api": "node scripts/doc-automation/generate-api-docs.cjs lib"
+    "docs": "npx ts-node scripts/docs/generate.ts",
+    "docs:generate": "npx ts-node scripts/docs/generate.ts",
+    "docs:watch": "npx ts-node scripts/docs/watch.ts",
+    "prebuild": "npm run docs:generate"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^3.0.6",
     "@ai-sdk/gateway": "^1.0.0",
     "@ai-sdk/google": "^2.0.43",
+    "@elevenlabs/elevenlabs-js": "^2.29.0",
     "@supabase/supabase-js": "^2.39.0",
+    "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "ai": "^5.0.102",
     "framer-motion": "^11.0.0",
-    "next": "^14.2.0",
+    "idb": "^8.0.3",
+    "next": "^14.2.35",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "tone": "^15.0.4",
@@ -29,6 +33,7 @@
   "devDependencies": {
     "@eslint/compat": "^2.0.0",
     "@eslint/js": "^9.39.1",
+    "@types/glob": "^8.1.0",
     "@types/node": "^20.11.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
@@ -44,12 +49,14 @@
     "globals": "^16.5.0",
     "postcss": "^8.4.0",
     "tailwindcss": "^3.4.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.6",
     "typescript": "^5.3.0",
     "typescript-eslint": "^8.48.0"
   },
   "repository": {
     "type": "git",
-    "url": "http://local_proxy@127.0.0.1:44250/git/doronreizes/drrweb"
+    "url": "https://github.com/doronpers/drrweb"
   },
   "keywords": [
     "interactive",
