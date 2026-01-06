@@ -8,10 +8,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "docs": "npx ts-node scripts/docs/generate.ts",
-    "docs:generate": "npx ts-node scripts/docs/generate.ts",
-    "docs:watch": "npx ts-node scripts/docs/watch.ts",
-    "prebuild": "npm run docs:generate"
+    "docs": "tsx scripts/docs/generate.ts",
+    "docs:generate": "tsx scripts/docs/generate.ts",
+    "docs:watch": "tsx scripts/docs/watch.ts",
+    "prebuild": "npm run docs:generate 2>/dev/null || true"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.6",

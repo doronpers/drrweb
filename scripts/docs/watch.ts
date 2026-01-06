@@ -15,7 +15,7 @@
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { generateDocumentation, DEFAULT_CONFIG } from './generate';
+import { generateDocumentation, DEFAULT_CONFIG } from './generate.js';
 
 // ====================================
 // CONFIGURATION
