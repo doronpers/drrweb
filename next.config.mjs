@@ -41,7 +41,8 @@ const nextConfig = {
             key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline'", // 'unsafe-eval' needed for Tone.js
+              "script-src 'self' 'unsafe-eval' 'unsafe-inline' blob:", // 'unsafe-eval' needed for Tone.js
+              "worker-src 'self' blob:", // Tone.js audio worklet workers
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com data:",
               "img-src 'self' data: blob:",

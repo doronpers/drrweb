@@ -33,9 +33,12 @@ export default function Architect() {
   };
 
   useEffect(() => {
-    // Mode-specific setup
+    // Play a gentle musical tone on mode entry
+    const timer = setTimeout(() => {
+      audioManager.playUISound('click-dry');
+    }, 500);
     return () => {
-      // Cleanup if needed
+      clearTimeout(timer);
     };
   }, []);
 
@@ -47,36 +50,38 @@ export default function Architect() {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       transition={transitions.smooth}
+      role="article"
+      aria-label="Professional profile and experience"
     >
       {/* ====================================
           GRID STRUCTURE WITH LAYOUT ANIMATIONS
           ==================================== */}
-      <div className="container mx-auto px-4 md:px-8 py-12 md:py-16 max-w-6xl">
+      <div className="container mx-auto px-8 py-16 max-w-6xl">
         {/* Header with layout="position" for smooth repositioning */}
         <motion.header
           layout="position"
           initial={animations.fadeInUp.initial}
           animate={animations.fadeInUp.animate}
           transition={{ ...transitions.smooth, delay: 0.2 }}
-          className="mb-12 md:mb-20"
+          className="mb-20"
         >
           <motion.h1 layout="position" className={styles.h1}>
             Doron Reizes
           </motion.h1>
           <motion.p
             layout="position"
-            className={`${styles.p} text-black/50 mt-3 tracking-wide`}
+            className={`${styles.p} text-black/60 mt-4`}
           >
-            Audio Postproduction Educator • Voice Trust Consultant
+            Systems Architect • Sound Designer • Educator
           </motion.p>
         </motion.header>
 
         {/* Main Grid */}
-        <div className="grid grid-cols-12 gap-6 md:gap-8">
+        <div className="grid grid-cols-12 gap-8">
           {/* Left Column - Core Information */}
           <motion.div
             layout
-            className="col-span-12 md:col-span-8 space-y-12 md:space-y-16"
+            className="col-span-12 md:col-span-8 space-y-16"
             variants={animations.staggerContainer}
             initial="initial"
             animate="animate"
@@ -86,20 +91,19 @@ export default function Architect() {
             <Section title="EXECUTIVE SUMMARY" onHover={handleHover}>
               <motion.div
                 layout="position"
-                className="space-y-4 leading-relaxed"
+                className="space-y-6 leading-relaxed"
                 variants={animations.staggerItem}
               >
-                <p className={`${styles.p} font-medium`}>
+                <p className={`${styles.h4} font-medium`}>
                   I improve <span className="font-bold">systems</span>,{' '}
                   <span className="font-bold">stories</span>, and the{' '}
                   <span className="font-bold">people</span> that tell them.
                 </p>
                 <p className={styles.p}>
-                  Seasoned audio professional with 20+ years spanning sound editorial,
-                  post-production, and higher education. Career trajectory moves from
-                  NYC&apos;s premier audio facilities through 18 years shaping curriculum
-                  at Full Sail University, to founding Sonotheia—a venture applying
-                  audio expertise to voice fraud detection and authentication governance.
+                  Multi-domain expertise spanning sound design, technical writing,
+                  and entrepreneurship. Currently serving as president and
+                  chief technologist at Sonotheia.ai (voice fraud detection), while
+                  teaching portfolio development at the university level.
                 </p>
               </motion.div>
             </Section>
@@ -108,19 +112,19 @@ export default function Architect() {
             <Section title="CURRENT POSITION" onHover={handleHover}>
               <motion.div layout className="space-y-6">
                 <Position
-                  title="President & Co-Founder"
-                  company="Sonotheia, Inc."
-                  description="Voice fraud prevention and audio authentication consultancy serving finance, legal, media, and real estate sectors. Developing vendor-agnostic detection methodologies combining physics-based anomaly testing with human-in-the-loop verification and legally defensible governance frameworks. Co-founded with Alexander Forostenko (CEO, ex-Morgan Stanley/SVB/RBS)."
-                  tags={['Voice Fraud Detection', 'Audio Authentication', 'Governance Frameworks', 'Physics-Based Analysis']}
+                  title="President & Chief Technology Officer"
+                  company="Sonotheia.ai"
+                  description="Leading technical infrastructure and product development for voice fraud detection platform. Architecting ML-powered systems that analyze vocal biometrics to detect synthetic and manipulated audio. Responsible for full-stack development, system architecture, team leadership, and strategic direction. Finalizing operational infrastructure for full launch."
+                  tags={['Voice AI', 'Machine Learning', 'Security', 'Full-Stack Development', 'Product Strategy']}
                   highlight
                   onHover={handleHover}
                 />
 
                 <Position
-                  title="Course Director, Sound for Film Portfolio"
-                  company="Full Sail University"
-                  description="Direct capstone portfolio development for Recording Arts students. Mentor demo reel creation, professional presence strategy, and personal branding. Previously served as Course Director for Interactive Audio (2007–2015), co-authoring the program textbook and establishing curriculum for sound design in emerging media formats."
-                  tags={['Higher Education', 'Curriculum Design', 'Audio Post-Production', 'Portfolio Development']}
+                  title="Adjunct Instructor"
+                  company="Portfolio Development Course"
+                  description="Teaching undergraduate students the art of professional portfolio construction since 2010. Curriculum focuses on narrative synthesis, strategic curation, and compelling presentation of creative and technical work. Students learn to identify through-lines, construct coherent arguments through project selection, and communicate their unique value proposition."
+                  tags={['Pedagogy', 'Narrative Design', 'Professional Development', 'Curriculum Design']}
                   onHover={handleHover}
                 />
               </motion.div>
@@ -130,17 +134,10 @@ export default function Architect() {
             <Section title="PROFESSIONAL EXPERIENCE" onHover={handleHover}>
               <motion.div layout className="space-y-6">
                 <Position
-                  title="Audio Engineer / Sound Editor"
-                  company="Sony Music Studios, NYC"
-                  description="Premixed and edited sound effects, dialogue, and music for long-format programming. Contributed to Emmy Award-winning project Tony Bennett: An American Classic (Outstanding Sound Mixing for a Variety, Music Series, or Special, 2006–2007)."
-                  tags={['Sound Editorial', 'Dialogue Editing', 'Emmy Award', 'Long-Format']}
-                  onHover={handleHover}
-                />
-                <Position
-                  title="Co-Founder & Managing Partner"
-                  company="Touch Interactive Media Group"
-                  description="Media consulting group serving clients including Brighthouse Networks and Enlightened Grain Spirits. Pivoted from production to advisory services based on regional market needs."
-                  tags={['Media Consulting', 'Client Services', 'Strategic Advisory']}
+                  title="Sound Designer & Technical Consultant"
+                  company="Freelance"
+                  description="Field recording, sound design, and audio post-production for film, installation, and interactive media. Specialized in location sound, spatial audio, and creating immersive sonic environments. Technical consulting on audio systems, workflow optimization, and creative sound design approaches."
+                  tags={['Field Recording', 'Post-Production', 'Spatial Audio', 'Technical Consulting']}
                   onHover={handleHover}
                 />
               </motion.div>
@@ -150,13 +147,13 @@ export default function Architect() {
             <Section title="CORE COMPETENCIES" onHover={handleHover}>
               <motion.div layout className="grid grid-cols-2 gap-6">
                 <CompetencyCard
-                  title="Audio Production"
+                  title="Sound Design & Audio"
                   items={[
-                    'Pro Tools (Expert)',
-                    'iZotope RX Suite',
-                    'Dialogue Editing & Sound Design',
-                    'Re-recording Mixing & ADR',
-                    'Dolby Atmos',
+                    'Field Recording & Location Sound',
+                    'Synthesis & Audio Processing (Tone.js, Max/MSP)',
+                    'Spatial Audio & Ambisonics',
+                    'Music Production & Composition',
+                    'Audio Post-Production (Reaper, Ableton Live)',
                   ]}
                   onHover={handleHover}
                 />
@@ -172,13 +169,13 @@ export default function Architect() {
                   onHover={handleHover}
                 />
                 <CompetencyCard
-                  title="Emerging Technologies"
+                  title="Software Development"
                   items={[
-                    'Python (Active Development)',
-                    'Machine Learning Fundamentals',
-                    'Audio Deepfake Detection',
-                    'Physics-Based Signal Analysis',
-                    'AI Platforms (Claude, OpenAI)',
+                    'Full-Stack Web Development (React, Next.js, TypeScript)',
+                    'Machine Learning & AI (TensorFlow, scikit-learn)',
+                    'Voice & Audio Processing (Web Audio API, Librosa)',
+                    'API Design & Integration',
+                    'Database Architecture (PostgreSQL, Supabase)',
                   ]}
                   onHover={handleHover}
                 />
@@ -196,59 +193,12 @@ export default function Architect() {
               </motion.div>
             </Section>
 
-            {/* Education */}
-            <Section title="EDUCATION" onHover={handleHover}>
-              <motion.div layout className="space-y-4">
-                <motion.div
-                  layout
-                  className="border-l-4 border-architect-accent pl-6 py-2"
-                >
-                  <motion.h3 layout="position" className={styles.h3}>
-                    MS, Innovation & Entrepreneurship
-                  </motion.h3>
-                  <motion.p
-                    layout="position"
-                    className={`${styles.p} text-black/70 font-medium mt-1`}
-                  >
-                    Full Sail University | 2020 | GPA: 4.0, Valedictorian
-                  </motion.p>
-                </motion.div>
-                <motion.div
-                  layout
-                  className="border-l-4 border-black/20 pl-6 py-2"
-                >
-                  <motion.h3 layout="position" className={styles.h3}>
-                    Specialized AS, Recording Arts
-                  </motion.h3>
-                  <motion.p
-                    layout="position"
-                    className={`${styles.p} text-black/70 font-medium mt-1`}
-                  >
-                    Full Sail University | 2004
-                  </motion.p>
-                </motion.div>
-                <motion.div
-                  layout
-                  className="border-l-4 border-black/20 pl-6 py-2"
-                >
-                  <motion.h3 layout="position" className={styles.h3}>
-                    BA, Literature & Creative Writing
-                  </motion.h3>
-                  <motion.p
-                    layout="position"
-                    className={`${styles.p} text-black/70 font-medium mt-1`}
-                  >
-                    American University | 2003
-                  </motion.p>
-                </motion.div>
-              </motion.div>
-            </Section>
           </motion.div>
 
           {/* Right Column - Contact & Quick Actions */}
           <motion.aside
             layout
-            className="col-span-12 md:col-span-4 space-y-6 md:space-y-8"
+            className="col-span-12 md:col-span-4 space-y-8"
             initial={animations.fadeInLeft.initial}
             animate={animations.fadeInLeft.animate}
             transition={{ ...transitions.smooth, delay: 0.4 }}
@@ -256,18 +206,13 @@ export default function Architect() {
             {/* Contact Card */}
             <motion.div
               layout
-              className="bg-black text-white p-4 md:p-6 md:sticky md:top-20 z-40 transition-colors duration-500"
+              className="bg-black text-white p-6 sticky top-8 transition-colors duration-500"
             >
               <h3 className="text-xl font-bold mb-4">CONTACT</h3>
               <motion.div layout className="space-y-3 font-light">
                 <ContactItem
                   href="https://sonotheia.ai"
-                  label="Sonotheia"
-                  onMouseEnter={handleHover}
-                />
-                <ContactItem
-                  href="mailto:doron@doronreizes.com"
-                  label="Email"
+                  label="Sonotheia.ai"
                   onMouseEnter={handleHover}
                 />
                 <ContactItem
@@ -276,36 +221,28 @@ export default function Architect() {
                   onMouseEnter={handleHover}
                 />
                 <ContactItem
-                  href="https://github.com"
+                  href="https://github.com/doronpers"
                   label="GitHub"
                   onMouseEnter={handleHover}
                 />
               </motion.div>
-
-              {/* CTA */}
-              <motion.button
-                layout="position"
-                className="w-full mt-6 py-3 bg-white text-black font-bold tracking-wide transition-all duration-300"
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onMouseEnter={handleHover}
-              >
-                DOWNLOAD CV
-              </motion.button>
             </motion.div>
 
             {/* Key Metrics */}
             <motion.div
               layout
-              className="border-2 border-black p-4 md:p-6 transition-colors duration-500"
+              className="border-2 border-black p-6 transition-colors duration-500"
             >
               <h3 className="text-xl font-bold mb-4">BY THE NUMBERS</h3>
               <motion.div layout className="space-y-4">
                 <Metric value="20+" label="Years Experience" />
-                <Metric value="18" label="Years Teaching" />
-                <Metric value="1" label="Emmy Recognition" />
+                <Metric value="3" label="Domains Mastered" />
+                <Metric value="40" label="Current Students" />
                 <Metric value="1" label="Startup Founded" />
               </motion.div>
+              <p className="text-xs text-black/40 mt-4 italic">
+                20+ years in audio (since 2005) • Teaching since 2010 • 3 domains mastered
+              </p>
             </motion.div>
           </motion.aside>
         </div>

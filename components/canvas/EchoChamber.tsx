@@ -71,8 +71,10 @@ function checkRateLimit(): { allowed: boolean; remainingTime?: number } {
 
 function sanitizeInput(input: string): string {
   // Remove control characters except newlines and tabs
+  // Using Unicode escapes for security - intentional for XSS prevention
   return input
-    .replace(/[\x00-\x08\x0B-\x0C\x0E-\x1F\x7F]/g, '')
+    // eslint-disable-next-line no-control-regex -- Intentional: security sanitization
+    .replace(/[\u0000-\u0008\u000B-\u000C\u000E-\u001F\u007F]/g, '')
     .trim();
 }
 
@@ -87,8 +89,18 @@ function validateInput(input: string): { valid: boolean; error?: string } {
     return { valid: false, error: 'Echo must be 100 characters or less' };
   }
   
-  // Check for potentially malicious patterns
-  if (/<script|javascript:|on\w+\s*=/i.test(sanitized)) {
+  // Check for potentially malicious patterns (XSS prevention)
+  const maliciousPatterns = [
+    /<script/i,
+    /javascript:/i,
+    /on\w+\s*=/i,
+    /<iframe/i,
+    /<object/i,
+    /<embed/i,
+    /data:text\/html/i,
+  ];
+  
+  if (maliciousPatterns.some(pattern => pattern.test(sanitized))) {
     return { valid: false, error: 'Invalid characters detected' };
   }
   
@@ -236,11 +248,12 @@ export default function EchoChamber() {
 
       {/* Input Toggle Button */}
       <motion.button
-        className="fixed bottom-4 right-4 md:bottom-8 md:right-8 pointer-events-auto z-50 p-3 md:p-4 bg-black/5 hover:bg-black/10 backdrop-blur-sm rounded-full border border-black/10 transition-colors"
+        className="fixed bottom-8 right-8 pointer-events-auto z-50 p-4 bg-black/5 hover:bg-black/10 backdrop-blur-sm rounded-full border border-black/10 transition-colors focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2"
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setShowInput(!showInput)}
         aria-label="Add echo"
+        aria-expanded={showInput}
       >
         <svg
           width="24"
@@ -265,7 +278,7 @@ export default function EchoChamber() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-20 right-4 left-4 md:bottom-24 md:right-8 md:left-auto pointer-events-auto z-[60] md:w-96 max-w-[calc(100vw-2rem)] md:max-w-[calc(100vw-4rem)]"
+            className="fixed bottom-24 right-8 pointer-events-auto z-50 w-96 max-w-[calc(100vw-4rem)]"
           >
             <div className="bg-white/90 backdrop-blur-md rounded-lg border border-black/10 shadow-2xl p-6">
               <h3 className="text-sm font-medium mb-4 text-black/60 tracking-wide">
@@ -292,14 +305,22 @@ export default function EchoChamber() {
                   <button
                     type="button"
                     onClick={() => setShowInput(false)}
-                    className="flex-1 px-4 py-2 text-sm border border-black/10 rounded-lg hover:bg-black/5 transition-colors"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Escape') {
+                        setShowInput(false);
+                      }
+                    }}
+                    className="flex-1 px-4 py-2 text-sm border border-black/10 rounded-lg hover:bg-black/5 transition-colors focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2"
+                    aria-label="Cancel echo submission"
                   >
                     Cancel
                   </button>
                   <button
                     type="submit"
                     disabled={!input.trim() || isSubmitting}
-                    className="flex-1 px-4 py-2 text-sm bg-black text-white rounded-lg hover:bg-black/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="flex-1 px-4 py-2 text-sm bg-black text-white rounded-lg hover:bg-black/80 transition-colors disabled:opacity-50 disabled:cursor-not-allowed focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2"
+                    aria-label="Send echo"
+                    aria-disabled={!input.trim() || isSubmitting}
                   >
                     {isSubmitting ? 'Sending...' : 'Send Echo'}
                   </button>

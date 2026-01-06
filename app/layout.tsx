@@ -15,6 +15,7 @@ import type { Metadata } from 'next';
 import { Inter, EB_Garamond, JetBrains_Mono } from 'next/font/google';
 import './globals.css';
 import { ViewModeProvider } from '@/contexts/ViewModeContext';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 // ====================================
 // FONT CONFIGURATION
@@ -100,8 +101,10 @@ export default function RootLayout({
         {/* Grain texture overlay - always present */}
         <div className="grain-overlay" aria-hidden="true" />
 
-        {/* Main application wrapped in ViewMode context */}
-        <ViewModeProvider>{children}</ViewModeProvider>
+        {/* Main application wrapped in ViewMode context and error boundary */}
+        <ErrorBoundary>
+          <ViewModeProvider>{children}</ViewModeProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

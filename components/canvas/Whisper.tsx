@@ -32,84 +32,108 @@ function getMoodStyles(mood: WhisperMood): {
   className: string;
   baseOpacity: number;
 } {
+  // Reduced opacity for all moods - more subtle, less obtrusive
   switch (mood) {
     case 'technical':
       return {
         className: 'font-mono text-xs tracking-widest uppercase',
-        baseOpacity: 0.15,
+        baseOpacity: 0.08, // Reduced from 0.15
       };
     case 'creative':
       return {
         className: 'font-serif italic text-sm',
-        baseOpacity: 0.2,
+        baseOpacity: 0.1, // Reduced from 0.2
       };
     case 'mysterious':
       return {
         className: 'font-light text-sm tracking-wide',
-        baseOpacity: 0.12,
+        baseOpacity: 0.06, // Reduced from 0.12
       };
     case 'philosophical':
       return {
         className: 'font-extralight text-base tracking-normal',
-        baseOpacity: 0.18,
+        baseOpacity: 0.09, // Reduced from 0.18
       };
     case 'contemplative':
     default:
       return {
         className: 'font-light text-sm tracking-wide',
-        baseOpacity: 0.16,
+        baseOpacity: 0.08, // Reduced from 0.16
       };
   }
+}
+
+/**
+ * Generate random float parameters for whisper animation
+ * Extracted to function for clarity and reusability
+ * 
+ * Note: Math.random() is intentionally used here to create unique visual
+ * positioning. The values are memoized per component instance to ensure
+ * stability across re-renders.
+ */
+function generateWhisperFloatParams(index: number, totalCount: number): {
+  startX: number;
+  startY: number;
+  driftX: number;
+  driftY: number;
+  duration: number;
+  floatY: number;
+  rotation: number;
+  delay: number;
+  opacityVariation: number;
+} {
+  const phi = 1.618033988749895;
+  const safeTotal = Math.max(totalCount, 1);
+  const seed = index / safeTotal;
+  const goldenAngle = seed * phi * 360;
+  
+  // Distribute across screen using golden angle spiral
+  const radius = 25 + (seed * 35); // 25-60% from center
+  const angleRad = (goldenAngle * Math.PI) / 180;
+  
+  const baseX = 50 + Math.cos(angleRad) * radius;
+  const baseY = 50 + Math.sin(angleRad) * radius;
+  
+  // Generate all random values upfront
+  const r1 = Math.random();
+  const r2 = Math.random();
+  const r3 = Math.random();
+  const r4 = Math.random();
+  const r5 = Math.random();
+  const r6 = Math.random();
+  const r7 = Math.random();
+  const r8 = Math.random();
+  const r9 = Math.random();
+  
+  return {
+    startX: Math.max(5, Math.min(95, baseX + (r1 - 0.5) * 20)),
+    startY: Math.max(10, Math.min(90, baseY + (r2 - 0.5) * 20)),
+    // Slow, gentle drift
+    driftX: (r3 - 0.5) * 30,
+    driftY: (r4 - 0.5) * 25,
+    // Longer durations for dreamlike quality
+    duration: 50 + r5 * 40, // 50-90 seconds
+    // Slight vertical float
+    floatY: 5 + r6 * 10,
+    // Very subtle rotation
+    rotation: (r7 - 0.5) * 3,
+    // Stagger the appearance
+    delay: index * 2.5 + r8 * 3,
+    // Opacity variation (stable per instance)
+    opacityVariation: 0.8 + r9 * 0.4,
+  };
 }
 
 const Whisper = forwardRef<HTMLDivElement, WhisperProps>(function Whisper(
   { id, text, mood, index, totalCount },
   ref
 ) {
-  // Distribute whispers across the viewport more evenly
-  // Using golden ratio for more organic distribution
-  const phi = 1.618033988749895;
-  
-  // Memoize ALL random parameters per instance to prevent re-render issues
-  const floatParams = useMemo(() => {
-    // Guard against division by zero
-    const safeTotal = Math.max(totalCount, 1);
-    const seed = index / safeTotal;
-    const goldenAngle = seed * phi * 360;
-    
-    // Distribute across screen using golden angle spiral
-    const radius = 25 + (seed * 35); // 25-60% from center
-    const angleRad = (goldenAngle * Math.PI) / 180;
-    
-    const baseX = 50 + Math.cos(angleRad) * radius;
-    const baseY = 50 + Math.sin(angleRad) * radius;
-    
-    // Add randomness
-    const startX = Math.max(5, Math.min(95, baseX + (Math.random() - 0.5) * 20));
-    const startY = Math.max(10, Math.min(90, baseY + (Math.random() - 0.5) * 20));
-    
-    // Memoize opacity variation here to prevent flicker on re-render
-    const opacityVariation = 0.8 + Math.random() * 0.4;
-    
-    return {
-      startX,
-      startY,
-      // Slow, gentle drift
-      driftX: (Math.random() - 0.5) * 30,
-      driftY: (Math.random() - 0.5) * 25,
-      // Longer durations for dreamlike quality
-      duration: 50 + Math.random() * 40, // 50-90 seconds
-      // Slight vertical float
-      floatY: 5 + Math.random() * 10,
-      // Very subtle rotation
-      rotation: (Math.random() - 0.5) * 3,
-      // Stagger the appearance
-      delay: index * 2.5 + Math.random() * 3,
-      // Opacity variation (memoized to prevent flicker)
-      opacityVariation,
-    };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Use useMemo to generate random parameters per instance
+  // Dependencies: index and totalCount ensure values update if positioning changes
+  const floatParams = useMemo(
+    () => generateWhisperFloatParams(index, totalCount),
+    [index, totalCount]
+  );
 
   const { className: moodClassName, baseOpacity } = getMoodStyles(mood);
   

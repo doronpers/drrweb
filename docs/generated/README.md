@@ -1,6 +1,6 @@
 # Documentation Index
 
-*Auto-generated on 2025-11-26*
+*Auto-generated on 2026-01-04*
 
 This directory contains auto-generated documentation from the codebase.
 

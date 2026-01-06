@@ -1,232 +1,30 @@
-# Component Documentation
-
-*Auto-generated on 2025-11-26*
-
-Total components: 8
-
----
-
-# AntiPortfolio
-
-====================================
-ANTI-PORTFOLIO - FAILURES & UNKNOWNS
-====================================
-
-A terminal-style log of failures, mistakes, and uncertainties.
-Builds trust through authenticity and transparency.
-
-Design:
-- Monospace terminal aesthetic
-- JSON-like structure
-- Collapsible sections
-- Subtle hover effects
-
-**File:** `components/AntiPortfolio.tsx`
-
-## Hooks Used
-
-- `useState`
-
-
----
-
-# FailuresLog
-
-====================================
-FAILURES LOG - ANTI-PORTFOLIO COMPONENT
-====================================
-
-A brutally honest, terminal-style table of failures.
-No hover effects. Pure data. Builds trust through transparency.
-
-Data Source: /data/failures.json
-
-Design Philosophy:
-- Monospace font throughout
-- Minimal styling, maximum clarity
-- No animations or hover effects
-- Let the content speak for itself
-
-**File:** `components/FailuresLog.tsx`
-
-## Hooks Used
-
-- `useEffect`
-- `useState`
-
-
----
-
-# Landing
-
-====================================
-THE ANTECHAMBER - LANDING COMPONENT
-====================================
-
-The entry point. A clean slate that listens.
-The user's first utterance determines their path through the prism.
-
-**File:** `components/Landing.tsx`
-
-## Hooks Used
-
-- `useState`
-- `useEffect`
-- `useCallback`
-- `useRef`
-- `useViewMode`
-
-## Dependencies
-
-- `@/contexts/ViewModeContext`
-- `@/actions/detect-intent`
-
-
----
-
-# EchoChamber
-
-====================================
-ECHO CHAMBER - FLOATING GUESTBOOK
-====================================
-
-A communal space for ephemeral thoughts.
-Messages float in the background with physics-based motion.
-
-Features:
-- Input for new echoes
-- Physics-based floating animation
-- Varying opacities for "distance"
-- Validation and moderation
-
-**File:** `components/canvas/EchoChamber.tsx`
-
-## Hooks Used
-
-- `useState`
-- `useEffect`
-- `useCallback`
-- `useRef`
-
-## Dependencies
-
-- `./EchoEntry`
-- `@/lib/supabase`
-
-
----
-
-# EchoEntry
-
-====================================
-ECHO ENTRY - SINGLE FLOATING MESSAGE
-====================================
-
-Individual entry in the Echo Chamber.
-Uses physics-based motion to create organic floating effect.
-
-**File:** `components/canvas/EchoEntry.tsx`
-
-## Props
-
-| Prop | Type | Required | Description |
-|------|------|----------|-------------|
-| `id` | `string` | ✓ | Unique identifier for the echo entry |
-| `text` | `string` | ✓ | The message text to display |
-| `timestamp` | `Date` | ✓ | When the echo was created |
-| `index` | `number` | ✓ | Position in the list for staggered animation |
-
-## Hooks Used
-
-- `useMemo`
-
-
----
-
-# Architect
-
-====================================
-MODE A: THE ARCHITECT (REFACTORED)
-====================================
-
-Utilitarian. Swiss Style. High contrast.
-For recruiters, business partners, and decision-makers.
-
-REFACTORING HIGHLIGHTS:
-- Centralized typography via getTypography()
-- Layout animations for morphing content
-- CSS transitions for colors (more performant)
-- Cleaner component structure
-
-**File:** `components/modes/Architect.tsx`
-
-## Hooks Used
-
-- `useEffect`
-
-## Dependencies
-
-- `@/lib/audio`
-- `@/lib/styles`
-
-
----
-
-# Author
-
-====================================
-MODE B: THE AUTHOR
-====================================
-
-Editorial. Breathable. Serif typography.
-For explorers, students, and those seeking depth.
-
-Design principles:
-- Essays and narrative over data
-- High whitespace, generous line-height
-- Warm, reverberant UI sounds
-- "Reading experience" over "information density"
-
-**File:** `components/modes/Author.tsx`
-
-## Hooks Used
-
-- `useEffect`
-
-## Dependencies
-
-- `@/lib/audio`
-
-
----
-
-# Lab
-
-====================================
-MODE C: THE LAB
-====================================
-
-Brutalist. Grid-breaking. Chaotic but navigable.
-For makers, tinkerers, and those who want to see the process.
-
-Design principles:
-- Monospace everything
-- Visible grid/structure
-- Glitchy, granular UI sounds
-- Raw, unfinished aesthetic
-- Behind-the-scenes, WIP content
-
-**File:** `components/modes/Lab.tsx`
-
-## Hooks Used
-
-- `useEffect`
-- `useState`
-
-## Dependencies
-
-- `@/lib/audio`
-
-
----
-
+# Component Index
+
+_Generated: 2026-01-06T14:19:39.890Z_
+
+| Component | File | Client | Props Type |
+|-----------|------|--------|------------|
+| `RootLayout` | `app/layout.tsx` | ❌ | `React` |
+| `Home` | `app/page.tsx` | ✅ | `-` |
+| `ModeButton` | `app/page.tsx` | ✅ | `ModeButtonProps` |
+| `AntiPortfolio` | `components/AntiPortfolio.tsx` | ✅ | `-` |
+| `FailuresLog` | `components/FailuresLog.tsx` | ✅ | `-` |
+| `Landing` | `components/Landing.tsx` | ✅ | `-` |
+| `OnboardingHint` | `components/OnboardingHint.tsx` | ✅ | `OnboardingHintProps` |
+| `VoiceSelector` | `components/VoiceSelector.tsx` | ✅ | `-` |
+| `EchoChamber` | `components/canvas/EchoChamber.tsx` | ✅ | `-` |
+| `EchoEntry` | `components/canvas/EchoEntry.tsx` | ✅ | `EchoEntryProps` |
+| `Whisper` | `components/canvas/Whisper.tsx` | ✅ | `-` |
+| `WhispersChamber` | `components/canvas/WhispersChamber.tsx` | ✅ | `WhispersChamberProps` |
+| `Architect` | `components/modes/Architect.tsx` | ✅ | `-` |
+| `Section` | `components/modes/Architect.tsx` | ✅ | `SectionProps` |
+| `Position` | `components/modes/Architect.tsx` | ✅ | `PositionProps` |
+| `CompetencyCard` | `components/modes/Architect.tsx` | ✅ | `CompetencyCardProps` |
+| `Pill` | `components/modes/Architect.tsx` | ✅ | `React` |
+| `ContactItem` | `components/modes/Architect.tsx` | ✅ | `ContactItemProps` |
+| `Metric` | `components/modes/Architect.tsx` | ✅ | `MetricProps` |
+| `Author` | `components/modes/Author.tsx` | ✅ | `-` |
+| `MicroMotive` | `components/modes/Author.tsx` | ✅ | `string` |
+| `Lab` | `components/modes/Lab.tsx` | ✅ | `-` |
+| `StackItem` | `components/modes/Lab.tsx` | ✅ | `string` |
+| `ViewModeProvider` | `contexts/ViewModeContext.tsx` | ✅ | `ViewModeProviderProps` |

@@ -117,8 +117,10 @@ export function useSoundscape(mode: ViewMode): UseSoundscapeReturn {
 
     // Transition audio parameters
     // Note: The actual parameter ramping would be implemented in audioManager
-    // For now, we log the target parameters
-    console.log(`🎵 Soundscape transitioning to ${mode}:`, params);
+    // For now, we log the target parameters (development only)
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🎵 Soundscape transitioning to ${mode}:`, params);
+    }
 
     // TODO: Implement smooth parameter ramping in audioManager
     // audioManager.rampParams(params.reverb, params.filter, 2.0);
@@ -142,7 +144,9 @@ export function useSoundscape(mode: ViewMode): UseSoundscapeReturn {
   const setParams = useCallback((params: SoundscapeParams) => {
     if (!isReady) return;
 
-    console.log('🎚️  Setting custom audio params:', params);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('🎚️  Setting custom audio params:', params);
+    }
     
     // TODO: Implement in audioManager
     // audioManager.rampParams(params.reverb, params.filter, 2.0);

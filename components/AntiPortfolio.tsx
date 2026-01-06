@@ -31,34 +31,46 @@ interface FailureEntry {
 
 const FAILURES: FailureEntry[] = [
   {
-    date: '2024-Q3',
+    date: '2024',
     project: 'Real-time voice cloning MVP',
     lesson: 'Built for perfection, not iteration. Missed market window.',
     category: 'business',
   },
   {
-    date: '2023-Q4',
+    date: '2023',
     project: 'Automated grading system for writing',
-    lesson: "AI can't read subtext. Scaled too early. Students felt unheard.",
+    lesson: "AI can't read subtext. Students felt unheard.",
     category: 'creative',
   },
   {
-    date: '2023-Q2',
+    date: '2023',
     project: 'Field recording marketplace',
     lesson: 'Wrong platform architecture. MongoDB for time-series was naive.',
     category: 'technical',
   },
   {
-    date: '2022-Q1',
+    date: '2022',
     project: 'Co-founded audio plugin company',
     lesson: 'Split equity before roles were clear. Partnership dissolved.',
     category: 'collaboration',
   },
   {
-    date: '2021-Q3',
+    date: '2021',
     project: 'Spatial audio installation',
     lesson: 'Underestimated setup complexity. 8-channel system crashed opening night.',
     category: 'technical',
+  },
+  {
+    date: '2018',
+    project: 'The Over-Engineered Mix',
+    lesson: 'Cut by director. Too many layers, lost the emotional core.',
+    category: 'creative',
+  },
+  {
+    date: '2021',
+    project: 'Media Consultancy',
+    lesson: 'Market mismatch. Target audience didn\'t exist yet.',
+    category: 'business',
   },
 ];
 
@@ -105,9 +117,17 @@ export default function AntiPortfolio() {
           </div>
           <motion.button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="px-4 py-2 border border-black/10 hover:border-black/30 hover:bg-black/5 transition-colors rounded"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                setIsExpanded(!isExpanded);
+              }
+            }}
+            className="px-4 py-2 border border-black/10 hover:border-black/30 hover:bg-black/5 transition-colors rounded focus:outline-none focus:ring-2 focus:ring-black/20 focus:ring-offset-2"
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            aria-expanded={isExpanded}
+            aria-label={isExpanded ? 'Collapse anti-portfolio' : 'Expand anti-portfolio'}
           >
             {isExpanded ? 'COLLAPSE [–]' : 'EXPAND [+]'}
           </motion.button>

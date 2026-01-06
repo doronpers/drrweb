@@ -7,7 +7,7 @@
    ==================================== */
 
 :root {
-  --grain-opacity: 0.03;
+  --grain-opacity: 0.015; /* Reduced from 0.03 - more subtle, less obtrusive */
   --transition-prism: 800ms cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
@@ -36,8 +36,32 @@
     outline: none;
   }
 
+  /* Enhanced focus states - following Dieter Rams: clear, purposeful */
   *:focus-visible {
     @apply ring-2 ring-offset-2 ring-black/20;
+    transition: box-shadow 0.15s ease;
+  }
+
+  /* Improved focus for interactive elements */
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    @apply ring-2 ring-offset-2;
+    transition: box-shadow 0.15s ease;
+  }
+
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
@@ -104,11 +128,28 @@
 
 ::-webkit-scrollbar-thumb {
   @apply bg-black/10 rounded-full;
-  transition: background 200ms;
+  transition: background 0.2s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-black/20;
+}
+
+/* ====================================
+   MOBILE OPTIMIZATIONS
+   ==================================== */
+@media (max-width: 768px) {
+  /* Larger touch targets */
+  button,
+  a {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Improved spacing on mobile */
+  .container {
+    @apply px-4;
+  }
 }
 
 /* ====================================
@@ -190,6 +231,60 @@
   animation: float 6s ease-in-out infinite;
 }
 
+/* Glitch effect for Lab mode */
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+.glitch {
+  animation: glitch 0.1s infinite;
+}
+
+/* ====================================
+   LAB MODE GLITCH EFFECT
+   ==================================== */
+.glitch {
+  animation: glitch 0.1s infinite;
+}
+
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
 /* ====================================
    WHISPER SYSTEM STYLES
    ==================================== */
@@ -216,18 +311,75 @@
   animation: whisper-pulse 8s ease-in-out infinite;
 }
 
-/* Whisper container depth layers */
+/* Whisper container depth layers - Reduced opacity for subtlety */
 .whisper-layer-far {
   filter: blur(0.5px);
-  opacity: 0.12;
+  opacity: 0.06; /* Reduced from 0.12 */
 }
 
 .whisper-layer-mid {
   filter: blur(0.25px);
-  opacity: 0.18;
+  opacity: 0.09; /* Reduced from 0.18 */
 }
 
 .whisper-layer-near {
   filter: blur(0);
-  opacity: 0.25;
+  opacity: 0.12; /* Reduced from 0.25 */
+}
+
+/* ====================================
+   INTRO SECTION STYLES
+   ==================================== */
+
+/* Static intro block for accessibility and indexing
+   Added for fast skimming; interactive experience remains below. */
+.intro-section {
+  /* Ensure content is above background but below fixed elements */
+  position: relative;
+  z-index: 10;
+}
+
+.intro-content {
+  max-width: 100%;
+}
+
+.intro-text,
+.intro-subtext {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.intro-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.intro-link {
+  display: inline-block;
+  position: relative;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .intro-section {
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+  }
+  
+  .intro-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  
+  .intro-subtext {
+    font-size: 0.85rem;
+  }
+  
+  .intro-nav ul {
+    gap: 1rem;
+  }
 }

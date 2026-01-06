@@ -120,7 +120,9 @@ if (envVars && process.env.NODE_ENV === 'development') {
  */
 export async function fetchEchoes(): Promise<Echo[]> {
   if (!supabase) {
-    console.warn('Supabase not configured. Using mock data.');
+    if (process.env.NODE_ENV === 'development') {
+      console.warn('Supabase not configured. Using mock data.');
+    }
     return [];
   }
 
@@ -143,14 +145,15 @@ export async function fetchEchoes(): Promise<Echo[]> {
       throw error;
     }
     return data || [];
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error fetching echoes:', error);
     // Log more details for debugging
-    if (error?.message) {
+    if (error instanceof Error) {
       console.error('Error message:', error.message);
     }
-    if (error?.details) {
-      console.error('Error details:', error.details);
+    // Check if error has details property (Supabase error structure)
+    if (error && typeof error === 'object' && 'details' in error) {
+      console.error('Error details:', (error as { details?: string }).details);
     }
     return [];
   }
@@ -166,9 +169,16 @@ export async function submitEcho(text: string): Promise<boolean> {
     return false;
   }
 
+  // Additional server-side validation (client-side validation already done)
+  const sanitized = text.trim();
+  if (!sanitized || sanitized.length > 100) {
+    console.error('Invalid echo text: length or content validation failed');
+    return false;
+  }
+
   try {
     const { error } = await supabase.from('echoes').insert({
-      text: text.trim(),
+      text: sanitized,
       approved: false, // Requires manual approval
     });
 
@@ -182,13 +192,14 @@ export async function submitEcho(text: string): Promise<boolean> {
       throw error;
     }
     return true;
-  } catch (error: any) {
+  } catch (error) {
     console.error('Error submitting echo:', error);
-    if (error?.message) {
+    if (error instanceof Error) {
       console.error('Error message:', error.message);
     }
-    if (error?.details) {
-      console.error('Error details:', error.details);
+    // Check if error has details property (Supabase error structure)
+    if (error && typeof error === 'object' && 'details' in error) {
+      console.error('Error details:', (error as { details?: string }).details);
     }
     return false;
   }

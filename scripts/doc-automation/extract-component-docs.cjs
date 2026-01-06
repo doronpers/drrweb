@@ -83,7 +83,7 @@ function extractProps(content, componentName) {
       }
       
       // Match prop definition
-      const propMatch = trimmed.match(/^(\w+)(\??)\s*:\s*([^;\/]+)(?:\/\/\s*(.+))?/);
+      const propMatch = trimmed.match(/^(\w+)(\??)\s*:\s*([^;/]+)(?:\/\/\s*(.+))?/);
       if (propMatch) {
         const description = propMatch[4] || currentDoc || '';
         props.push({

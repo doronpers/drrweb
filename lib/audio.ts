@@ -22,6 +22,36 @@ import * as Tone from 'tone';
 
 type UISoundType = 'click-dry' | 'click-warm' | 'glitch';
 
+/**
+ * Detune configuration for humanization.
+ * Values are in cents (100 cents = 1 semitone).
+ */
+interface DetuneConfig {
+  /** Minimum detune in cents (typically negative) */
+  min: number;
+  /** Maximum detune in cents (typically positive) */
+  max: number;
+}
+
+/**
+ * Generate a random detune value within a bounded musical range.
+ * This creates subtle pitch variation that humanizes the sound.
+ *
+ * @param config - The detune range configuration
+ * @returns A random detune value in cents
+ */
+function getRandomDetune(config: DetuneConfig = { min: -5, max: 5 }): number {
+  return config.min + Math.random() * (config.max - config.min);
+}
+
+// Detune presets for different modes (values in cents)
+// ±5 cents is subtle humanization, ±10-15 for more character
+const DETUNE_PRESETS = {
+  architect: { min: -3, max: 3 },   // Subtle: clean, precise feel
+  author: { min: -8, max: 8 },      // Warmer: more organic variation
+  lab: { min: -12, max: 12 },       // Character: slightly experimental
+} as const;
+
 // Musical scale: Pentatonic (C, D, E, G, A) - universally pleasing
 // Using frequencies in Hz for multiple octaves
 // Also includes relative minor (A minor pentatonic uses same notes)
@@ -67,6 +97,7 @@ class AudioManager {
   private noise: Tone.Noise | null = null;
   private filter: Tone.Filter | null = null;
   private ambientVolume: Tone.Volume | null = null;
+  private originalAmbientVolume: number = -25; // Store original volume for ducking restoration
   
   // Musical ambient tones (subtle harmonic layers)
   private ambientTone1: Tone.Oscillator | null = null;
@@ -246,8 +277,6 @@ class AudioManager {
           release: 0.8,    // Much longer release for smooth fade (less abrupt)
         },
       });
-      // Set detune programmatically on the instance (no detuning for pure tone)
-      this.glitchSynth.oscillator.detune.value = 0;
       // Add gentle low-pass filter for warmth and smoothness
       const labFilter = new Tone.Filter({
         type: 'lowpass',
@@ -369,7 +398,10 @@ class AudioManager {
           ];
           const archNoteIndex = this.interactionCount % architectNotes.length;
           const architectNote = architectNotes[archNoteIndex];
-          console.log(`🎵 Playing musical tone: ${architectNote}Hz (Architect mode) - Note ${archNoteIndex + 1}/${architectNotes.length}`);
+          // Apply subtle humanization detune (±3 cents for clean, precise feel)
+          const archDetune = getRandomDetune(DETUNE_PRESETS.architect);
+          this.clickSynth.detune.value = archDetune;
+          console.log(`🎵 Playing musical tone: ${architectNote}Hz (Architect mode) - Note ${archNoteIndex + 1}/${architectNotes.length} - Detune: ${archDetune.toFixed(1)}¢`);
           this.clickSynth.triggerAttackRelease(architectNote, '0.5', now);
           break;
         }
@@ -397,7 +429,10 @@ class AudioManager {
           ];
           const authNoteIndex = this.interactionCount % authorNotes.length;
           const authorNote = authorNotes[authNoteIndex];
-          console.log(`🎵 Playing musical tone: ${authorNote}Hz (Author mode) - Note ${authNoteIndex + 1}/${authorNotes.length} - Reverb: 75% wet`);
+          // Apply organic humanization detune (±8 cents for warmer, more organic feel)
+          const authDetune = getRandomDetune(DETUNE_PRESETS.author);
+          this.warmSynth.detune.value = authDetune;
+          console.log(`🎵 Playing musical tone: ${authorNote}Hz (Author mode) - Note ${authNoteIndex + 1}/${authorNotes.length} - Reverb: 75% wet - Detune: ${authDetune.toFixed(1)}¢`);
           this.warmSynth.triggerAttackRelease(authorNote, '1.2', now);
           break;
         }
@@ -425,7 +460,10 @@ class AudioManager {
           ];
           const labNoteIndex = this.interactionCount % labNotes.length;
           const labNote = labNotes[labNoteIndex];
-          console.log(`🎵 Playing musical tone: ${labNote}Hz (Lab mode) - Note ${labNoteIndex + 1}/${labNotes.length} - Reverb: 60% wet`);
+          // Apply experimental humanization detune (±12 cents for slightly experimental character)
+          const labDetune = getRandomDetune(DETUNE_PRESETS.lab);
+          this.glitchSynth.detune.value = labDetune;
+          console.log(`🎵 Playing musical tone: ${labNote}Hz (Lab mode) - Note ${labNoteIndex + 1}/${labNotes.length} - Reverb: 60% wet - Detune: ${labDetune.toFixed(1)}¢`);
           // Longer duration for smoother, less ticky sound
           this.glitchSynth.triggerAttackRelease(labNote, '0.9', now);
           break;
@@ -468,6 +506,57 @@ class AudioManager {
    */
   isMuted(): boolean {
     return this.muted;
+  }
+
+  /**
+   * Duck the ambient drone volume subtly (for voice playback).
+   * Uses smooth ramping to make the change unnoticeable.
+   * 
+   * @param amountDb - Amount to duck in dB (default: -2dB, barely noticeable)
+   * @param duration - Ramp duration in seconds (default: 0.3s for smooth transition)
+   */
+  duckAmbient(amountDb: number = -2, duration: number = 0.3): void {
+    if (!this.ambientVolume || this.muted) return;
+    
+    // Store current volume as original if not already stored
+    this.originalAmbientVolume = this.ambientVolume.volume.value;
+    
+    // Ramp to ducked volume
+    this.ambientVolume.volume.rampTo(
+      this.originalAmbientVolume + amountDb,
+      duration
+    );
+    
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🔉 Ducking ambient by ${amountDb}dB (${duration}s)`);
+    }
+  }
+
+  /**
+   * Restore ambient drone volume to original level.
+   * 
+   * @param duration - Ramp duration in seconds (default: 0.3s for smooth transition)
+   */
+  restoreAmbient(duration: number = 0.3): void {
+    if (!this.ambientVolume || this.muted) return;
+    
+    // Restore to original volume
+    this.ambientVolume.volume.rampTo(
+      this.originalAmbientVolume,
+      duration
+    );
+    
+    if (process.env.NODE_ENV === 'development') {
+      console.log(`🔊 Restoring ambient to ${this.originalAmbientVolume}dB (${duration}s)`);
+    }
+  }
+
+  /**
+   * Get the ambient volume node for external control.
+   * Exposed for voice manager integration.
+   */
+  getAmbientVolume(): Tone.Volume | null {
+    return this.ambientVolume;
   }
 
   /**

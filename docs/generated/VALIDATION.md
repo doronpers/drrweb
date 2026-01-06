@@ -1,8 +1,26 @@
 # Documentation Validation Report
 
-*Generated on 2025-11-26*
+*Generated on 2026-01-04*
 
-Found 10 file(s) with documentation issues:
+Found 12 file(s) with documentation issues:
+
+## app/about/page.tsx
+
+- ⚠️  Low function documentation coverage: 0%
+
+**Stats:**
+- Functions: 0/1 documented
+- Has file-level JSDoc: ✓
+- Props documented: ✓
+
+## app/contact/page.tsx
+
+- ⚠️  Low function documentation coverage: 0%
+
+**Stats:**
+- Functions: 0/1 documented
+- Has file-level JSDoc: ✓
+- Props documented: ✓
 
 ## app/layout.tsx
 
@@ -49,6 +67,15 @@ Found 10 file(s) with documentation issues:
 - Has file-level JSDoc: ✓
 - Props documented: ✓
 
+## components/canvas/Whisper.tsx
+
+- ⚠️  Component props not documented
+
+**Stats:**
+- Functions: 1/2 documented
+- Has file-level JSDoc: ✓
+- Props documented: ✗
+
 ## components/modes/Architect.tsx
 
 - ⚠️  Low function documentation coverage: 0%
@@ -76,15 +103,6 @@ Found 10 file(s) with documentation issues:
 - Has file-level JSDoc: ✓
 - Props documented: ✓
 
-## eslint.config.js
-
-- ⚠️  Missing file-level JSDoc comment
-
-**Stats:**
-- Functions: 0/0 documented
-- Has file-level JSDoc: ✗
-- Props documented: ✓
-
 ## test-supabase.js
 
 - ⚠️  Low function documentation coverage: 0%
@@ -96,6 +114,6 @@ Found 10 file(s) with documentation issues:
 
 ## Summary
 
-- **Total files with issues:** 10
-- **Files without JSDoc:** 1
-- **Overall function documentation coverage:** 3%
+- **Total files with issues:** 12
+- **Files without JSDoc:** 0
+- **Overall function documentation coverage:** 6%
