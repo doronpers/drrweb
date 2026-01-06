@@ -132,7 +132,18 @@ export async function detectIntent(input: string): Promise<IntentResponse> {
     if (process.env.NODE_ENV === 'development') {
       console.log('🤖 Multiple words detected, using AI for intent detection...');
     }
-    const model = getModel('claude-3-5-sonnet-20241022');
+    
+    // Safely get model - catch errors if provider isn't actually available
+    let model;
+    try {
+      model = getModel('claude-3-5-sonnet-20241022');
+    } catch (modelError) {
+      console.error('❌ Failed to get AI model:', modelError);
+      // Fallback to keyword matching if model unavailable
+      const mode = parseIntent(trimmedInput);
+      return createFallbackResponse(toNarrowMode(mode));
+    }
+    
     const { object } = await generateObject({
       model: model as any, // Type assertion needed for V2/V3 compatibility
       schema: IntentSchema,

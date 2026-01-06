@@ -134,7 +134,9 @@ export default function EchoChamber() {
         setEchoes(formattedEchoes);
       } catch (err) {
         console.error('Failed to load echoes:', err);
-        // Fallback to empty array if Supabase is not configured
+        // Fallback to empty array - Echo Chamber will work but show no echoes
+        // This is graceful degradation - the site remains functional
+        setEchoes([]);
       } finally {
         setIsLoading(false);
       }
@@ -206,17 +208,22 @@ export default function EchoChamber() {
         setInput('');
         setShowInput(false);
         
-        // Refresh from server to get actual ID
-        const data = await fetchEchoes();
-        const formattedEchoes: Echo[] = data.map((echo: SupabaseEcho) => ({
-          id: echo.id,
-          text: echo.text,
-          timestamp: new Date(echo.created_at),
-        }));
-        setEchoes(formattedEchoes);
+        // Refresh from server to get actual ID (but don't fail if this fails)
+        try {
+          const data = await fetchEchoes();
+          const formattedEchoes: Echo[] = data.map((echo: SupabaseEcho) => ({
+            id: echo.id,
+            text: echo.text,
+            timestamp: new Date(echo.created_at),
+          }));
+          setEchoes(formattedEchoes);
+        } catch (refreshError) {
+          // If refresh fails, keep the optimistic echo
+          console.warn('Failed to refresh echoes after submission, keeping optimistic update:', refreshError);
+        }
       } else {
         setError({
-          message: 'Failed to submit echo. Please try again.',
+          message: 'Failed to submit echo. The service may be temporarily unavailable. Please try again later.',
           type: 'network',
         });
       }
