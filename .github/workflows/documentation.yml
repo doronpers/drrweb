@@ -1,0 +1,88 @@
+name: Documentation
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'components/**'
+      - 'lib/**'
+      - 'actions/**'
+      - 'contexts/**'
+      - 'app/**'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  validate:
+    name: Validate Documentation
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      # Note: continue-on-error is intentional - we want to show the validation
+      # report even if there are issues, without blocking the workflow.
+      # The report is still added to the PR summary for visibility.
+      - name: Validate documentation
+        run: npm run docs:validate
+        continue-on-error: true
+      
+      - name: Generate validation report
+        if: always()
+        run: |
+          npm run docs:generate
+          cat docs/generated/VALIDATION.md >> $GITHUB_STEP_SUMMARY
+  
+  generate:
+    name: Generate Documentation
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Generate documentation
+        run: npm run docs:generate
+      
+      - name: Check for changes
+        id: verify-changed-files
+        run: |
+          if git diff --quiet docs/generated/; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Commit and push changes
+        if: steps.verify-changed-files.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add docs/generated/
+          git commit -m "docs: auto-update generated documentation [skip ci]"
+          git push

@@ -1,0 +1,32 @@
+{
+  "docAutomation": {
+    "version": "1.0.0",
+    "description": "Documentation automation configuration",
+    "directories": {
+      "components": "components",
+      "lib": "lib",
+      "actions": "actions",
+      "contexts": "contexts",
+      "output": "docs/generated"
+    },
+    "excludeDirs": [
+      "node_modules",
+      ".git",
+      ".next",
+      "dist",
+      "build",
+      "out"
+    ],
+    "validation": {
+      "requireFileJSDoc": true,
+      "minFunctionDocCoverage": 0.5,
+      "requirePropsDoc": true
+    },
+    "generation": {
+      "includePrivateFunctions": false,
+      "includeImports": true,
+      "includeHooks": true,
+      "includeDependencies": true
+    }
+  }
+}

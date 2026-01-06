@@ -102,9 +102,9 @@ export default function AntiPortfolio() {
       initial={{ opacity: 0, y: 40 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.6, duration: 0.8 }}
-      className="border-t border-black/10 bg-black/[0.02] backdrop-blur-sm font-mono text-sm mt-24"
+      className="border-t border-black/10 bg-black/[0.02] backdrop-blur-sm font-mono text-sm mt-16 md:mt-24 relative z-10"
     >
-      <div className="container mx-auto px-8 py-12 max-w-6xl">
+      <div className="container mx-auto px-4 md:px-8 py-8 md:py-12 max-w-6xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
           <div>

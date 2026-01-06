@@ -16,6 +16,7 @@
   html {
     @apply antialiased;
     font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    scroll-behavior: smooth;
   }
 
   body {
@@ -23,6 +24,11 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Prevent content from hiding under fixed elements */
+  * {
+    scroll-margin-top: 6rem;
   }
 
   /* Disable default focus rings, we'll add custom ones */
@@ -69,7 +75,7 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: 9999;
+  z-index: 1;
   opacity: var(--grain-opacity);
   background-image:
     repeating-linear-gradient(
@@ -225,6 +231,32 @@
   animation: float 6s ease-in-out infinite;
 }
 
+/* Glitch effect for Lab mode */
+@keyframes glitch {
+  0% {
+    transform: translate(0);
+  }
+  20% {
+    transform: translate(-2px, 2px);
+  }
+  40% {
+    transform: translate(-2px, -2px);
+  }
+  60% {
+    transform: translate(2px, 2px);
+  }
+  80% {
+    transform: translate(2px, -2px);
+  }
+  100% {
+    transform: translate(0);
+  }
+}
+
+.glitch {
+  animation: glitch 0.1s infinite;
+}
+
 /* ====================================
    LAB MODE GLITCH EFFECT
    ==================================== */
@@ -293,4 +325,61 @@
 .whisper-layer-near {
   filter: blur(0);
   opacity: 0.12; /* Reduced from 0.25 */
+}
+
+/* ====================================
+   INTRO SECTION STYLES
+   ==================================== */
+
+/* Static intro block for accessibility and indexing
+   Added for fast skimming; interactive experience remains below. */
+.intro-section {
+  /* Ensure content is above background but below fixed elements */
+  position: relative;
+  z-index: 10;
+}
+
+.intro-content {
+  max-width: 100%;
+}
+
+.intro-text,
+.intro-subtext {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.intro-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.intro-link {
+  display: inline-block;
+  position: relative;
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .intro-section {
+    padding-top: 3rem;
+    padding-bottom: 2rem;
+  }
+  
+  .intro-text {
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+  
+  .intro-subtext {
+    font-size: 0.85rem;
+  }
+  
+  .intro-nav ul {
+    gap: 1rem;
+  }
 }
