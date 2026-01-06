@@ -7,9 +7,9 @@
    - This allows voice generation API calls to work
 
 2. **Build Script Fixed**
-   - Changed docs generation from `ts-node` to `tsx`
-   - Made prebuild script non-blocking: `npm run docs:generate || true`
-   - Build will succeed even if docs generation fails
+   - Removed `prebuild` script entirely (docs generation is optional)
+   - Changed docs generation from `ts-node` to `tsx` (for manual use)
+   - Build now succeeds without any docs generation step
 
 3. **Build Verified**
    - Local build succeeds: `npm run build` ✅
