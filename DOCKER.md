@@ -17,6 +17,16 @@ The Docker setup uses a multi-stage build process:
 - Docker Compose 2.0 or higher (optional, for easier deployment)
 - SSL certificates (self-signed for development, CA-signed for production)
 
+### Validate Your Setup
+
+Before starting, you can validate your Docker setup:
+
+```bash
+./validate-docker-setup.sh
+```
+
+This script checks for Docker, Docker Compose, required files, and configuration.
+
 ## Quick Start
 
 ### 1. Generate SSL Certificates (Development)
@@ -245,6 +255,10 @@ docker-compose build web
 ```
 
 Ensure all build-time environment variables are set correctly.
+
+### npm ci warnings during build
+
+You may see "Exit handler never called!" errors from npm during the build. This is a known issue with npm in Docker environments and can be safely ignored if the build completes successfully. The Dockerfile includes retry logic (`npm ci || npm ci || npm install`) to handle transient network issues.
 
 ## Production Deployment
 
