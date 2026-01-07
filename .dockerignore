@@ -52,3 +52,11 @@ next-env.d.ts
 .pnp
 .pnp.js
 
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# SSL certificates (will be mounted as volume)
+ssl/
+*.pem
