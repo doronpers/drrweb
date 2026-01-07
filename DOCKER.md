@@ -277,6 +277,7 @@ You may see "Exit handler never called!" errors from npm during the build. This 
 - ✅ Use CA-signed SSL certificates (not self-signed)
 - ✅ Keep Docker images updated
 - ✅ Use non-root users in containers (where possible)
+  - **Note**: The production container runs supervisor as root because nginx requires root privileges to bind to ports 80 and 443. This is standard for nginx containers.
 - ✅ Scan images for vulnerabilities
 - ✅ Implement rate limiting
 - ✅ Configure log aggregation

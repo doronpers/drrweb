@@ -71,6 +71,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 RUN mkdir -p /etc/nginx/ssl
 
 # Create supervisor configuration
+# Note: Running as root is required because nginx needs root to bind to ports 80/443
 RUN printf "[supervisord]\n\
 nodaemon=true\n\
 user=root\n\
