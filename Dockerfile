@@ -5,8 +5,8 @@ WORKDIR /app
 # Copy package files
 COPY package.json package-lock.json* ./
 
-# Install dependencies with retry logic
-RUN npm ci || npm ci || npm install
+# Install dependencies with retry logic for transient network issues
+RUN npm ci || npm ci || npm ci
 
 # Stage 2: Build
 FROM node:20-alpine AS builder
