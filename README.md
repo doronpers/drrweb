@@ -284,6 +284,26 @@ npm run build
 npm start
 ```
 
+### Deploy with Docker
+
+The application includes Docker support with nginx reverse proxy. See [DOCKER.md](./DOCKER.md) for complete documentation.
+
+**Quick start:**
+
+```bash
+# Generate SSL certificates (development)
+./generate-ssl-cert.sh
+
+# Configure environment variables
+cp .env.docker.example .env
+# Edit .env with your credentials
+
+# Build and run with docker-compose
+docker-compose up -d web
+```
+
+Access at https://localhost
+
 ### Deploy to Vercel
 
 ```bash
