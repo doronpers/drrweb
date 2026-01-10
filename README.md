@@ -187,7 +187,7 @@ WITH CHECK (true);
 
 ### 1. The Antechamber (Landing)
 
-- Minimal input field: "What do you seek?"
+- Minimal input field: "How may I inform your journey?"
 - Keyword mapping routes to appropriate mode
 - Audio initialization with user consent
 
@@ -283,6 +283,26 @@ To customize intent detection behavior, edit `actions/detect-intent.ts`:
 npm run build
 npm start
 ```
+
+### Deploy with Docker
+
+The application includes Docker support with nginx reverse proxy. See [DOCKER.md](./DOCKER.md) for complete documentation.
+
+**Quick start:**
+
+```bash
+# Generate SSL certificates (development)
+./generate-ssl-cert.sh
+
+# Configure environment variables
+cp .env.docker.example .env
+# Edit .env with your credentials
+
+# Build and run with docker-compose
+docker-compose up -d web
+```
+
+Access at https://localhost
 
 ### Deploy to Vercel
 
