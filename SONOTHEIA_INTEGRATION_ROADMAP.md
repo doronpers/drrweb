@@ -22,9 +22,11 @@ This document outlines the artful integration of elements from [Website-Sonothei
 ## P1: Analysis Phases → Mode Transitions
 
 ### Concept
+
 Transform Sonotheia's analysis phase progression into poetic mode transitions. When a user selects a mode in the Antechamber, the transition includes a brief "tuning" sequence that builds anticipation.
 
 ### Source Reference
+
 ```javascript
 // From Website-Sonotheia/frontend/src/components/Demo.jsx
 const ANALYSIS_PHASES = [
@@ -36,12 +38,14 @@ const ANALYSIS_PHASES = [
 ```
 
 ### Implementation
+
 - Create `PrismTransition.tsx` component
 - Add mode-specific phase sequences
 - Integrate with existing Framer Motion transitions
 - Trigger mode-specific audio cues during phases
 
 ### Files to Modify/Create
+
 - `components/PrismTransition.tsx` (new)
 - `app/page.tsx` (integrate transition)
 - `lib/audio.ts` (add transition sounds)
@@ -51,9 +55,11 @@ const ANALYSIS_PHASES = [
 ## P1: Waveform Visualization → Lab Mode
 
 ### Concept
+
 Add a real-time audio waveform monitor to Lab mode that visualizes the ambient Tone.js synthesis. Reinforces the "process exposed" brutalist aesthetic.
 
 ### Source Reference
+
 ```jsx
 // From Website-Sonotheia/frontend/src/components/Demo.jsx
 <div className="waveform-container">
@@ -64,12 +70,14 @@ Add a real-time audio waveform monitor to Lab mode that visualizes the ambient T
 ```
 
 ### Implementation
+
 - Create `AudioWaveformMonitor.tsx` component
 - Connect to existing `audioManager` singleton
 - Use Tone.Analyser for real-time data
 - Style with Lab mode's brutalist aesthetic
 
 ### Files to Modify/Create
+
 - `components/canvas/AudioWaveformMonitor.tsx` (new)
 - `components/modes/Lab.tsx` (integrate monitor)
 - `lib/audio.ts` (expose analyser)
@@ -79,9 +87,11 @@ Add a real-time audio waveform monitor to Lab mode that visualizes the ambient T
 ## P2: DetectorChat → "Ask the Artist"
 
 ### Concept
+
 Adapt Sonotheia's conversational DetectorChat into an "Interrogate the Text" feature for Author mode. Visitors can ask questions about essays/writing, powered by AI.
 
 ### Source Reference
+
 ```jsx
 // From Website-Sonotheia/frontend/src/components/DetectorChat.jsx
 function DetectorChat({ detectionResult }) {
@@ -92,12 +102,14 @@ function DetectorChat({ detectionResult }) {
 ```
 
 ### Implementation
+
 - Create `AskTheArtist.tsx` component
 - Integrate with existing Gemini API (actions/detect-intent.ts)
 - Context-aware prompts based on current content
 - Maintain Author mode's serif, editorial aesthetic
 
 ### Files to Modify/Create
+
 - `components/AskTheArtist.tsx` (new)
 - `components/modes/Author.tsx` (integrate)
 - `actions/ask-artist.ts` (new server action)
@@ -107,9 +119,11 @@ function DetectorChat({ detectionResult }) {
 ## P2: Evidence Grid → Competency Fingerprint
 
 ### Concept
+
 Transform Sonotheia's sensor evidence display into a visual "competency fingerprint" for Architect mode, showing skills and domains with confidence indicators.
 
 ### Mapping
+
 | Sonotheia Sensor | drrweb Equivalent |
 |-----------------|-------------------|
 | Vocal Tract Analysis | Sound Design |
@@ -119,6 +133,7 @@ Transform Sonotheia's sensor evidence display into a visual "competency fingerpr
 | Liveness Detection | Active Projects |
 
 ### Implementation
+
 - Create `CompetencyFingerprint.tsx` component
 - Animated reveal with Framer Motion
 - Click to expand domain details
@@ -128,9 +143,11 @@ Transform Sonotheia's sensor evidence display into a visual "competency fingerpr
 ## P3: Enhanced Audio Processing
 
 ### Concept
+
 Extend the existing Tone.js audio engine with Sonotheia-inspired reactive soundscapes.
 
 ### Features
+
 - Engagement harmonics (depth-based complexity)
 - Mode resolution sounds (musical confirmation)
 - Spectral layers tied to scroll position
@@ -140,9 +157,11 @@ Extend the existing Tone.js audio engine with Sonotheia-inspired reactive sounds
 ## P3: Trust Signals → Echo Chamber
 
 ### Concept
+
 Add Sonotheia-style trust messaging to the Echo Chamber guestbook.
 
 ### Implementation
+
 - Subtle privacy/moderation notes
 - Matches intimate, floating aesthetic
 
