@@ -350,3 +350,6 @@ This is a personal project template. Feel free to fork and adapt for your own us
 ---
 
 **Built with care for atmosphere, subtext, and sensory feedback.**
+
+## Agent Instructions
+This repository follows [Agent Behavioral Standards](Documentation/Governance/AGENT_BEHAVIORAL_STANDARDS.md). All AI agents MUST read these before performing any tasks.

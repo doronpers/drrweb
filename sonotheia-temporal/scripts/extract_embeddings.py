@@ -29,7 +29,7 @@ import seaborn as sns
 from tqdm import tqdm
 
 # Suppress warnings for cleaner output
-warnings.filterwarnings('ignore')
+warnings.filterwarnings("ignore")
 
 
 class AudioEmbeddingExtractor:
@@ -47,7 +47,7 @@ class AudioEmbeddingExtractor:
         self,
         whisper_model: str = "base",
         gpt2_model: str = "gpt2",
-        device: Optional[str] = None
+        device: Optional[str] = None,
     ):
         """
         Initialize the extractor with specified models.
@@ -117,8 +117,10 @@ class AudioEmbeddingExtractor:
             return audio
 
         except Exception as e:
-            raise RuntimeError(f"Failed to load audio file: {e}\n"
-                             f"Supported formats: WAV, MP3, FLAC, OGG, M4A")
+            raise RuntimeError(
+                f"Failed to load audio file: {e}\n"
+                f"Supported formats: WAV, MP3, FLAC, OGG, M4A"
+            )
 
     def transcribe_with_timestamps(self, audio: np.ndarray) -> Dict:
         """
@@ -135,30 +137,29 @@ class AudioEmbeddingExtractor:
         try:
             # Transcribe with word-level timestamps
             result = self.whisper_model.transcribe(
-                audio,
-                word_timestamps=True,
-                verbose=False
+                audio, word_timestamps=True, verbose=False
             )
 
             # Extract word-level information
             words_with_timestamps = []
 
-            for segment in result['segments']:
-                if 'words' in segment:
-                    for word_info in segment['words']:
-                        words_with_timestamps.append({
-                            'word': word_info['word'].strip(),
-                            'start': word_info['start'],
-                            'end': word_info['end']
-                        })
+            for segment in result["segments"]:
+                if "words" in segment:
+                    for word_info in segment["words"]:
+                        words_with_timestamps.append(
+                            {
+                                "word": word_info["word"].strip(),
+                                "start": word_info["start"],
+                                "end": word_info["end"],
+                            }
+                        )
 
-            print(f"Transcription complete: {len(words_with_timestamps)} words detected")
+            print(
+                f"Transcription complete: {len(words_with_timestamps)} words detected"
+            )
             print(f"Full text: {result['text']}")
 
-            return {
-                'text': result['text'],
-                'words': words_with_timestamps
-            }
+            return {"text": result["text"], "words": words_with_timestamps}
 
         except Exception as e:
             raise RuntimeError(f"Transcription failed: {e}")
@@ -179,7 +180,7 @@ class AudioEmbeddingExtractor:
 
         # Tokenize the text
         inputs = self.tokenizer(text, return_tensors="pt")
-        input_ids = inputs['input_ids'].to(self.device)
+        input_ids = inputs["input_ids"].to(self.device)
 
         # Decode tokens for reference
         tokens = [self.tokenizer.decode([token_id]) for token_id in input_ids[0]]
@@ -189,8 +190,7 @@ class AudioEmbeddingExtractor:
         # Extract embeddings from all layers
         with torch.no_grad():
             outputs = self.gpt2_model(
-                input_ids,
-                output_hidden_states=True  # Get all layer outputs
+                input_ids, output_hidden_states=True  # Get all layer outputs
             )
 
             # hidden_states is a tuple of (num_layers + 1) tensors
@@ -218,7 +218,7 @@ class AudioEmbeddingExtractor:
         self,
         words_with_timestamps: List[Dict],
         tokens: List[str],
-        embeddings: np.ndarray
+        embeddings: np.ndarray,
     ) -> pd.DataFrame:
         """
         Align GPT-2 token embeddings to word-level timestamps from Whisper.
@@ -238,27 +238,29 @@ class AudioEmbeddingExtractor:
 
         # Create a simple word-to-token mapping
         # This is approximate and could be improved with more sophisticated alignment
-        words = [w['word'] for w in words_with_timestamps]
-        full_text = ' '.join(words)
+        words = [w["word"] for w in words_with_timestamps]
+        full_text = " ".join(words)
 
         # Re-tokenize to get alignment
         token_positions = []
         current_pos = 0
 
         for i, word_info in enumerate(words_with_timestamps):
-            word = word_info['word']
+            word = word_info["word"]
             # Find which tokens correspond to this word
             word_tokens = self.tokenizer.encode(word, add_special_tokens=False)
 
             # Simple mapping: assign the timestamp to all tokens of this word
             for _ in word_tokens:
                 if current_pos < len(tokens):
-                    token_positions.append({
-                        'word': word,
-                        'start': word_info['start'],
-                        'end': word_info['end'],
-                        'token_idx': current_pos
-                    })
+                    token_positions.append(
+                        {
+                            "word": word,
+                            "start": word_info["start"],
+                            "end": word_info["end"],
+                            "token_idx": current_pos,
+                        }
+                    )
                     current_pos += 1
 
         # Build DataFrame with embeddings
@@ -266,22 +268,22 @@ class AudioEmbeddingExtractor:
 
         for pos in token_positions:
             row = {
-                'timestamp': pos['start'],
-                'word': pos['word'],
-                'token': tokens[pos['token_idx']].replace('\n', '\\n')
+                "timestamp": pos["start"],
+                "word": pos["word"],
+                "token": tokens[pos["token_idx"]].replace("\n", "\\n"),
             }
 
             # Add embeddings from each layer
-            token_idx = pos['token_idx']
+            token_idx = pos["token_idx"]
             for layer_idx in range(embeddings.shape[1]):
                 # Store the full embedding vector as a string representation
                 # or key statistics (mean, std) for CSV compatibility
                 layer_emb = embeddings[token_idx, layer_idx, :]
 
                 # Option 1: Store statistics (more CSV-friendly)
-                row[f'layer_{layer_idx}_mean'] = np.mean(layer_emb)
-                row[f'layer_{layer_idx}_std'] = np.std(layer_emb)
-                row[f'layer_{layer_idx}_norm'] = np.linalg.norm(layer_emb)
+                row[f"layer_{layer_idx}_mean"] = np.mean(layer_emb)
+                row[f"layer_{layer_idx}_std"] = np.std(layer_emb)
+                row[f"layer_{layer_idx}_norm"] = np.linalg.norm(layer_emb)
 
                 # Option 2: Store full vector (can be very wide)
                 # Uncomment if you need full vectors in CSV
@@ -299,7 +301,7 @@ class AudioEmbeddingExtractor:
         self,
         df: pd.DataFrame,
         output_path: str,
-        embeddings: Optional[np.ndarray] = None
+        embeddings: Optional[np.ndarray] = None,
     ):
         """
         Save embeddings to CSV file.
@@ -317,7 +319,7 @@ class AudioEmbeddingExtractor:
 
         # Optionally save full embeddings as numpy array
         if embeddings is not None:
-            npy_path = output_path.replace('.csv', '_full.npy')
+            npy_path = output_path.replace(".csv", "_full.npy")
             np.save(npy_path, embeddings)
             print(f"Saved full embeddings to: {npy_path}")
 
@@ -326,7 +328,7 @@ class AudioEmbeddingExtractor:
         df: pd.DataFrame,
         embeddings: np.ndarray,
         output_path: str,
-        metric: str = 'norm'
+        metric: str = "norm",
     ):
         """
         Create a heatmap visualization of embeddings across layers and time.
@@ -341,7 +343,7 @@ class AudioEmbeddingExtractor:
 
         # Extract the metric for each layer
         num_layers = embeddings.shape[1]
-        layer_cols = [f'layer_{i}_{metric}' for i in range(num_layers)]
+        layer_cols = [f"layer_{i}_{metric}" for i in range(num_layers)]
 
         if not all(col in df.columns for col in layer_cols):
             print(f"Warning: Not all layer columns found for metric '{metric}'")
@@ -357,54 +359,52 @@ class AudioEmbeddingExtractor:
         ax1 = axes[0]
         sns.heatmap(
             heatmap_data,
-            cmap='viridis',
-            cbar_kws={'label': f'Embedding {metric.capitalize()}'},
+            cmap="viridis",
+            cbar_kws={"label": f"Embedding {metric.capitalize()}"},
             ax=ax1,
-            xticklabels=False
+            xticklabels=False,
         )
-        ax1.set_ylabel('Layer', fontsize=12)
+        ax1.set_ylabel("Layer", fontsize=12)
         ax1.set_title(
-            f'GPT-2 Embedding Evolution Across Layers and Time\n'
-            f'({metric.capitalize()} values)',
+            f"GPT-2 Embedding Evolution Across Layers and Time\n"
+            f"({metric.capitalize()} values)",
             fontsize=14,
-            fontweight='bold'
+            fontweight="bold",
         )
 
         # Time series for each layer
         ax2 = axes[1]
-        time_points = df['timestamp'].values
+        time_points = df["timestamp"].values
 
         for layer_idx in range(num_layers):
-            values = df[f'layer_{layer_idx}_{metric}'].values
-            ax2.plot(time_points, values, alpha=0.6, label=f'Layer {layer_idx}')
+            values = df[f"layer_{layer_idx}_{metric}"].values
+            ax2.plot(time_points, values, alpha=0.6, label=f"Layer {layer_idx}")
 
-        ax2.set_xlabel('Time (seconds)', fontsize=12)
-        ax2.set_ylabel(f'Embedding {metric.capitalize()}', fontsize=12)
-        ax2.set_title('Temporal Evolution by Layer', fontsize=12, fontweight='bold')
-        ax2.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=8)
+        ax2.set_xlabel("Time (seconds)", fontsize=12)
+        ax2.set_ylabel(f"Embedding {metric.capitalize()}", fontsize=12)
+        ax2.set_title("Temporal Evolution by Layer", fontsize=12, fontweight="bold")
+        ax2.legend(bbox_to_anchor=(1.05, 1), loc="upper left", fontsize=8)
         ax2.grid(True, alpha=0.3)
 
         # Add word annotations if not too many
         if len(df) < 50:
-            unique_words = df.drop_duplicates('word')
+            unique_words = df.drop_duplicates("word")
             for _, row in unique_words.iterrows():
                 ax2.axvline(
-                    row['timestamp'],
-                    color='red',
+                    row["timestamp"],
+                    color="red",
                     alpha=0.2,
-                    linestyle='--',
-                    linewidth=0.5
+                    linestyle="--",
+                    linewidth=0.5,
                 )
 
         plt.tight_layout()
-        plt.savefig(output_path, dpi=300, bbox_inches='tight')
+        plt.savefig(output_path, dpi=300, bbox_inches="tight")
         print(f"Saved visualization to: {output_path}")
         plt.close()
 
     def process_audio_file(
-        self,
-        audio_path: str,
-        output_dir: Optional[str] = None
+        self, audio_path: str, output_dir: Optional[str] = None
     ) -> Tuple[pd.DataFrame, str, str]:
         """
         Complete pipeline: process audio file and generate outputs.
@@ -435,13 +435,11 @@ class AudioEmbeddingExtractor:
         transcription = self.transcribe_with_timestamps(audio)
 
         # Step 3: Extract GPT-2 embeddings
-        embeddings, tokens = self.extract_gpt2_embeddings(transcription['text'])
+        embeddings, tokens = self.extract_gpt2_embeddings(transcription["text"])
 
         # Step 4: Align embeddings to words
         df, embeddings, tokens = self.align_embeddings_to_words(
-            transcription['words'],
-            tokens,
-            embeddings
+            transcription["words"], tokens, embeddings
         )
 
         # Step 5: Save embeddings
@@ -450,12 +448,12 @@ class AudioEmbeddingExtractor:
         # Step 6: Create visualization
         self.visualize_embeddings(df, embeddings, str(plot_path))
 
-        print("\n" + "="*60)
+        print("\n" + "=" * 60)
         print("PROCESSING COMPLETE!")
-        print("="*60)
+        print("=" * 60)
         print(f"CSV output: {csv_path}")
         print(f"Visualization: {plot_path}")
-        print("="*60)
+        print("=" * 60)
 
         return df, str(csv_path), str(plot_path)
 
@@ -478,44 +476,42 @@ Examples:
 
   # Force CPU usage
   python extract_embeddings.py input.wav --device cpu
-        """
+        """,
     )
 
     parser.add_argument(
-        'audio_file',
-        type=str,
-        help='Path to the audio file to process'
+        "audio_file", type=str, help="Path to the audio file to process"
     )
 
     parser.add_argument(
-        '--output-dir',
+        "--output-dir",
         type=str,
         default=None,
-        help='Directory for output files (default: ../data/embeddings/)'
+        help="Directory for output files (default: ../data/embeddings/)",
     )
 
     parser.add_argument(
-        '--whisper-model',
+        "--whisper-model",
         type=str,
-        default='base',
-        choices=['tiny', 'base', 'small', 'medium', 'large'],
-        help='Whisper model size (default: base)'
+        default="base",
+        choices=["tiny", "base", "small", "medium", "large"],
+        help="Whisper model size (default: base)",
     )
 
     parser.add_argument(
-        '--gpt2-model',
+        "--gpt2-model",
         type=str,
-        default='gpt2',
-        choices=['gpt2', 'gpt2-medium', 'gpt2-large', 'gpt2-xl'],
-        help='GPT-2 model variant (default: gpt2)'
+        default="gpt2",
+        choices=["gpt2", "gpt2-medium", "gpt2-large", "gpt2-xl"],
+        help="GPT-2 model variant (default: gpt2)",
     )
 
     parser.add_argument(
-        '--device',
+        "--device",
         type=str,
         default=None,
-        choices=['cuda', 'cpu'],
-        help='Device to use for computation (default: auto-detect)'
+        choices=["cuda", "cpu"],
+        help="Device to use for computation (default: auto-detect)",
     )
 
     args = parser.parse_args()
@@ -525,13 +521,12 @@ Examples:
         extractor = AudioEmbeddingExtractor(
             whisper_model=args.whisper_model,
             gpt2_model=args.gpt2_model,
-            device=args.device
+            device=args.device,
         )
 
         # Process audio file
         extractor.process_audio_file(
-            audio_path=args.audio_file,
-            output_dir=args.output_dir
+            audio_path=args.audio_file, output_dir=args.output_dir
         )
 
         return 0
@@ -548,9 +543,10 @@ Examples:
     except Exception as e:
         print(f"\nUnexpected error: {e}", file=sys.stderr)
         import traceback
+
         traceback.print_exc()
         return 1
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     sys.exit(main())
